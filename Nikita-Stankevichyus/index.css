@@ -30,23 +30,57 @@
   display: block;
 }
 
-.my_modal {
+.my_modal_delete {
   display: none;
 	position: fixed;
-	top: 25%;
-	left: 25%;
-  width: 50%;
-  height: 50%;
-	/* margin: 0 auto; */
+	top: 35%;
+	left: 37.5%;
+  width: 25%;
+  height: 200px;
 	background: #fff;
-	border: 1px solid orange;
+	border: 3px solid #333;
 	border-radius: 4px; 
 	z-index: 2;
 	opacity: 1;	
 }
 
-.modal_close {
-	position: absolute;
-	top: 10px;
-	right: 10px;
+.my_modal_edit {
+	display: none;
+	position: fixed;
+	top: 20%;
+	left: 37.5%;
+	background: #fff;
+	border: 3px solid #333;
+	border-radius: 4px;
+	width: min-content;
+	padding: 25px;
+	padding-right: 80px;
+	padding-left: 80px;
+	z-index: 2;
+	opacity: 1;
+}
+
+.mg-t-15 {
+	margin-top: 15px;
+}
+
+.mg-t-35 {
+	margin-top: 35px;
+}
+
+.mg-h-auto {
+	margin: 0 auto;
+}
+
+.border-bottom {
+	border-bottom: 2px solid black;
+}
+
+.txt-align-center {
+	text-align: center;
+}
+
+.light_border {
+	border: 2px solid #CCC;
+	border-radius: 4px; 
 }

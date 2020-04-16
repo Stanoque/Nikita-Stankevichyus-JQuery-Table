@@ -21,10 +21,100 @@
       <div class="modal_fade">
       </div>
 
-      <div class="my_modal">
-        <p>Are you sure?</p>
-        <button type="button" class="btn btn-light modal_delete">Yes</button>
-        <button type="button" class="btn btn-light modal_close">No</button>
+      <div class="my_modal_edit">
+        <div class="container">
+
+          <div class="row">
+            <h2 class="product_name">Product Name</h2>
+          </div>
+          
+          <form action="" class="modal_edit_form">
+
+            <div class="row">
+              <label for="">
+                Name
+                <input type="text" class="name">
+              </label>
+            </div>
+
+            <div class="row">
+              <label for="">
+                Supplier Email
+                <input type="text" class="supplier_email">
+              </label>
+            </div>
+
+            <div class="row">
+              <label for="">
+                Count
+                <input type="text" class="count">
+              </label>
+            </div>
+
+            <div class="row">
+              <label for="">
+                Price
+                <input type="text" class="name">
+              </label>
+            </div>
+
+            <div class="row">
+              <label>
+                Delivery
+                <div class="row justify-content-between">
+                  <div class="col-5">
+                    <select name="select"> 
+                      <option value="russia">Russia</option> 
+                      <option value="belorus">Belorus</option>
+                      <option value="usa">USA</option>
+                    </select>
+                  </div>
+
+                  <div class="col-6 light_border">
+                    <label class="select_all">
+                      <input type="checkbox" class="city">
+                      Select All
+                    </label>
+                    <label class="city_1">
+                      <input type="checkbox" class="city">
+                      City_1
+                    </label>
+                    <label class="city_2">
+                      <input type="checkbox" class="city">
+                      City_2
+                    </label>
+                    <label class="city_3">
+                      <input type="checkbox" class="city">
+                      City_3
+                    </label>
+                </div>
+    
+              </label>
+            </div>
+
+            <div class="row mg-t-15">
+              <div class="col-6"><button type="button" class="btn btn-dark btn-block modal_save">Save</button></div>
+            <div class="col-6"><button type="button" class="btn btn-dark btn-block modal_cancel">Cancel</button></div>
+            </div>
+          </form>
+        
+        </div>
+      </div>
+    </div>
+
+      <div class="my_modal_delete">
+        <div class="container">
+          <div class="row justify-content-center align-items-center border-bottom mg-t-35">
+            <div class="col-12 txt-align-center">
+              <p class="">Are you sure?</p>
+            </div>
+          </div>
+
+          <div class="row justify-content-center mg-t-35">
+            <div class="col-lg-6 col-md-12"><button type="button" class="btn btn-light btn-block modal_delete">Yes</button></div>
+            <div class="col-lg-6 col-md-12"><button type="button" class="btn btn-light btn-block modal_close">No</button></div>
+          </div>
+        </div>
       </div>		
       
 
@@ -79,8 +169,8 @@
             <td class='col-2'>
               <form>
                 <div class='row justify-content-around'>
-                  <button type="button" class="btn btn-light col-5 button_edit">Edit</button>
-                  <button type="button" class="btn btn-light col-5">Delete</button>
+                  <button type="button" class="btn btn-light col-5 button_edit" id="edit_1">Edit</button>
+                  <button type="button" class="btn btn-light col-5 button_delete" id="delete_1">Delete</button>
                 </div>
               </form>
             </td>
@@ -100,8 +190,8 @@
             <td class='col-2'>
               <form>
                 <div class='row justify-content-around'>
-                  <button type="button" class="btn btn-light col-5 button_edit">Edit</button>
-                  <button type="button" class="btn btn-light col-5">Delete</button>
+                  <button type="button" class="btn btn-light col-5 button_edit" id="edit_2">Edit</button>
+                  <button type="button" class="btn btn-light col-5 button_delete" id="delete_2">Delete</button>
                 </div>
               </form>
             </td>
@@ -121,8 +211,8 @@
             <td class='col-2'>
               <form>
                 <div class='row justify-content-around'>
-                  <button type="button" class="btn btn-light col-5 button_edit">Edit</button>
-                  <button type="button" class="btn btn-light col-5">Delete</button>
+                  <button type="button" class="btn btn-light col-5 button_edit" id="edit_3">Edit</button>
+                  <button type="button" class="btn btn-light col-5 button_delete" id="delete_3">Delete</button>
                 </div>
               </form>
             </td>

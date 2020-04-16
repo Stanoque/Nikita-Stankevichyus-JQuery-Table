@@ -17,21 +17,31 @@ let kek = new Good('kek', 'shek', 'cheburek', 0, {
   belarus: ['hotlany'],
 });
 
-let triangle = $("#triangle");
-let buttonEdit = $(".button_edit");
+let buttonDelete = $(".button_delete");
 let buttonClose = $(".modal_close");
 
-triangle.click(() => {
-  triangle.toggleClass('flip');
+$("#triangle").click(() => {
+  $("#triangle").toggleClass('flip');
 });
 
 
-buttonEdit.click(() => {
+$("#delete_1").click(() => {
   $(".modal_fade").addClass("modal_fade_trick");
-  $(".my_modal").css("display", "block");
+  $(".my_modal_delete").css("display", "block");
 });
 
-buttonClose.click(() => {
+$("#edit_1").click(() => {
+  $(".modal_fade").addClass("modal_fade_trick");
+  $(".my_modal_edit").css("display", "block");
+});
+
+
+$(".modal_close").click(() => {
   $(".modal_fade").removeClass("modal_fade_trick");
-  $(".my_modal").css("display", "none");
+  $(".my_modal_delete").css("display", "none");
+});
+
+$(".modal_cancel").click(() => {
+  $(".modal_fade").removeClass("modal_fade_trick");
+  $(".my_modal_edit").css("display", "none");
 });
