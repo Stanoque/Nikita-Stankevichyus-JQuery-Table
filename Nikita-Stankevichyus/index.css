@@ -59,8 +59,8 @@ main {
 	border-radius: 4px;
 	width: 350px;
 	padding: 25px;
-	padding-right: 80px;
-	padding-left: 80px;
+	/* padding-right: 60px; */
+	/* padding-left: 40px; */
 	z-index: 2;
 	opacity: 1;
 	transform: translate(-50%, -15%);
@@ -96,4 +96,12 @@ main {
 }
 .mg-r-0 {
 	margin-right: 0 !important;
+}
+
+h2 {
+	margin-left: -15px;
+}
+
+.mg-l--15{
+	margin-left: -15px;
 }
