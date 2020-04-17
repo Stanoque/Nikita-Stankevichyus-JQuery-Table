@@ -1,3 +1,8 @@
+main {
+	position: relative;
+}
+
+
 .that{
   border: 1px solid red;
 }
@@ -46,18 +51,19 @@
 
 .my_modal_edit {
 	display: none;
-	position: fixed;
-	top: 20%;
-	left: 37.5%;
+	position: absolute;
+	top: 50%;
+	left: 50%;
 	background: #fff;
 	border: 3px solid #333;
 	border-radius: 4px;
-	width: min-content;
+	width: 350px;
 	padding: 25px;
 	padding-right: 80px;
 	padding-left: 80px;
 	z-index: 2;
 	opacity: 1;
+	transform: translate(-50%, -15%);
 }
 
 .mg-t-15 {
@@ -83,4 +89,11 @@
 .light_border {
 	border: 2px solid #CCC;
 	border-radius: 4px; 
+}
+
+.mg-l-0 {
+	margin-left: 0 !important;
+}
+.mg-r-0 {
+	margin-right: 0 !important;
 }
