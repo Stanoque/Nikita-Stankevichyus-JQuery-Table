@@ -57,7 +57,7 @@ main {
 	background: #fff;
 	border: 3px solid #333;
 	border-radius: 4px;
-	width: 350px;
+	width: 370px;
 	padding: 25px;
 	/* padding-right: 60px; */
 	/* padding-left: 40px; */
@@ -104,4 +104,13 @@ h2 {
 
 .mg-l--15{
 	margin-left: -15px;
+}
+
+
+.brd{
+	border: 1px solid red;
+}
+
+.label_city {
+	min-width: 100px;
 }
