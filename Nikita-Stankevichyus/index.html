@@ -317,22 +317,7 @@
                   </div>
 
                   <div class="col-6 light_border cities">
-                    <label class="select_all border-bottom font-weight-bold">
-                      <input type="checkbox">
-                      Select All
-                    </label>
-                    <label class="label_city">
-                      <input type="checkbox" class="city_1 city" value="<%=city_1%>">
-                      <span><%=city_1%></span>
-                    </label>
-                    <label class="label_city">
-                      <input type="checkbox" class="city_2 city" value="<%=city_2%>">
-                      <span><%=city_2%></span>
-                    </label>
-                    <label class="label_city">
-                      <input type="checkbox" class="city_3 city" value="<%=city_3%>">
-                      <span><%=city_3%></span>
-                    </label>
+                    
                 </div>
     
               </label>
@@ -348,22 +333,24 @@
     </script>
   
     <script type="text/template" id="edit_cities_template">
-      <label class="border-bottom font-weight-bold">
-        <input type="checkbox" class="select_all">
-        Select All
-      </label>
-      <label class="label_city">
-        <input type="checkbox" class="city_1 city" value="<%=city_1%>">
-        <span><%=city_1%></span>
-      </label>
-      <label class="label_city">
-        <input type="checkbox" class="city_2 city" value="<%=city_2%>">
-        <span><%=city_2%></span>
-      </label>
-      <label class="label_city">
-        <input type="checkbox" class="city_3 city" value="<%=city_3%>">
-        <span><%=city_3%></span>
-      </label>
+      <div class="cities_form hidden <%-country%>_cities">
+        <label class="border-bottom font-weight-bold">
+          <input type="checkbox" class="select_all">
+          Select All
+        </label>
+        <label class="label_city">
+          <input type="checkbox" class="city_1 city" value="<%=city_1%>">
+          <span><%=city_1%></span>
+        </label>
+        <label class="label_city">
+          <input type="checkbox" class="city_2 city" value="<%=city_2%>">
+          <span><%=city_2%></span>
+        </label>
+        <label class="label_city">
+          <input type="checkbox" class="city_3 city" value="<%=city_3%>">
+          <span><%=city_3%></span>
+        </label>
+      </div>
     </script>
     
     <script type="text/template" id="modal_delete_template">

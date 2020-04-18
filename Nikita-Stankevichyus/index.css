@@ -114,3 +114,9 @@ h2 {
 .label_city {
 	min-width: 100px;
 }
+
+.hidden {
+	display: none;
+	position: absolute;
+	pointer-events: none;
+}
