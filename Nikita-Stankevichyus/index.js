@@ -1,24 +1,75 @@
 "use strict";
 
-const LIST = [];
+const LIST = {
+  collection: [],
+  push: (good) => {
+    LIST.collection.push(good);
+  },
+  forEach: (callback) => {
+    LIST.collection.forEach(callback);
+  },
+};
 
-function Good(name='', email='', count=0, price=0, delivery={}) {
+
+function Good(name='', email='', count=0, price=0, russia=[], belorus=[], usa=[]) {
 
   this.name = name;
   this.email = email;
   this.count = count;
   this.price = price;
 
-  this.delivery = delivery;
+  this.delivery = {
+    russia: {
+      moscow: russia ? russia[0] ? true : false : false,
+      saratov: russia ? russia[1] ? true : false : false,
+      spb: russia ? russia[2] ? true : false : false,
+    },
+    belorus: {
+      minsk: belorus ? belorus[0] ? true : false : false,
+      hotlany: belorus ? belorus[1] ? true : false : false,
+      bobruysk: belorus ? belorus[2] ? true : false : false,
+    },
+    usa: {
+      ny: usa ? usa[0] ? true : false : false,
+      washington: usa ? usa[1] ? true : false : false,
+      boston: usa ? usa[2] ? true : false : false,
+    },
+  };
+
+  this.russiaAllCities = () => {
+    let toReturn = true;
+    for(let city in this.delivery.russia){
+      if(!city){
+        toReturn = false;
+      }
+    }
+    return toReturn;
+  };
+
+  this.belorusAllCities = () => {
+    let toReturn = true;
+    for(let city in this.delivery.belorus){
+      if(!city){
+        toReturn = false;
+      }
+    }
+    return toReturn;
+  };
+
+  this.usaAllCities = () => {
+    let toReturn = true;
+    for(let city in this.delivery.usa){
+      if(!city){
+        toReturn = false;
+      }
+    }
+    return toReturn;
+  };
 }
 
-LIST.push(new Good('Just Good', 'someemail@gmail.com', 3, 222, {
-  russia: ['Москва', 'Саратов', 'Санкт-Петербург'],
-  belorus: ['Минск', 'Хотляны', 'Бобруйск'],
-  usa: ['Нью-Йорк', 'Вашингтон', 'Бостон']
-}));
+LIST.push(new Good('Just Good', 'someemail@gmail.com', 3, 222, [true, true, true],[true, true, true],[true, true, true]));
 LIST.push(new Good('G Good', 'someeail@gmail.com', 4, 22, {
-  russia: ['Москва', 'Санкт-Петербург'],
+  russia: [true, true, true],
   belorus: ['Минск'],
 }));
 LIST.push(new Good('B Good', 'smeemail@gmail.com',11, 100500, {
@@ -102,23 +153,35 @@ LIST.forEach((good, number) => {
   
   $(citiesTemp({
     country: 'russia',
-    city_1: good.delivery.russia ? good.delivery.russia[0] ? good.delivery.russia[0] : '' : '',
-    city_2: good.delivery.russia ? good.delivery.russia[1] ? good.delivery.russia[1] : '' : '',
-    city_3: good.delivery.russia ? good.delivery.russia[2] ? good.delivery.russia[2] : '' : '',
+    city_1: 'Moscow',
+    city_2: 'Saratov',
+    city_3: 'SPb',
+    attr_1: good.delivery.russia.moscow ? 'checked' : null,
+    attr_2: good.delivery.russia.saratov ? 'checked' : null,
+    attr_3: good.delivery.russia.spb ? 'checked' : null,
+    attr_4: good.russiaAllCities() ? 'checked' : null,
   })).appendTo($('#modal_edit_'+number+' .cities'));  
 
   $(citiesTemp({
     country: 'belorus',
-    city_1: good.delivery.belorus ? good.delivery.belorus[0] ? good.delivery.belorus[0] : '' : '',
-    city_2: good.delivery.belorus ? good.delivery.belorus[1] ? good.delivery.belorus[1] : '' : '',
-    city_3: good.delivery.belorus ? good.delivery.belorus[2] ? good.delivery.belorus[2] : '' : '',
+    city_1: 'Minsk',
+    city_2: 'Hotlany',
+    city_3: 'Bobruysk',
+    attr_1: good.delivery.belorus.minsk ? 'checked' : null,
+    attr_2: good.delivery.belorus.hotlany ? 'checked' : null,
+    attr_3: good.delivery.belorus.bobruysk ? 'checked' : null,
+    attr_4: good.belorusAllCities() ? 'checked' : null,
   })).appendTo($('#modal_edit_'+number+' .cities'));
 
   $(citiesTemp({
     country: 'usa',
-    city_1: good.delivery.usa ? good.delivery.usa[0] ? good.delivery.usa[0] : '' : '',
-    city_2: good.delivery.usa ? good.delivery.usa[1] ? good.delivery.usa[1] : '' : '',
-    city_3: good.delivery.usa ? good.delivery.usa[2] ? good.delivery.usa[2] : '' : '',
+    city_1: 'NY',
+    city_2: 'Washington',
+    city_3: 'Boston',
+    attr_1: good.delivery.usa.ny ? 'checked' : null,
+    attr_2: good.delivery.usa.washington ? 'checked' : null,
+    attr_3: good.delivery.usa.boston ? 'checked' : null,
+    attr_4: good.usaAllCities() ? 'checked' : null,
   })).appendTo($('#modal_edit_'+number+' .cities')); 
   
   const russia = $('#modal_edit_'+number+' .russia');
@@ -188,62 +251,6 @@ LIST.forEach((good, number) => {
     }
 
   });
-
-  // $('#modal_edit_'+number+' .russia').click(() => {
-
-  //   $('#modal_edit_'+number+' .cities').empty();
-
-  //   let citiesTemp = _.template($('#edit_cities_template').html());
-
-  //   $('#modal_edit_'+number+' .cities').html(
-  //     citiesTemp({
-  //       city_1: good.delivery.russia ? good.delivery.russia[0] ? good.delivery.russia[0] : '' : '',
-  //       city_2: good.delivery.russia ? good.delivery.russia[1] ? good.delivery.russia[1] : '' : '',
-  //       city_3: good.delivery.russia ? good.delivery.russia[2] ? good.delivery.russia[2] : '' : '',
-  //     })
-  //   );
-
-  //   cityCleaner();
-
-  // }); 
-
-
-  // $('#modal_edit_'+number+' .belorus').click(() => {
-
-  //   $('#modal_edit_'+number+' .cities').empty();
-
-  //   let citiesTemp = _.template($('#edit_cities_template').html());
-
-  //   $('#modal_edit_'+number+' .cities').html(
-  //     citiesTemp({
-  //       city_1: good.delivery.belorus ? good.delivery.belorus[0] ? good.delivery.belorus[0] : '' : '',
-  //       city_2: good.delivery.belorus ? good.delivery.belorus[1] ? good.delivery.belorus[1] : '' : '',
-  //       city_3: good.delivery.belorus ? good.delivery.belorus[2] ? good.delivery.belorus[2] : '' : '',
-  //     })
-  //   );
-
-  //   cityCleaner();
-
-  // });
-
-  
-  // $('#modal_edit_'+number+' .usa').click(() => {
-
-  //   $('#modal_edit_'+number+' .cities').empty();
-
-  //   let citiesTemp = _.template($('#edit_cities_template').html());
-
-  //   $('#modal_edit_'+number+' .cities').html(
-  //     citiesTemp({
-  //       city_1: good.delivery.usa ? good.delivery.usa[0] ? good.delivery.usa[0] : '' : '',
-  //       city_2: good.delivery.usa ? good.delivery.usa[1] ? good.delivery.usa[1] : '' : '',
-  //       city_3: good.delivery.usa ? good.delivery.usa[2] ? good.delivery.usa[2] : '' : '',
-  //     })
-  //   );
-
-  //   cityCleaner();
-
-  // });
 
   let deleteTemp = _.template($('#modal_delete_template').html());
 

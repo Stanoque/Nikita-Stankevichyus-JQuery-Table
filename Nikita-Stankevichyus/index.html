@@ -335,19 +335,19 @@
     <script type="text/template" id="edit_cities_template">
       <div class="cities_form hidden <%-country%>_cities">
         <label class="border-bottom font-weight-bold">
-          <input type="checkbox" class="select_all">
+          <input type="checkbox" class="select_all" <%=attr_4%>>
           Select All
         </label>
         <label class="label_city">
-          <input type="checkbox" class="city_1 city" value="<%=city_1%>">
+          <input type="checkbox" class="city_1 city" <%=attr_1%> value="<%=city_1%>">
           <span><%=city_1%></span>
         </label>
         <label class="label_city">
-          <input type="checkbox" class="city_2 city" value="<%=city_2%>">
+          <input type="checkbox" class="city_2 city" <%=attr_2%> value="<%=city_2%>">
           <span><%=city_2%></span>
         </label>
         <label class="label_city">
-          <input type="checkbox" class="city_3 city" value="<%=city_3%>">
+          <input type="checkbox" class="city_3 city" <%=attr_3%> value="<%=city_3%>">
           <span><%=city_3%></span>
         </label>
       </div>
@@ -372,11 +372,6 @@
 
     </script>
 
-    <script type="text/javascript" src="index.js">
-    </script>
-
-
-
-    
+    <script type="text/javascript" src="index.js"></script>
   </body>
 </html>
