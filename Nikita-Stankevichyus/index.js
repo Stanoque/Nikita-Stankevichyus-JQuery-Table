@@ -28,7 +28,7 @@ function Good(name='', email='', count=0, price=0, russia=[], belorus=[], usa=[]
   this.russiaAllCities = () => {
     let toReturn = true;
     for(let city in this.delivery.russia){
-      if(!city){
+      if(!this.delivery.russia[city]){
         toReturn = false;
       }
     }
@@ -38,7 +38,7 @@ function Good(name='', email='', count=0, price=0, russia=[], belorus=[], usa=[]
   this.belorusAllCities = () => {
     let toReturn = true;
     for(let city in this.delivery.belorus){
-      if(!city){
+      if(!this.delivery.belorus[city]){
         toReturn = false;
       }
     }
@@ -48,7 +48,7 @@ function Good(name='', email='', count=0, price=0, russia=[], belorus=[], usa=[]
   this.usaAllCities = () => {
     let toReturn = true;
     for(let city in this.delivery.usa){
-      if(!city){
+      if(!this.delivery.usa[city]){
         toReturn = false;
       }
     }
@@ -64,6 +64,7 @@ const LIST = {
   
   delete: (good) => {
     LIST.collection.splice(LIST.collection.indexOf(good), 1);
+    LIST.render();
   },
 
   forEach: (callback) => {
@@ -71,6 +72,8 @@ const LIST = {
   },
 
   render: () => {
+    alert(LIST.collection);
+    $('#table_body').empty();
 
     let rowTemp = _.template($("#row_template").html());
 
@@ -93,7 +96,7 @@ const LIST = {
         email: good.email,
         saveId: 'modal_save_'+number,
         cancelId: 'modal_cancel_'+number,
-      })).appendTo('.main');
+      })).appendTo('#table_body');
 
       const cityCleaner = () => {
     
@@ -237,7 +240,7 @@ const LIST = {
         deleteId: 'modal_delete_'+number,
         idYes: 'yes_'+number,
         idNo: 'no_'+number,
-      })).appendTo('.main');
+      })).appendTo('#table_body');
 
       $('#delete_'+number).click(() => {
         $('.modal_fade').addClass('modal_fade_trick');
@@ -245,6 +248,7 @@ const LIST = {
       });
   
       $('#yes_'+number).click(() => {
+        LIST.delete(good);
         $('.modal_fade').removeClass('modal_fade_trick');
         $('#modal_delete_'+number).css('display', 'none');
       }); 
@@ -263,15 +267,9 @@ const LIST = {
 
 
 LIST.push(new Good('Just Good', 'someemail@gmail.com', 3, 222, [true, true, true],[true, true, true],[true, true, true]));
-LIST.push(new Good('G Good', 'someeail@gmail.com', 4, 22, {
-  russia: [true, true, true],
-  belorus: ['Минск'],
-}));
-LIST.push(new Good('B Good', 'smeemail@gmail.com',11, 100500, {
-}));
-LIST.push(new Good('A Good', 'somemail@gmail.com', 1, Infinity, {
-  belorus: ['Хотляны'],
-}));
+LIST.push(new Good('G Good', 'someeail@gmail.com', 4, 22, [true, true, true],[false, false, true],[true, true, true]));
+LIST.push(new Good('B Good', 'smeemail@gmail.com',11, 100500, [true, true, true],[false, true, true],[true, true, true]));
+LIST.push(new Good('A Good', 'somemail@gmail.com', 1, Infinity, [true, true, true],[true, true, true],[true, true, true]));
 
 let buttonDelete = $(".button_delete");
 let buttonClose = $(".modal_close");
