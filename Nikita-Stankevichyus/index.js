@@ -174,7 +174,8 @@ const LIST = {
   },
 
   add: (good) => {
-
+    LIST.push(good);
+    LIST.render();
   },
 
   forEach: (callback) => {
@@ -384,7 +385,6 @@ LIST.push(new Good('A Good', 'somemail@gmail.com', 1, Infinity, [true, true, tru
 let buttonDelete = $(".button_delete");
 let buttonClose = $(".modal_close");
 let modalTemp = _.template($("#modal_edit_template").html());
-let citiesTemp = _.template($("#edit_cities_template").html());
 
 $(modalTemp({
   modalId: 'modal_add',
@@ -404,9 +404,34 @@ $("#triangle_price").click(() => {
   $("#triangle_price").toggleClass('flip');
 });
 
+appendDelivery('#modal_add', null);
+
 $("#good_add").click(() => {
   $(".modal_fade").addClass("modal_fade_trick");
   $("#modal_add").css("display", "block");
+});
+
+$('#modal_add form').submit((event) => {
+  event.preventDefault();
+  const form = '#modal_add form ';
+  LIST.add(new Good(
+    $(form+'.name').val(),
+    $(form+'.supplier_email').val(),
+    $(form+'.count').val(),
+    $(form+'.price').val(), 
+    [$(form+'.russia_cities .city_1').attr('check') ? true : false, 
+     $(form+'.russia_cities .city_2').attr('check') ? true : false,
+     $(form+'.russia_cities .city_3').attr('check') ? true : false], 
+    [$(form+'.belorus_cities .city_1').attr('check') ? true : false, 
+     $(form+'.belorus_cities .city_2').attr('check') ? true : false,
+     $(form+'.belorus_cities .city_3').attr('check') ? true : false], 
+    [$(form+'.usa_cities .city_1').attr('check') ? true : false, 
+     $(form+'.usa_cities .city_2').attr('check') ? true : false,
+     $(form+'.usa_cities .city_3').attr('check') ? true : false], 
+  ));
+  $(".modal_fade").removeClass("modal_fade_trick");  
+  $('#modal_add').css('display', 'none');
+  LIST.render();
 });
 
 LIST.render();

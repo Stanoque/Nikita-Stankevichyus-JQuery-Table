@@ -18,6 +18,7 @@
 
     <main class=main>
 
+
       <div class="modal_fade">
       </div>
 
@@ -27,7 +28,7 @@
               
               <div class="col-lg-4 col-md-4">
                 <input type='text' placeholder="Enter product name..."></input>
-                <button type="button" class="btn btn-light">Search</button>
+                <button type="button" class="btn btn-light" id="search">Search</button>
               </div>
              
               <div class="col-lg-1 col-md-2">
@@ -117,28 +118,28 @@
             <div class="row">
               <label for="">
                 <div class="row">Name</div>
-                <div class="row"><input type="text" class="name form-control" placeholder="<%-name%>"></div>
+                <div class="row"><input type="text" name="name" class="name form-control" value="<%-name%>"></div>
               </label>
             </div>
 
             <div class="row">
               <label for="">
                 <div class="row">Supplier Email</div>
-                <div class="row"><input type="text" class="supplier_email form-control" placeholder="<%-email%>"></div>
+                <div class="row"><input type="text" name="email" class="supplier_email form-control" value="<%-email%>"></div>
               </label>
             </div>
 
             <div class="row">
               <label for="">
                 <div class="row">Count</div>
-                <div class="row"><input type="text" class="count form-control" placeholder="<%-count%>"></div>
+                <div class="row"><input type="text" name="count" class="count form-control" value="<%-count%>"></div>
               </label>
             </div>
 
             <div class="row">
               <label for="">
                 <div class="row">Price</div>
-                <div class="row"><input type="text" class="name form-control" placeholder="<%-price%>"></div>
+                <div class="row"><input type="text" name="price" class="price form-control" value="<%-price%>"></div>
               </label>
             </div>
 
@@ -161,8 +162,8 @@
               </label>
             </div>
             <div class="row mg-t-15">
-              <div class="col-6"><button type="button" class="btn btn-dark btn-block modal_save" id="<%-saveId%>">Save</button></div>
-            <div class="col-6"><button type="button" class="btn btn-dark btn-block modal_cancel" id="<%-cancelId%>">Cancel</button></div>
+              <div class="col-6"><input type="submit" class="btn btn-dark btn-block modal_save" value='Save' id="<%-saveId%>"></div>
+              <div class="col-6"><button type="button" class="btn btn-dark btn-block modal_cancel" id="<%-cancelId%>">Cancel</button></div>
             </div>
           </form>
         
@@ -211,5 +212,6 @@
     </script>
 
     <script type="text/javascript" src="index.js"></script>
+    
   </body>
 </html>

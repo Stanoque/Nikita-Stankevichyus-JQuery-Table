@@ -52,7 +52,7 @@ main {
 .my_modal_edit {
 	display: none;
 	position: absolute;
-	top: 50%;
+	top: 25vh;
 	left: 50%;
 	background: #fff;
 	border: 3px solid #333;
