@@ -128,7 +128,7 @@ const clearAdd = (form) => {
   $(form+'.name').val('');
   $(form+'.supplier_email').val('');
   $(form+'.count').val('');
-  $(form+'.price').val('');
+  $(form+'.price').val('$');
   $(form+'.select_all').prop('checked', false);
   $(form+'.city').prop('checked', false);
   // $(form+'.russia_cities .city_1').prop('checked', false);
@@ -570,7 +570,10 @@ const LIST = {
     });
 
     $('.price').blur(function(){
-      $(this).val('$'.concat($(this).val()));
+      let regExpDollar = /\$/;
+      if(!$(this).val().match(regExpDollar)){
+        $(this).val('$'.concat($(this).val()));
+      }
     });
     
 
@@ -700,22 +703,24 @@ $('#modal_add form').submit((event) => {
 
   
   if(validation.every((element)=>{return element;})){
+    let cities = $(form+'.city').toArray();
+    let delivery = [];
+
+    cities.forEach((city)=>{
+      delivery.push($(city).prop('checked') ? true : false);
+    });
+
+    alert(delivery);
 
   // FIXME: Do something about this hell
     LIST.add(new Good(
       $(form+'.name').val(),
       $(form+'.supplier_email').val(),
       $(form+'.count').val(),
-      $(form+'.price').val(), 
-      [$(form+'.russia_cities .city_1').prop('checked') ? true : false, 
-       $(form+'.russia_cities .city_2').prop('checked') ? true : false,
-      $(form+'.russia_cities .city_3').prop('checked') ? true : false], 
-      [$(form+'.belorus_cities .city_1').prop('checked') ? true : false, 
-      $(form+'.belorus_cities .city_2').prop('checked') ? true : false,
-      $(form+'.belorus_cities .city_3').prop('checked') ? true : false], 
-      [$(form+'.usa_cities .city_1').prop('checked') ? true : false, 
-      $(form+'.usa_cities .city_2').prop('checked') ? true : false,
-      $(form+'.usa_cities .city_3').prop('checked') ? true : false], 
+      $(form+'.price').val().replace('$', ''), 
+      delivery.slice(0, 3), 
+      delivery.slice(3, 5), 
+      delivery.slice(5, 9), 
     ));
 
 
