@@ -515,9 +515,10 @@ const LIST = {
         }
       });
 
-      $("#modal_cancel_"+number).click(() => {
-        $(".modal_fade").removeClass("modal_fade_trick");
-        $("#modal_edit_"+number).css("display", "none");
+      $('#modal_cancel_'+number).click(() => {
+        $('.modal_fade').removeClass('modal_fade_trick');
+        $('#modal_edit_'+number).css('display', 'none');
+        clearEdit('#modal_edit_'+number+' form ', good);
       });
 
       $("#modal_description_close_"+number).click(() => {
@@ -555,13 +556,13 @@ const LIST = {
   
     });
 
-    $('.digits').keyup(function(){
+    $('.digits').on('input', (function(){
       const nonDigitRegExp = /\D/;
     
       if($(this).val().match(nonDigitRegExp)){
         $(this).val($(this).val().replace(nonDigitRegExp,''));
       }
-    });
+    }));
     
     $('.price').focus(function(){
       let regExpDollar = /\$/;
