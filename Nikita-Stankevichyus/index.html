@@ -24,17 +24,19 @@
 
       
         <div class='container-fluid'>
-          <div class='row justify-content-between'>
+          <div class='row justify-content-between mg-t-15 mg-b-15'>
               
               <div class="col-lg-4 col-md-4">
                 <form action="" id='search_form'>
-                  <input type='text'></input>
-                  <button type="submit" class="btn btn-light" id="search">Search</button>
+                  <div class="row">
+                    <input type='text' class="form-control search mg-l-9"></input>
+                    <button type="submit" class="btn btn-primary mg-l-15" id="search">Search</button>
+                  </div>
                 </form>
               </div>
              
-              <div class="col-lg-1 col-md-2">
-                <button type="button" class="btn btn-light" id="good_add">Add New</button>
+              <div class="col-lg-2 col-md-2 row">
+                <button type="button" class="btn btn-primary btn-block mg-r-7" id="good_add">Add New</button>
               </div>
           </div> 
         </div> 
@@ -47,7 +49,7 @@
           <tr class='row' id="show">
             <th scope="col"  class='col-5'>
               <div class='row justify-content-between pd-h-10'>
-                <div class='col-4'>
+                <div class='col-4 text-primary good_name sort_name'>
                   Name
                 </div>
                 <div class='col-1 triangle' id="triangle_name">
@@ -59,7 +61,7 @@
             </th>
             <th scope="col"  class='col-5'>
               <div class='row justify-content-between pd-h-10'>
-                <div class='col-4'>
+                <div class='col-4 mg-l--10 good_name text-primary sort_price'>
                   Price
                 </div>
                 <div class='col-1 triangle' id="triangle_price">
@@ -69,7 +71,7 @@
                 </div>
               </div>
             </th>
-            <th scope="col"  class='col-2'>Actions</th>
+            <th scope="col"  class='col-2 pd-l-22'>Actions</th>
           </tr>
 
         </thead>
@@ -88,7 +90,7 @@
       <tr class="row" id="<%-idRow%>">
         <td class="col-5">
           <div class="row justify-content-between pd-h-10">
-            <div class="col-4 good_name text-info" id="<%-idName%>"><%-name%></div>
+            <div class="col-4 good_name text-primary" id="<%-idName%>"><%-name%></div>
           <div class="col-1">
             <div class="badge badge-dark"><%-count%></div>
           </div>
@@ -98,8 +100,8 @@
         <td class="col-2">
           <form>
             <div class="row justify-content-around mg-l-0 mg-r-0">
-              <button type="button" class="btn btn-light col-5 button_edit" id="<%-idEdit%>">Edit</button>
-              <button type="button" class="btn btn-light col-5 button_delete" id="<%-idDelete%>">Delete</button>
+              <button type="button" class="btn btn-primary col-5 button_edit" id="<%-idEdit%>">Edit</button>
+              <button type="button" class="btn btn-primary col-5 button_delete" id="<%-idDelete%>">Delete</button>
             </div>
           </form>
         </td>
@@ -148,7 +150,7 @@
             <div class="row">
               <label class="mg-l--15">
                 Delivery
-                <div class="row justify-content-between">
+                <div class="row justify-content-between delivery">
                   <div class="col-6">
                     <select name="select" class="countries form-control"> 
                       <option value="russia" class="russia">Russia</option> 
@@ -158,14 +160,15 @@
                   </div>
 
                   <div class="col-6 light_border cities">
+                  </div>
                     
                 </div>
     
               </label>
             </div>
-            <div class="row mg-t-15">
-              <div class="col-6"><input type="submit" class="btn btn-dark btn-block modal_save" value='Save' id="<%-saveId%>"></div>
-              <div class="col-6"><button type="button" class="btn btn-dark btn-block modal_cancel" id="<%-cancelId%>">Cancel</button></div>
+            <div class="row justify-content-between mg-t-15">
+              <div class="col-6 mg-l--28"><input type="submit" class="btn btn-warning btn-block modal_save" value='Save' id="<%-saveId%>"></div>
+              <div class="col-6 mg-r-24"><button type="button" class="btn btn-primary btn-block modal_cancel" id="<%-cancelId%>">Cancel</button></div>
             </div>
           </form>
         
@@ -205,8 +208,8 @@
           </div>
 
           <div class="row justify-content-center mg-t-35">
-            <div class="col-lg-6 col-md-12"><button type="button" class="btn btn-light btn-block modal_delete" id="<%-idYes%>">Yes</button></div>
-            <div class="col-lg-6 col-md-12"><button type="button" class="btn btn-light btn-block modal_close" id="<%-idNo%>">No</button></div>
+            <div class="col-lg-6 col-md-12"><button type="button" class="btn btn-danger btn-block modal_delete" id="<%-idYes%>">Yes</button></div>
+            <div class="col-lg-6 col-md-12"><button type="button" class="btn btn-primary btn-block modal_close" id="<%-idNo%>">No</button></div>
           </div>
         </div>
       </div>	
@@ -228,7 +231,7 @@
           </div>
 
           <div class="row justify-content-center mg-t-35">
-            <div class="col-lg-12 col-md-12"><button type="button" class="btn btn-dark btn-block modal_close" id="<%-closeId%>">Close</button></div>
+            <div class="col-lg-12 col-md-12"><button type="button" class="btn btn-primary btn-block modal_close" id="<%-closeId%>">Close</button></div>
           </div>
         </div>
       </div>	

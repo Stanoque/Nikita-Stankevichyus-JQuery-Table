@@ -131,15 +131,6 @@ const clearAdd = (form) => {
   $(form+'.price').val('$');
   $(form+'.select_all').prop('checked', false);
   $(form+'.city').prop('checked', false);
-  // $(form+'.russia_cities .city_1').prop('checked', false);
-  // $(form+'.russia_cities .city_2').prop('checked', false);
-  // $(form+'.russia_cities .city_3').prop('checked', false);
-  // $(form+'.belorus_cities .city_1').prop('checked', false);
-  // $(form+'.belorus_cities .city_2').prop('checked', false);
-  // $(form+'.belorus_cities .city_3').prop('checked', false);
-  // $(form+'.usa_cities .city_1').prop('checked', false);
-  // $(form+'.usa_cities .city_2').prop('checked', false);
-  // $(form+'.usa_cities .city_3').prop('checked', false);
 };
 
 const clearEdit = (form, good) => {
@@ -603,13 +594,11 @@ $(modalTemp({
 $("#triangle_name").click(() => {
   $("#triangle_name").toggleClass('flip');
   LIST.ascedningName = !LIST.ascedningName;
-  LIST.sortByName();
 });
 
 $("#triangle_price").click(() => {
   $("#triangle_price").toggleClass('flip');
   LIST.ascedningPrice = !LIST.ascedningPrice;
-  LIST.sortByPrice();
 });
 
 appendDelivery('#modal_add', null);
@@ -765,6 +754,13 @@ $('#search_form').submit((event)=>{
   LIST.render();
 })
 
+$('.sort_name').click(()=>{
+  LIST.sortByName();
+});
+
+$('.sort_price').click(()=>{
+  LIST.sortByPrice();
+});
 
 LIST.render();
 
