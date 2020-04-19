@@ -22,13 +22,15 @@
       <div class="modal_fade">
       </div>
 
-      <form>
+      
         <div class='container-fluid'>
           <div class='row justify-content-between'>
               
               <div class="col-lg-4 col-md-4">
-                <input type='text' placeholder="Enter product name..."></input>
-                <button type="button" class="btn btn-light" id="search">Search</button>
+                <form action="" id='search_form'>
+                  <input type='text'></input>
+                  <button type="submit" class="btn btn-light" id="search">Search</button>
+                </form>
               </div>
              
               <div class="col-lg-1 col-md-2">
@@ -36,7 +38,7 @@
               </div>
           </div> 
         </div> 
-      </form>
+      
 
       <table class="table table-bordered">
 
@@ -83,7 +85,7 @@
     </footer>
 
     <script type="text/template" id="row_template">
-      <tr class="row">
+      <tr class="row" id="<%-idRow%>">
         <td class="col-5">
           <div class="row justify-content-between pd-h-10">
             <div class="col-4 good_name text-info" id="<%-idName%>"><%-name%></div>
@@ -92,7 +94,7 @@
           </div>
           </div>
         </td>
-        <td class="col-5"><%-price%></td>
+        <td class="col-5">$<%-price%></td>
         <td class="col-2">
           <form>
             <div class="row justify-content-around mg-l-0 mg-r-0">

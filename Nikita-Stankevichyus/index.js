@@ -9,8 +9,10 @@ function Good(name='', email='', count=0, price=0, russia=[], belorus=[], usa=[]
   this.email = email;
   this.count = count;
   this.price = price;
+  this.hidden = false;
 
   this.description = loremIpsum;
+
   // NOTE: Maybe there is a better way of dealing with delivery data storage
   this.delivery = {
     russia: {
@@ -110,7 +112,11 @@ const isCountValid = (count) => {
 
 const isPriceValid = (price) => {
 
-  if(price.length > 0){
+  let workPrice = price;
+  let regExpDollar = /\$/;
+  workPrice = workPrice.replace(regExpDollar, '');
+
+  if(workPrice.length > 0){
     return true;
   } else {
     return false;
@@ -398,6 +404,7 @@ const LIST = {
 
     LIST.forEach((good, number) => {
       $(rowTemp({
+        idRow: 'table_row_'+number,
         name: good.name,
         price: good.price,
         count: good.count,
@@ -406,12 +413,21 @@ const LIST = {
         idDelete: 'delete_'+number,
       })).appendTo('#table_body');
 
+
+      if(good.hidden){
+        $('#table_row_'+number).addClass('hidden');
+        $('#table_row_'+number+' *').addClass('hidden');
+      } else {
+        $('#table_row_'+number).removeClass('hidden');
+        $('#table_row_'+number+' *').removeClass('hidden');
+      }
+
       let modalTemp = _.template($("#modal_edit_template").html());
 
       $(modalTemp({
         modalId: 'modal_edit_'+number,
         name: good.name,
-        price: good.price,
+        price: '$'+good.price,
         count: good.count,
         email: good.email,
         saveId: 'modal_save_'+number,
@@ -464,8 +480,8 @@ const LIST = {
           good.name = $(form+'.name').val();
           good.email = $(form+'.supplier_email').val();
           good.count = $(form+'.count').val();
-          good.price = $(form+'.price').val(); 
-
+          good.price = $(form+'.price').val().replace('$', '');
+          
           // FIXME: These three can be presented by one function
           good.delivery.russia.moscow = $(form+'.russia_cities .city_1').prop('checked') ? true : false; 
           good.delivery.russia.saratov = $(form+'.russia_cities .city_2').prop('checked') ? true : false; 
@@ -539,15 +555,32 @@ const LIST = {
   
     });
 
+    $('.digits').keyup(function(){
+      const nonDigitRegExp = /\D/;
+    
+      if($(this).val().match(nonDigitRegExp)){
+        $(this).val($(this).val().replace(nonDigitRegExp,''));
+      }
+    });
+    
+    $('.price').focus(function(){
+      let regExpDollar = /\$/;
+      $(this).val($(this).val().replace(regExpDollar, ''));
+    });
+
+    $('.price').blur(function(){
+      $(this).val('$'.concat($(this).val()));
+    });
+    
 
   },
 };
 
 // NOTE: Need to think about generating those
-LIST.push(new Good('B', 'someemail@gmail.com', 3, 100, [true, true, true],[true, true, true],[true, true, true]));
-LIST.push(new Good('A', 'someeail@gmail.com', 4, 1000, [true, true, true],[false, false, true],[true, true, true]));
-LIST.push(new Good('C', 'smeemail@gmail.com',11, 10, [true, true, true],[false, true, true],[true, true, true]));
-LIST.push(new Good('D', 'somemail@gmail.com', 1, 1, [true, true, true],[true, true, true],[true, true, true]));
+LIST.push(new Good('Lorem ipsum', 'someemail@gmail.com', 3, 100, [true, true, true],[true, true, true],[true, true, true]));
+LIST.push(new Good('Dolor sit amet', 'someeail@gmail.com', 4, 1000, [true, true, true],[false, false, true],[true, true, true]));
+LIST.push(new Good('Ipsum amet', 'smeemail@gmail.com',11, 10, [true, true, true],[false, true, true],[true, true, true]));
+LIST.push(new Good('Lorem sit', 'somemail@gmail.com', 1, 1, [true, true, true],[true, true, true],[true, true, true]));
 
 let buttonDelete = $(".button_delete");
 let buttonClose = $(".modal_close");
@@ -558,7 +591,7 @@ $(modalTemp({
   email: '',
   name: '',
   count: '',
-  price: '',
+  price: '$',
   saveId: 'save_add',
   cancelId: 'cancel_add',
 })).appendTo('.main');
@@ -656,15 +689,6 @@ $("#cancel_add").click(() => {
 //   $(form+'.usa_cities .city_3').prop('checked', false);
 // };
 
-$('.digits').keyup(function(){
-  const nonDigitRegExp = /\D/;
-
-  if($(this).val().match(nonDigitRegExp)){
-    $(this).val($(this).val().replace(nonDigitRegExp,''));
-  }
-});
-
-
 
 $('#modal_add form').submit((event) => {
   event.preventDefault();
@@ -715,4 +739,26 @@ $('#modal_add form').submit((event) => {
   }
 });
 
+
+$('#search_form').submit((event)=>{
+  event.preventDefault();
+  const form = '#search_form ';
+  const input = $(form+'input');
+
+  const toSearch = input.val();
+  const regExpToFilter = new RegExp(toSearch, 'i');
+
+  LIST.forEach((good)=>{
+    if(!good.name.match(regExpToFilter)){
+      good.hidden = true; 
+    } else {
+      good.hidden = false;
+    }
+  });
+
+  LIST.render();
+})
+
+
 LIST.render();
+
