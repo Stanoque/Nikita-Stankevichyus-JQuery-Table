@@ -139,3 +139,7 @@ h2 {
 	z-index: 2;
 	opacity: 1;	
 }
+
+.invalid {
+	border: 2px solid red;
+}

@@ -76,7 +76,6 @@ let appendDelivery = function(whereTo, good) {
             delivery.push(good.delivery[country][city]);
           }
         }
-  
 
         $(citiesTemp({
           country: country,
@@ -457,6 +456,10 @@ appendDelivery('#modal_add', null);
 $("#good_add").click(() => {
   $(".modal_fade").addClass("modal_fade_trick");
   $("#modal_add").css("display", "block");
+
+  const form = '#modal_add form ';
+  $(form+'.name').focus();
+
 });
 
 $("#cancel_add").click(() => {
@@ -464,9 +467,78 @@ $("#cancel_add").click(() => {
   $("#modal_add").css("display", "none");
 });
 
+const isNameValid = (name) => {
+  let workString = name;
+  let regExpOnlySpaces = /\S/;
+  
+  if(!workString.match(regExpOnlySpaces)){
+    return false;
+  }
+  if(workString.length > 15 || workString.length < 5){
+    return false;
+  }
+
+  return true;
+
+};
+
+const isEmailValid = (email) => {
+  let regExpEmail = /\w+@\w+.[com|ru|org]/g;
+
+  if(email.match(regExpEmail)){
+    return true;
+  } else {
+    return false;
+  };
+
+};
+
+const isCountValid = (count) => {
+
+  if(count.length > 0){
+    return true;
+  } else {
+    return false;
+  }
+
+};
+
+const isPriceValid = (price) => {
+
+  if(price.length > 0){
+    return true;
+  } else {
+    return false;
+  }
+
+};
+
+$('.digits').keyup(function(){
+  const nonDigitRegExp = /\D/;
+
+  if($(this).val().match(nonDigitRegExp)){
+    $(this).val($(this).val().replace(nonDigitRegExp,''));
+  }
+});
+
 $('#modal_add form').submit((event) => {
   event.preventDefault();
+
   const form = '#modal_add form ';
+  
+  let name = $(form+'.name').val();
+  let email = $(form+'.supplier_email').val();
+  let count = $(form+'.count').val();
+  let price = $(form+'.price').val();
+
+  if(isEmailValid(email)){
+    alert('Nice bro');
+  } else {
+    alert('Wrong leatherman');
+  }
+  isEmailValid(email);
+  isCountValid(count);
+  isPriceValid(price);
 
   // FIXME: Do something about this hell
   LIST.add(new Good(
@@ -506,190 +578,3 @@ $('#modal_add form').submit((event) => {
 });
 
 LIST.render();
-
-
-
-
-// let rowTemp = _.template($("#row_template").html());
-
-// LIST.forEach((good, number) => {
-//   $(rowTemp({
-//     name: good.name,
-//     price: good.price,
-//     count: good.count,
-//     idEdit: 'edit_'+number,
-//     idDelete: 'delete_'+number,
-//   })).appendTo('#table_body');
-
-//   let modalTemp = _.template($("#modal_edit_template").html());
-
-//   $(modalTemp({
-//     modalId: 'modal_edit_'+number,
-//     name: good.name,
-//     price: good.price,
-//     count: good.count,
-//     email: good.email,
-//     saveId: 'modal_save_'+number,
-//     cancelId: 'modal_cancel_'+number,
-//   })).appendTo('.main');
-
-//   const cityCleaner = () => {
-    
-//     $('#modal_edit_'+number+' .label_city span').each(
-//       (index, element) => {
-        
-//         if($(element).html()===''){
-//           $(element).parent().empty();
-//         }
-//       } 
-//     );
-
-//   }
-
-//   cityCleaner();
-
-//   $('#edit_'+number).click(() => {
-//     $(".modal_fade").addClass("modal_fade_trick");
-//     $("#modal_edit_"+number).css("display", "block");
-//   });
-
-//   $("#modal_save_"+number).click(() => {
-//     $(".modal_fade").removeClass("modal_fade_trick");
-//     $("#modal_edit_"+number).css("display", "none");
-//   });
-
-//   $("#modal_cancel_"+number).click(() => {
-//     $(".modal_fade").removeClass("modal_fade_trick");
-//     $("#modal_edit_"+number).css("display", "none");
-//   });
-
-
-//   const thisCities = $('#modal_edit_'+number+' .cities');
-
-//   let citiesTemp = _.template($('#edit_cities_template').html());
-  
-//   $(citiesTemp({
-//     country: 'russia',
-//     city_1: 'Moscow',
-//     city_2: 'Saratov',
-//     city_3: 'SPb',
-//     attr_1: good.delivery.russia.moscow ? 'checked' : null,
-//     attr_2: good.delivery.russia.saratov ? 'checked' : null,
-//     attr_3: good.delivery.russia.spb ? 'checked' : null,
-//     attr_4: good.russiaAllCities() ? 'checked' : null,
-//   })).appendTo($('#modal_edit_'+number+' .cities'));  
-
-//   $(citiesTemp({
-//     country: 'belorus',
-//     city_1: 'Minsk',
-//     city_2: 'Hotlany',
-//     city_3: 'Bobruysk',
-//     attr_1: good.delivery.belorus.minsk ? 'checked' : null,
-//     attr_2: good.delivery.belorus.hotlany ? 'checked' : null,
-//     attr_3: good.delivery.belorus.bobruysk ? 'checked' : null,
-//     attr_4: good.belorusAllCities() ? 'checked' : null,
-//   })).appendTo($('#modal_edit_'+number+' .cities'));
-
-//   $(citiesTemp({
-//     country: 'usa',
-//     city_1: 'NY',
-//     city_2: 'Washington',
-//     city_3: 'Boston',
-//     attr_1: good.delivery.usa.ny ? 'checked' : null,
-//     attr_2: good.delivery.usa.washington ? 'checked' : null,
-//     attr_3: good.delivery.usa.boston ? 'checked' : null,
-//     attr_4: good.usaAllCities() ? 'checked' : null,
-//   })).appendTo($('#modal_edit_'+number+' .cities')); 
-  
-//   const russia = $('#modal_edit_'+number+' .russia');
-//   const belorus = $('#modal_edit_'+number+' .belorus');
-//   const usa = $('#modal_edit_'+number+' .usa');
-
-//   const russiaCities = $('#modal_edit_'+number+' .russia_cities');
-//   const belorusCities = $('#modal_edit_'+number+' .belorus_cities');
-//   const usaCities = $('#modal_edit_'+number+' .usa_cities');
-
-//   const russiaAll = $('#modal_edit_'+number+' .russia_cities .select_all');
-//   const belorusAll = $('#modal_edit_'+number+' .belorus_cities .select_all');
-//   const usaAll = $('#modal_edit_'+number+' .usa_cities .select_all');
-
-//   $(russiaCities).removeClass('hidden');
-
-//   $(russia).click(() => {
-
-//     $(belorusCities).addClass('hidden');
-//     $(usaCities).addClass('hidden');
-//     $(russiaCities).removeClass('hidden');
-
-//   });
-
-//   $(belorus).click(() => {
-
-//     $(russiaCities).addClass('hidden');
-//     $(usaCities).addClass('hidden');
-//     $(belorusCities).removeClass('hidden');
-
-//   });
-
-//   $(usa).click(() => {
-
-//     $(russiaCities).addClass('hidden');
-//     $(belorusCities).addClass('hidden');
-//     $(usaCities).removeClass('hidden');
-
-//   });
-
-//   $(russiaAll).click(() => {
-
-//     if($('#modal_edit_'+number+' .russia_cities .city').attr('checked')){
-//       $('#modal_edit_'+number+' .russia_cities .city').attr('checked', false);
-//     } else {
-//       $('#modal_edit_'+number+' .russia_cities .city').attr('checked', true);
-//     }
-
-//   });
-
-//   $(belorusAll).click(() => {
-
-//     if($('#modal_edit_'+number+' .belorus_cities .city').attr('checked')){
-//       $('#modal_edit_'+number+' .belorus_cities .city').attr('checked', false);
-//     } else {
-//       $('#modal_edit_'+number+' .belorus_cities .city').attr('checked', true);
-//     }
-
-//   });
-
-//   $(usaAll).click(() => {
-
-//     if($('#modal_edit_'+number+' .usa_cities .city').attr('checked')){
-//       $('#modal_edit_'+number+' .usa_cities .city').attr('checked', false);
-//     } else {
-//       $('#modal_edit_'+number+' .usa_cities .city').attr('checked', true);
-//     }
-
-//   });
-
-//   let deleteTemp = _.template($('#modal_delete_template').html());
-
-//   $(deleteTemp({
-//     deleteId: 'modal_delete_'+number,
-//     idYes: 'yes_'+number,
-//     idNo: 'no_'+number,
-//   })).appendTo('.main');
-
-//   $('#delete_'+number).click(() => {
-//     $('.modal_fade').addClass('modal_fade_trick');
-//     $('#modal_delete_'+number).css('display', 'block');
-//   });
-  
-//   $('#yes_'+number).click(() => {
-//     $('.modal_fade').removeClass('modal_fade_trick');
-//     $('#modal_delete_'+number).css('display', 'none');
-//   }); 
-
-//   $('#no_'+number).click(() => {
-//     $('.modal_fade').removeClass('modal_fade_trick');
-//     $('#modal_delete_'+number).css('display', 'none');
-//   }); 
-  
-// });
