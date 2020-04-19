@@ -86,7 +86,7 @@
       <tr class="row">
         <td class="col-5">
           <div class="row justify-content-between pd-h-10">
-            <div class="col-4"><%-name%></div>
+            <div class="col-4 good_name text-info" id="<%-idName%>"><%-name%></div>
           <div class="col-1">
             <div class="badge badge-dark"><%-count%></div>
           </div>
@@ -209,6 +209,27 @@
         </div>
       </div>	
 
+    </script>
+
+    <script type="text/template" id="modal_description_template">
+      <div class="my_modal_description" id="<%-descriptionId%>">
+        <div class="container">
+          <div class="row justify-content-center">
+            <div class="col-12 txt-align-center">
+              <h2 class="mg-t-15"><%-name%></h2>
+            </div>
+          </div>
+          <div class="row justify-content-center align-items-center border-bottom mg-t-35">
+            <div class="col-12 txt-align-center">
+              <p class=""><%-description%></p>
+            </div>
+          </div>
+
+          <div class="row justify-content-center mg-t-35">
+            <div class="col-lg-12 col-md-12"><button type="button" class="btn btn-dark btn-block modal_close" id="<%-closeId%>">Close</button></div>
+          </div>
+        </div>
+      </div>	
     </script>
 
     <script type="text/javascript" src="index.js"></script>

@@ -1,5 +1,8 @@
 "use strict";
 
+const loremIpsum = 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum. ';
+
+
 function Good(name='', email='', count=0, price=0, russia=[], belorus=[], usa=[]) {
 
   this.name = name;
@@ -7,6 +10,8 @@ function Good(name='', email='', count=0, price=0, russia=[], belorus=[], usa=[]
   this.count = count;
   this.price = price;
 
+  this.description = loremIpsum;
+  // NOTE: Maybe there is a better way of dealing with delivery data storage
   this.delivery = {
     russia: {
       moscow: russia ? russia[0] ? true : false : false,
@@ -25,6 +30,8 @@ function Good(name='', email='', count=0, price=0, russia=[], belorus=[], usa=[]
     },
   };
 
+
+  // FIXME: These three can be presented by one function
   this.russiaAllCities = () => {
     let toReturn = true;
     for(let city in this.delivery.russia){
@@ -283,6 +290,7 @@ const LIST = {
         name: good.name,
         price: good.price,
         count: good.count,
+        idName: 'description_'+number,
         idEdit: 'edit_'+number,
         idDelete: 'delete_'+number,
       })).appendTo('#table_body');
@@ -299,24 +307,39 @@ const LIST = {
         cancelId: 'modal_cancel_'+number,
       })).appendTo('#table_body');
 
-      const cityCleaner = () => {
-    
-        $('#modal_edit_'+number+' .label_city span').each(
-          (index, element) => {
+
+      let descriptionTemp = _.template($('#modal_description_template').html());
+
+      $(descriptionTemp({
+        descriptionId: 'modal_description_'+number,
+        name: good.name,
+        description: good.description,
+        closeId: 'modal_description_close_'+number,
         
-            if($(element).html()===''){
-              $(element).parent().empty();
-            }
-          } 
-        );
+      })).appendTo('#table_body');
+      // const cityCleaner = () => {
+    
+      //   $('#modal_edit_'+number+' .label_city span').each(
+      //     (index, element) => {
+        
+      //       if($(element).html()===''){
+      //         $(element).parent().empty();
+      //       }
+      //     } 
+      //   );
 
-      }
+      // }
 
-      cityCleaner();
+      // cityCleaner();
 
       $('#edit_'+number).click(() => {
         $(".modal_fade").addClass("modal_fade_trick");
         $("#modal_edit_"+number).css("display", "block");
+      });
+
+      $('#description_'+number).click(() => {
+        $(".modal_fade").addClass("modal_fade_trick");
+        $("#modal_description_"+number).css("display", "block");
       });
 
       $('#modal_edit_'+number+' form').submit((event) => {
@@ -354,6 +377,10 @@ const LIST = {
         $("#modal_edit_"+number).css("display", "none");
       });
 
+      $("#modal_description_close_"+number).click(() => {
+        $(".modal_fade").removeClass("modal_fade_trick");
+        $("#modal_description_"+number).css("display", "none");
+      });
 
       const thisCities = $('#modal_edit_'+number+' .cities');
 
@@ -390,7 +417,7 @@ const LIST = {
   },
 };
 
-
+// NOTE: Need to think about generating those
 LIST.push(new Good('B', 'someemail@gmail.com', 3, 100, [true, true, true],[true, true, true],[true, true, true]));
 LIST.push(new Good('A', 'someeail@gmail.com', 4, 1000, [true, true, true],[false, false, true],[true, true, true]));
 LIST.push(new Good('C', 'smeemail@gmail.com',11, 10, [true, true, true],[false, true, true],[true, true, true]));
@@ -437,6 +464,8 @@ $("#cancel_add").click(() => {
 $('#modal_add form').submit((event) => {
   event.preventDefault();
   const form = '#modal_add form ';
+
+  // FIXME: Do something about this hell
   LIST.add(new Good(
     $(form+'.name').val(),
     $(form+'.supplier_email').val(),
