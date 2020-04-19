@@ -68,12 +68,15 @@ let appendDelivery = function(whereTo, good) {
   let citiesTemp = _.template($('#edit_cities_template').html());
   
       const renderCities = (country, cityNames=[], allChecked) => {
-
-        if(!good){return;}
+        
         let delivery = [];
-        for(let city in good.delivery[country]){
-          delivery.push(good.delivery[country][city]);
+
+        if(good){
+          for(let city in good.delivery[country]){
+            delivery.push(good.delivery[country][city]);
+          }
         }
+  
 
         $(citiesTemp({
           country: country,
