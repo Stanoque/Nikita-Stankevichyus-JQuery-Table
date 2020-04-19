@@ -60,106 +60,182 @@ let appendDelivery = function(whereTo, good) {
 
   let citiesTemp = _.template($('#edit_cities_template').html());
   
-      $(citiesTemp({
-        country: 'russia',
-        city_1: 'Moscow',
-        city_2: 'Saratov',
-        city_3: 'SPb',
-        attr_1: good ? good.delivery.russia.moscow ? 'checked' : null : null,
-        attr_2: good ? good.delivery.russia.saratov ? 'checked' : null : null,
-        attr_3: good ? good.delivery.russia.spb ? 'checked' : null : null,
-        attr_4: good ? good.russiaAllCities() ? 'checked' : null : null,
-      })).appendTo($(whereTo + ' .cities'));  
+      const renderCities = (country, cityNames=[], allChecked) => {
 
-      $(citiesTemp({
-        country: 'belorus',
-        city_1: 'Minsk',
-        city_2: 'Hotlany',
-        city_3: 'Bobruysk',
-        attr_1: good ? good.delivery.belorus.minsk ? 'checked' : null : null,
-        attr_2: good ? good.delivery.belorus.hotlany ? 'checked' : null : null,
-        attr_3: good ? good.delivery.belorus.bobruysk ? 'checked' : null : null,
-        attr_4: good ? good.belorusAllCities() ? 'checked' : null : null,
-      })).appendTo($(whereTo + ' .cities'));  
+        if(!good){return;}
+        let delivery = [];
+        for(let city in good.delivery[country]){
+          delivery.push(good.delivery[country][city]);
+        }
 
-      $(citiesTemp({
-        country: 'usa',
-        city_1: 'NY',
-        city_2: 'Washington',
-        city_3: 'Boston',
-        attr_1: good ? good.delivery.usa.ny ? 'checked' : null : null,
-        attr_2: good ? good.delivery.usa.washington ? 'checked' : null : null,
-        attr_3: good ? good.delivery.usa.boston ? 'checked' : null : null,
-        attr_4: good ? good.usaAllCities() ? 'checked' : null : null,
-      })).appendTo($(whereTo + ' .cities'));  
+        $(citiesTemp({
+          country: country,
+          city_1: cityNames[0],
+          city_2: cityNames[1],
+          city_3: cityNames[2],
+          attr_1: delivery[0] ? 'checked' : null,
+          attr_2: delivery[1] ? 'checked' : null,
+          attr_3: delivery[2] ? 'checked' : null,
+          attr_4: allChecked ? 'checked' : null,
+        })).appendTo($(whereTo + ' .cities'));
+      };
+
+      renderCities('russia', ['Moscow', 'Saratov', 'SPb'], good ? good.russiaAllCities() : false);
+      renderCities('belorus', ['Minsk', 'Hotlany', 'Bobruysk'], good ? good.belorusAllCities() : false);
+      renderCities('usa', ['NY', 'Washington', 'Boston'], good ? good.usaAllCities() : false);
+
+      // FIXME: These three can be presented by one function
+      // DONE
+      // $(citiesTemp({
+      //   country: 'russia',
+      //   city_1: 'Moscow',
+      //   city_2: 'Saratov',
+      //   city_3: 'SPb',
+      //   attr_1: good ? good.delivery.russia.moscow ? 'checked' : null : null,
+      //   attr_2: good ? good.delivery.russia.saratov ? 'checked' : null : null,
+      //   attr_3: good ? good.delivery.russia.spb ? 'checked' : null : null,
+      //   attr_4: good ? good.russiaAllCities() ? 'checked' : null : null,
+      // })).appendTo($(whereTo + ' .cities'));  
+
+      // $(citiesTemp({
+      //   country: 'belorus',
+      //   city_1: 'Minsk',
+      //   city_2: 'Hotlany',
+      //   city_3: 'Bobruysk',
+      //   attr_1: good ? good.delivery.belorus.minsk ? 'checked' : null : null,
+      //   attr_2: good ? good.delivery.belorus.hotlany ? 'checked' : null : null,
+      //   attr_3: good ? good.delivery.belorus.bobruysk ? 'checked' : null : null,
+      //   attr_4: good ? good.belorusAllCities() ? 'checked' : null : null,
+      // })).appendTo($(whereTo + ' .cities'));  
+
+      // $(citiesTemp({
+      //   country: 'usa',
+      //   city_1: 'NY',
+      //   city_2: 'Washington',
+      //   city_3: 'Boston',
+      //   attr_1: good ? good.delivery.usa.ny ? 'checked' : null : null,
+      //   attr_2: good ? good.delivery.usa.washington ? 'checked' : null : null,
+      //   attr_3: good ? good.delivery.usa.boston ? 'checked' : null : null,
+      //   attr_4: good ? good.usaAllCities() ? 'checked' : null : null,
+      // })).appendTo($(whereTo + ' .cities'));  
+
+
+      // FIXME: Do something with this hell
+      // DONE
+      // const russia = $(whereTo + ' .russia');
+      // const belorus = $(whereTo + ' .belorus');
+      // const usa = $(whereTo + ' .usa');
+
+      let countries = $(whereTo + ' .countries').children();
+
+      countries = countries.toArray();
+
+      const cities = countries.map((country)=>{
+
+        let citiesClass = ' .'+$(country).attr('class')+'_cities';
+        return $(whereTo + citiesClass);
+
+      });
+
+      // const russiaCities = $(whereTo + ' .russia_cities');
+      // const belorusCities = $(whereTo + ' .belorus_cities');
+      // const usaCities = $(whereTo + ' .usa_cities');
+
+      // const cities = [russiaCities, belorusCities, usaCities];
+
+      // const russiaAll = $(whereTo + ' .russia_cities .select_all');
+      // const belorusAll = $(whereTo + ' .belorus_cities .select_all');
+      // const usaAll = $(whereTo + ' .usa_cities .select_all');
+
+      $(cities[0]).removeClass('hidden');
+
+
+      const migrate = (toCountry) => {
+
+        $(toCountry).click(() => {
+
+          cities.forEach((country)=>{
+            $(country).addClass('hidden');
+          });
+
+          const citiesClass = ' .'+$(toCountry).attr('class')+'_cities';
+          $(whereTo + citiesClass).removeClass('hidden');
   
-      const russia = $(whereTo + ' .russia');
-      const belorus = $(whereTo + ' .belorus');
-      const usa = $(whereTo + ' .usa');
-
-      const russiaCities = $(whereTo + ' .russia_cities');
-      const belorusCities = $(whereTo + ' .belorus_cities');
-      const usaCities = $(whereTo + ' .usa_cities');
-
-      const russiaAll = $(whereTo + ' .russia_cities .select_all');
-      const belorusAll = $(whereTo + ' .belorus_cities .select_all');
-      const usaAll = $(whereTo + ' .usa_cities .select_all');
-
-      $(russiaCities).removeClass('hidden');
-
-      $(russia).click(() => {
-
-        $(belorusCities).addClass('hidden');
-        $(usaCities).addClass('hidden');
-        $(russiaCities).removeClass('hidden');
-
-      });
-
-      $(belorus).click(() => {
-
-        $(russiaCities).addClass('hidden');
-        $(usaCities).addClass('hidden');
-        $(belorusCities).removeClass('hidden');
-
-      });
-
-      $(usa).click(() => {
-
-        $(russiaCities).addClass('hidden');
-        $(belorusCities).addClass('hidden');
-        $(usaCities).removeClass('hidden');
-
-      });
-
-      $(russiaAll).click(() => {
-
-        if($(whereTo + ' .russia_cities .city').prop('checked')){
-          $(whereTo + ' .russia_cities .city').prop('checked', false);
-        } else {
-         $(whereTo + ' .russia_cities .city').prop('checked', true);
-        }
-
-      });
-
-      $(belorusAll).click(() => {
-
-        if($(whereTo + ' .belorus_cities .city').prop('checked')){
-          $(whereTo + ' .belorus_cities .city').prop('checked', false);
-        } else {
-          $(whereTo + ' .belorus_cities .city').prop('checked', true);
-        }
-
         });
+      }
 
-      $(usaAll).click(() => {
-
-        if($(whereTo + ' .usa_cities .city').prop('checked')){
-          $(whereTo + ' .usa_cities .city').prop('checked', false);
-        } else {
-         $(whereTo + ' .usa_cities .city').prop('checked', true);
-        }
-
+      countries.forEach((country)=>{
+        migrate(country);
       });
+
+      // FIXME: These three can be preseneted by one function 
+      // DONE
+      // $(russia).click(() => {
+
+      //   $(belorusCities).addClass('hidden');
+      //   $(usaCities).addClass('hidden');
+      //   $(russiaCities).removeClass('hidden');
+
+      // });
+
+      // $(belorus).click(() => {
+
+      //   $(russiaCities).addClass('hidden');
+      //   $(usaCities).addClass('hidden');
+      //   $(belorusCities).removeClass('hidden');
+
+      // });
+
+      // $(usa).click(() => {
+
+      //   $(russiaCities).addClass('hidden');
+      //   $(belorusCities).addClass('hidden');
+      //   $(usaCities).removeClass('hidden');
+
+      // });
+
+      // FIXME: These three can be preseneted by one function
+      // DONE
+
+      const selectAll = (countrySelectAll) => {
+        $(countrySelectAll).click(() => {
+          $(countrySelectAll).parent().siblings().children('.city').prop('checked', $(countrySelectAll).prop('checked'));
+          // $(whereTo + ' .russia_cities .city').prop('checked', $(russiaAll).prop('checked'));
+        });
+      }
+
+      cities.forEach((country)=>{
+       selectAll($(country).find('.select_all')); 
+      })
+
+      // cities.forEach((country)=>{
+      //   alert($(country).children('.select_all').html());
+      // });
+
+      // $(russiaAll).click(() => {
+      //   $(russiaAll).parent().siblings().children('.city').prop('checked', $(russiaAll).prop('checked'));
+      //   // $(whereTo + ' .russia_cities .city').prop('checked', $(russiaAll).prop('checked'));
+      // });
+
+      // $(belorusAll).click(() => {
+
+      //   if($(whereTo + ' .belorus_cities .city').prop('checked')){
+      //     $(whereTo + ' .belorus_cities .city').prop('checked', false);
+      //   } else {
+      //     $(whereTo + ' .belorus_cities .city').prop('checked', true);
+      //   }
+
+      //   });
+
+      // $(usaAll).click(() => {
+
+      //   if($(whereTo + ' .usa_cities .city').prop('checked')){
+      //     $(whereTo + ' .usa_cities .city').prop('checked', false);
+      //   } else {
+      //    $(whereTo + ' .usa_cities .city').prop('checked', true);
+      //   }
+
+      // });
 }
 
 const LIST = {
@@ -253,6 +329,7 @@ const LIST = {
         good.count = $(form+'.count').val();
         good.price = $(form+'.price').val(); 
 
+        // FIXME: These three can be presented by one function
         good.delivery.russia.moscow = $(form+'.russia_cities .city_1').prop('checked') ? true : false; 
         good.delivery.russia.saratov = $(form+'.russia_cities .city_2').prop('checked') ? true : false; 
         good.delivery.russia.spb = $(form+'.russia_cities .city_3').prop('checked') ? true : false;
