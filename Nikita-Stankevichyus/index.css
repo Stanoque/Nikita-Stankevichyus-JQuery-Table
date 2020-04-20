@@ -238,7 +238,7 @@ h2 {
 	width: 141.5% !important;
 }
 
-@media (max-width: 576px ){
+@media (max-width: 575.5px ){
 	.modal_save {
 		width: 100% !important;
 	}

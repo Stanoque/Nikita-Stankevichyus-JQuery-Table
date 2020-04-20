@@ -79,6 +79,7 @@ const hidNotes = (form) => {
 
 const showNotes = (form) => {
   if($(form).hasClass('name')){
+    $(form).parent().siblings('.note').addClass('hidden');
     if($(form).val().length < 5){
       $(form).parent().siblings('.invalid_name_short').removeClass('hidden');
     } else {
@@ -692,69 +693,6 @@ $("#cancel_add").click(() => {
   clearInvalid('#modal_add form ');
 });
 
-// const isNameValid = (name) => {
-//   let workString = name;
-//   let regExpOnlySpaces = /\S/;
-  
-//   if(!workString.match(regExpOnlySpaces)){
-//     return false;
-//   }
-//   if(workString.length > 15 || workString.length < 5){
-//     return false;
-//   }
-
-//   return true;
-
-// };
-
-// const isEmailValid = (email) => {
-//   let regExpEmail = /\w+@\w+.[com|ru|org]/g;
-
-//   if(email.match(regExpEmail)){
-//     return true;
-//   } else {
-//     return false;
-//   };
-
-// };
-
-// const isCountValid = (count) => {
-
-//   if(count.length > 0){
-//     return true;
-//   } else {
-//     return false;
-//   }
-
-// };
-
-// const isPriceValid = (price) => {
-
-//   if(price.length > 0){
-//     return true;
-//   } else {
-//     return false;
-//   }
-
-// };
-
-// const clearAdd = (form) => {
-//   $(form+'.name').val('');
-//   $(form+'.supplier_email').val('');
-//   $(form+'.count').val('');
-//   $(form+'.price').val('');
-//   $(form+'.select_all').prop('checked', false);
-//   $(form+'.russia_cities .city_1').prop('checked', false);
-//   $(form+'.russia_cities .city_2').prop('checked', false);
-//   $(form+'.russia_cities .city_3').prop('checked', false);
-//   $(form+'.belorus_cities .city_1').prop('checked', false);
-//   $(form+'.belorus_cities .city_2').prop('checked', false);
-//   $(form+'.belorus_cities .city_3').prop('checked', false);
-//   $(form+'.usa_cities .city_1').prop('checked', false);
-//   $(form+'.usa_cities .city_2').prop('checked', false);
-//   $(form+'.usa_cities .city_3').prop('checked', false);
-// };
-
 
 $('#modal_add form').submit((event) => {
   event.preventDefault();
@@ -773,10 +711,6 @@ $('#modal_add form').submit((event) => {
       delivery.push($(city).prop('checked') ? true : false);
     });
 
-    
-
-  // FIXME: Do something about this hell
-  // DONE
     LIST.add(new Good(
       $(form+'.name').val(),
       $(form+'.supplier_email').val(),
