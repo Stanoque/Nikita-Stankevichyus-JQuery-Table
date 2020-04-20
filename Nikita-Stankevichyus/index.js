@@ -74,6 +74,18 @@ function Good(name='', email='', count=0, price=0, russia=[], belorus=[], usa=[]
   };
 }
 
+const showNotes = (form) => {
+  if($(form).hasClass('name')){
+    if($(form).val().length < 5){
+      $(form).parent().siblings('.invalid_name_short').toggleClass('hidden');
+    } else {
+      $(form).parent().siblings('.invalid_name_long').toggleClass('hidden');
+    }
+  } else {
+    $(form).parent().siblings('.note').toggleClass('hidden');
+  }
+}
+
 const putSemi = (price) => {
 
 
@@ -103,14 +115,14 @@ const putSemi = (price) => {
   }
   
   workString.reverse();
-  console.log(tail);
+  
   workString = workString.join('').concat(tail);
-  console.log(workString);
+  
   return workString;
 }
 
 const cleanPriceString = (price) => {
-  console.log(typeof price);
+  
   return price.replace(/\,/g, '').replace('$', '');
 };
 
@@ -120,7 +132,7 @@ const priceConverter = (price) => {
   if(typeof price === 'number') {
     return '$'+putSemi(workPrice);
   } else {
-    alert(cleanPriceString(workPrice));
+    
     return parseFloat(cleanPriceString(workPrice));
   }
 };
@@ -182,6 +194,7 @@ const clearAdd = (form) => {
   $(form+'.price').val('$');
   $(form+'.select_all').prop('checked', false);
   $(form+'.city').prop('checked', false);
+  $(form+'.note').addClass('hidden');
 };
 
 const clearEdit = (form, good) => {
@@ -192,6 +205,7 @@ const clearEdit = (form, good) => {
   $(form+'russia .select_all').prop('checked', good.russiaAllCities());
   $(form+'belorus .select_all').prop('checked', good.belorusAllCities());
   $(form+'usa .select_all').prop('checked', good.usaAllCities());
+  $(form+'.note').addClass('hidden');
 
   let cities = $(form+'.cities').toArray();
   let delivery = good.deliveryToArray();
@@ -200,15 +214,6 @@ const clearEdit = (form, good) => {
     $(element).prop('checked', delivery[index]);
   });
 
-  // $(form+'.russia_cities .city_1').prop('checked', good.russia.moscow);
-  // $(form+'.russia_cities .city_2').prop('checked', false);
-  // $(form+'.russia_cities .city_3').prop('checked', false);
-  // $(form+'.belorus_cities .city_1').prop('checked', false);
-  // $(form+'.belorus_cities .city_2').prop('checked', false);
-  // $(form+'.belorus_cities .city_3').prop('checked', false);
-  // $(form+'.usa_cities .city_1').prop('checked', false);
-  // $(form+'.usa_cities .city_2').prop('checked', false);
-  // $(form+'.usa_cities .city_3').prop('checked', false);
 }
 
 const clearInvalid = (form) => {
@@ -373,35 +378,6 @@ let appendDelivery = function(whereTo, good) {
       cities.forEach((country)=>{
        selectAll($(country).find('.select_all')); 
       })
-
-      // cities.forEach((country)=>{
-      //   alert($(country).children('.select_all').html());
-      // });
-
-      // $(russiaAll).click(() => {
-      //   $(russiaAll).parent().siblings().children('.city').prop('checked', $(russiaAll).prop('checked'));
-      //   // $(whereTo + ' .russia_cities .city').prop('checked', $(russiaAll).prop('checked'));
-      // });
-
-      // $(belorusAll).click(() => {
-
-      //   if($(whereTo + ' .belorus_cities .city').prop('checked')){
-      //     $(whereTo + ' .belorus_cities .city').prop('checked', false);
-      //   } else {
-      //     $(whereTo + ' .belorus_cities .city').prop('checked', true);
-      //   }
-
-      //   });
-
-      // $(usaAll).click(() => {
-
-      //   if($(whereTo + ' .usa_cities .city').prop('checked')){
-      //     $(whereTo + ' .usa_cities .city').prop('checked', false);
-      //   } else {
-      //    $(whereTo + ' .usa_cities .city').prop('checked', true);
-      //   }
-
-      // });
 }
 
 const LIST = {
@@ -549,6 +525,7 @@ const LIST = {
             validation.forEach((element, index)=>{
             if(!element){
               forms[index].addClass('invalid');
+              showNotes(forms[index]);
             }
           });
       
@@ -561,6 +538,7 @@ const LIST = {
         $('.modal_fade').removeClass('modal_fade_trick');
         $('#modal_edit_'+number).css('display', 'none');
         clearEdit('#modal_edit_'+number+' form ', good);
+        clearInvalid('#modal_edit_'+number+' form ');
       });
 
       $("#modal_description_close_"+number).click(() => {
@@ -613,11 +591,11 @@ const LIST = {
 
       
       $(this).val($(this).val().replace(nonDigitRegExp,''));
-      $(this).val($(this).val().replace(strayDotRegExp,''));
+      // $(this).val($(this).val().replace(strayDotRegExp,''));
       
-      if($(this).val().charAt(0) === '.'){
-        $(this).val($(this).val().slice(1));
-      }
+      // if($(this).val().charAt(0) === '.'){
+      //   $(this).val($(this).val().slice(1));
+      // }
 
       // NOTE: Think how to rewrite this to deal with 'past' and 'present' dot
       if($(this).val().match(/\./g)){
@@ -646,6 +624,14 @@ const LIST = {
 
       if(!$(this).val().match(regExpDollar)){
         $(this).val('$'.concat($(this).val()));
+      }
+
+      const strayDotRegExp = /\.(?!\d)/g;
+
+      $(this).val($(this).val().replace(strayDotRegExp,''));
+      
+      if($(this).val().charAt(0) === '.'){
+        $(this).val($(this).val().slice(1));
       }
     });
     
@@ -782,9 +768,10 @@ $('#modal_add form').submit((event) => {
       delivery.push($(city).prop('checked') ? true : false);
     });
 
-    alert(delivery);
+    
 
   // FIXME: Do something about this hell
+  // DONE
     LIST.add(new Good(
       $(form+'.name').val(),
       $(form+'.supplier_email').val(),
@@ -810,6 +797,7 @@ $('#modal_add form').submit((event) => {
     validation.forEach((element, index)=>{
       if(!element){
         forms[index].addClass('invalid');
+        showNotes(forms[index]);
       }
     });
 

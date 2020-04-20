@@ -177,10 +177,16 @@ h2 {
 	min-width: 100px;
 }
 
+.note {
+	color: red;
+	font-size: 12px;
+	margin-bottom: -15px;
+}
+
 .hidden {
-	display: none;
-	position: absolute;
-	pointer-events: none;
+	display: none !important;
+	position: absolute !important;
+	pointer-events: none !important;
 }
 
 .good_name {

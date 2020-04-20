@@ -122,32 +122,37 @@
             <div class="row">
               <label for="">
                 <div class="row">Name</div>
-                <div class="row"><input type="text" name="name" class="name form-control" value="<%-name%>"></div>
+                <div class="row"><input type="text" name="name" class="name form-control" value="<%-name%>"></div> 
+                <div class="row hidden note invalid_name_short">Name's length must be more than 5</div>
+                <div class="row hidden note invalid_name_long">Name's length must be less than 15</div>
               </label>
             </div>
 
-            <div class="row">
+            <div class="row mg-t-15">
               <label for="">
                 <div class="row">Supplier Email</div>
                 <div class="row"><input type="text" name="email" class="supplier_email form-control" value="<%-email%>"></div>
+                <div class="row hidden note invalid_email">Invalid email</div>
               </label>
             </div>
 
-            <div class="row">
+            <div class="row mg-t-15">
               <label for="">
                 <div class="row">Count</div>
                 <div class="row"><input type="text" name="count" class="count form-control digits" value="<%-count%>"></div>
+                <div class="row hidden note invalid_count">Required field</div>
               </label>
             </div>
 
-            <div class="row">
+            <div class="row mg-t-15">
               <label for="">
                 <div class="row">Price</div>
                 <div class="row"><input type="text" name="price" class="price form-control digits" value="<%-price%>"></div>
+                <div class="row hidden note invalid_price">Required field</div>
               </label>
             </div>
 
-            <div class="row">
+            <div class="row mg-t-15">
               <label class="mg-l--15">
                 Delivery
                 <div class="row justify-content-between delivery">
