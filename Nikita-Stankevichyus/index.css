@@ -19,8 +19,8 @@ label {
   cursor: pointer;
 }
 
-.flip {
-  transform: rotate(180deg) translateX(6px) translateY(-6px);
+.flip svg{
+  transform: rotate(180deg);
 }
 .modal_fade:before {
   display: none;
@@ -42,10 +42,12 @@ label {
 .my_modal_delete {
   display: none;
 	position: fixed;
-	top: 35%;
-	left: 37.5%;
-  width: 25%;
-  height: 200px;
+	top: 25vh;
+	left: 50vw;
+	min-width: max-content;
+	transform: translate(-50%, -23.5%);
+	width: 45vw;
+	height: 200px;
 	background: #fff;
 	border: 3px solid #333;
 	border-radius: 4px; 
@@ -61,13 +63,14 @@ label {
 	background: #fff;
 	border: 3px solid #333;
 	border-radius: 4px;
-	width: 370px;
+	min-width: min-content;
+	max-width: 370px;
 	padding: 25px;
 	/* padding-right: 60px; */
 	/* padding-left: 40px; */
 	z-index: 2;
 	opacity: 1;
-	transform: translate(-50%, -15%);
+	transform: translate(-50%, -23.5%);
 }
 
 .mg-t-15 {
@@ -180,7 +183,7 @@ h2 {
 .note {
 	color: red;
 	font-size: 12px;
-	margin-bottom: -15px;
+	margin-bottom: -18px;
 }
 
 .hidden {
@@ -201,10 +204,17 @@ h2 {
 .my_modal_description {
   display: none;
 	position: fixed;
+	padding-bottom: 25px;
 	top: 25vh;
-	left: 37.5%;
-  width: 25%;
-  height: 450px;
+	left: 50vw;
+	transform: translateX(-50%) translateY(-25%);
+	min-width: 200px;
+	max-width: 400px;
+	/* width: 350px; */
+	min-height: max-content;
+	max-height: 100vh;
+	/* height: 450px; */
+	/* max-height: 500px; */
 	background: #fff;
 	border: 3px solid #333;
 	border-radius: 4px; 
@@ -227,3 +237,62 @@ h2 {
 .modal_cancel {
 	width: 141.5% !important;
 }
+
+@media (max-width: 576px ){
+	.modal_save {
+		width: 100% !important;
+	}
+	
+	.modal_cancel {
+		width: 100% !important;
+	}
+
+	.modal_buttons_wrap {
+		margin: 5px auto !important;
+	}
+
+	.cities {
+		margin: 0 15px;
+		margin-top: 10px;
+	}
+
+	.button_edit {
+		margin-bottom: 10px;
+		margin-right: 10px;
+	}
+
+	.button_delete {
+		margin-right: 10px;
+	}
+
+	#good_add {
+		margin-left: 40px;
+		margin-top: 15px;
+	}
+
+	.my_modal_description{
+		font-size: 14px;
+	}
+	.modal_close {
+		margin-top: 5px;
+		/* width: 220px; */
+	}
+
+	.my_modal_delete {
+		height: 220px;
+	}
+}
+
+/* .col-12 {
+	width: 100% !important;
+	margin: 0 auto !important;
+}
+
+.col-12 button{
+	width: 100% !important;
+}
+
+.col-12 input{
+	width: 100% !important;
+} */
+
