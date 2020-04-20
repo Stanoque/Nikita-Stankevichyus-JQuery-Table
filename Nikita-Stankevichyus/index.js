@@ -110,6 +110,7 @@ const putSemi = (price) => {
 }
 
 const cleanPriceString = (price) => {
+  console.log(typeof price);
   return price.replace(/\,/g, '').replace('$', '');
 };
 
@@ -769,7 +770,8 @@ $('#modal_add form').submit((event) => {
 
   const form = '#modal_add form ';
   let forms = [$(form+'.name'), $(form+'.supplier_email'), $(form+'.count'), $(form+'.price')];
-  let validation = [isNameValid(forms[0].val()), isEmailValid(forms[1].val()), isCountValid(forms[2].val()), isPriceValid(forms[3].val())];
+  
+  let validation = [isNameValid(forms[0].val()), isEmailValid(forms[1].val()), isCountValid(forms[2].val()), isPriceValid(cleanPriceString(forms[3].val()))];
 
   
   if(validation.every((element)=>{return element;})){
