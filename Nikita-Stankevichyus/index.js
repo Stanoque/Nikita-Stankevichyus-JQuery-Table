@@ -668,7 +668,10 @@ $(modalTemp({
 $("#triangle_name").click(() => {
   $("#triangle_name").toggleClass('flip');
   LIST.ascedningName = !LIST.ascedningName;
+
 });
+
+
 
 $("#triangle_price").click(() => {
   $("#triangle_price").toggleClass('flip');
@@ -711,25 +714,48 @@ $('#modal_add form').submit((event) => {
       delivery.push($(city).prop('checked') ? true : false);
     });
 
-    LIST.add(new Good(
-      $(form+'.name').val(),
-      $(form+'.supplier_email').val(),
-      $(form+'.count').val(),
-      priceConverter($(form+'.price').val()), 
-      delivery.slice(0, 3), 
-      delivery.slice(3, 5), 
-      delivery.slice(5, 9), 
-    ));
+    // LIST.add(new Good(
+    //   $(form+'.name').val(),
+    //   $(form+'.supplier_email').val(),
+    //   $(form+'.count').val(),
+    //   priceConverter($(form+'.price').val()), 
+    //   delivery.slice(0, 3), 
+    //   delivery.slice(3, 5), 
+    //   delivery.slice(5, 9), 
+    // ));
 
+    let addPromise = new Promise((resolve, reject) => {
+      setTimeout(()=>{
+        LIST.add(new Good(
+          $(form+'.name').val(),
+          $(form+'.supplier_email').val(),
+          $(form+'.count').val(),
+          priceConverter($(form+'.price').val()), 
+          delivery.slice(0, 3), 
+          delivery.slice(3, 5), 
+          delivery.slice(5, 9), 
+      ))
+          resolve('Good added')
+        }
+      , serverResponseTime);
+      }
+    );
+    
+    addPromise.then((resolved) => {
+      clearAdd(form);
+      clearInvalid(form);
+      LIST.render();
+    }  
+    );
 
-    clearAdd(form);
+    // clearAdd(form);
 
     $(".modal_fade").removeClass("modal_fade_trick");  
     $('#modal_add').css('display', 'none');
 
-    clearInvalid(form);
-
-    LIST.render();
+    
+    // clearInvalid(form);
+    // LIST.render();
 
   } else {
     clearInvalid(form);
@@ -773,6 +799,8 @@ $('.sort_name').click(()=>{
 $('.sort_price').click(()=>{
   LIST.sortByPrice();
 });
+
+
 
 LIST.render();
 
