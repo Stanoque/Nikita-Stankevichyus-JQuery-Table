@@ -74,6 +74,56 @@ function Good(name='', email='', count=0, price=0, russia=[], belorus=[], usa=[]
   };
 }
 
+const putSemi = (price) => {
+
+
+  let workString = price.toString();
+  let tail = '';
+
+  workString = workString.replace(/\,/g, '');
+
+  if(workString.indexOf('.') !== -1){
+    tail = workString.slice(workString.indexOf('.'));
+    workString = workString.slice(0, workString.indexOf('.'));
+  }
+
+  workString = workString.split('');
+  workString.reverse();
+  
+  let counter = 0;
+  for(let i = 0; i < workString.length; i++){
+    if(counter < 3) {
+      counter++;
+    } else {
+      
+      workString.splice(i, 0, ',');
+      counter = 0;
+    }
+    
+  }
+  
+  workString.reverse();
+  console.log(tail);
+  workString = workString.join('').concat(tail);
+  console.log(workString);
+  return workString;
+}
+
+const cleanPriceString = (price) => {
+  return price.replace(/\,/g, '').replace('$', '');
+};
+
+const priceConverter = (price) => {
+  let workPrice = price;
+  
+  if(typeof price === 'number') {
+    return '$'+putSemi(workPrice);
+  } else {
+    alert(cleanPriceString(workPrice));
+    return parseFloat(cleanPriceString(workPrice));
+  }
+};
+
 const isNameValid = (name) => {
   let workString = name;
   let regExpOnlySpaces = /\S/;
@@ -113,8 +163,8 @@ const isCountValid = (count) => {
 const isPriceValid = (price) => {
 
   let workPrice = price;
-  let regExpDollar = /\$/;
-  workPrice = workPrice.replace(regExpDollar, '');
+  // let regExpDollar = /\$/;
+  // workPrice = workPrice.replace(regExpDollar, '');
 
   if(workPrice.length > 0){
     return true;
@@ -137,7 +187,7 @@ const clearEdit = (form, good) => {
   $(form+'.name').val(good.name);
   $(form+'.supplier_email').val(good.email);
   $(form+'.count').val(good.count);
-  $(form+'.price').val(good.price);
+  $(form+'.price').val(priceConverter(good.price));
   $(form+'russia .select_all').prop('checked', good.russiaAllCities());
   $(form+'belorus .select_all').prop('checked', good.belorusAllCities());
   $(form+'usa .select_all').prop('checked', good.usaAllCities());
@@ -397,7 +447,7 @@ const LIST = {
       $(rowTemp({
         idRow: 'table_row_'+number,
         name: good.name,
-        price: good.price,
+        price: priceConverter(good.price),
         count: good.count,
         idName: 'description_'+number,
         idEdit: 'edit_'+number,
@@ -418,7 +468,7 @@ const LIST = {
       $(modalTemp({
         modalId: 'modal_edit_'+number,
         name: good.name,
-        price: '$'+good.price,
+        price: priceConverter(good.price),
         count: good.count,
         email: good.email,
         saveId: 'modal_save_'+number,
@@ -465,13 +515,13 @@ const LIST = {
 
         const form = '#modal_edit_'+number+' form ';
         let forms = [$(form+'.name'), $(form+'.supplier_email'), $(form+'.count'), $(form+'.price')];
-        let validation = [isNameValid(forms[0].val()), isEmailValid(forms[1].val()), isCountValid(forms[2].val()), isPriceValid(forms[3].val())];
+        let validation = [isNameValid(forms[0].val()), isEmailValid(forms[1].val()), isCountValid(forms[2].val()), isPriceValid(cleanPriceString(forms[3].val()))];
 
         if(validation.every((element)=>{return element;})){
           good.name = $(form+'.name').val();
           good.email = $(form+'.supplier_email').val();
           good.count = $(form+'.count').val();
-          good.price = $(form+'.price').val().replace('$', '');
+          good.price = priceConverter($(form+'.price').val());
           
           // FIXME: These three can be presented by one function
           good.delivery.russia.moscow = $(form+'.russia_cities .city_1').prop('checked') ? true : false; 
@@ -547,21 +597,52 @@ const LIST = {
   
     });
 
-    $('.digits').on('input', (function(){
+    $('.count').on('input', (function(){
       const nonDigitRegExp = /\D/;
-    
-      if($(this).val().match(nonDigitRegExp)){
-        $(this).val($(this).val().replace(nonDigitRegExp,''));
+     
+
+      $(this).val($(this).val().replace(nonDigitRegExp,''));
+      
+
+    }));
+
+    $('.price').on('input', (function(){
+      const nonDigitRegExp = /[^0-9.]/;
+      const strayDotRegExp = /\.(?!\d)/g;
+
+      
+      $(this).val($(this).val().replace(nonDigitRegExp,''));
+      $(this).val($(this).val().replace(strayDotRegExp,''));
+      
+      if($(this).val().charAt(0) === '.'){
+        $(this).val($(this).val().slice(1));
       }
+
+      // NOTE: Think how to rewrite this to deal with 'past' and 'present' dot
+      if($(this).val().match(/\./g)){
+          
+          if($(this).val().match(/\./g).length > 1){
+          
+            const valArray = $(this).val().split('');
+            valArray[valArray.indexOf('.')] = '';
+            $(this).val(valArray.join(''));
+          }
+      }
+    
     }));
     
     $('.price').focus(function(){
       let regExpDollar = /\$/;
+
+      $(this).val($(this).val().replace(/\,/g, ''));
       $(this).val($(this).val().replace(regExpDollar, ''));
     });
 
     $('.price').blur(function(){
       let regExpDollar = /\$/;
+
+      $(this).val(putSemi($(this).val()));
+
       if(!$(this).val().match(regExpDollar)){
         $(this).val('$'.concat($(this).val()));
       }
@@ -706,7 +787,7 @@ $('#modal_add form').submit((event) => {
       $(form+'.name').val(),
       $(form+'.supplier_email').val(),
       $(form+'.count').val(),
-      $(form+'.price').val().replace('$', ''), 
+      priceConverter($(form+'.price').val()), 
       delivery.slice(0, 3), 
       delivery.slice(3, 5), 
       delivery.slice(5, 9), 
