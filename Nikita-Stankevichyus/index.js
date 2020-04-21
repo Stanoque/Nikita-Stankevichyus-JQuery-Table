@@ -1,12 +1,14 @@
 "use strict";
 
+
+
 const loremIpsum = 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum. ';
 const serverResponseTime = 2000;
 const initialDatabase = [
   new Good('Lorem ipsum', 'someemail@gmail.com', 3, 100, [true, true, true],[true, true, true],[true, true, true]),
-new Good('Dolor sit amet', 'someeail@gmail.com', 4, 1000, [true, true, true],[false, false, true],[true, true, true]),
-new Good('Ipsum amet', 'smeemail@gmail.com',11, 10, [true, true, true],[false, true, true],[true, true, true]),
-new Good('Lorem sit', 'somemail@gmail.com', 1, 1, [true, true, true],[true, true, true],[true, true, true])
+  new Good('Dolor sit amet', 'someeail@gmail.com', 4, 1000, [true, true, true],[false, false, true],[true, true, true]),
+  new Good('Ipsum amet', 'smeemail@gmail.com',11, 10, [true, true, true],[false, true, true],[true, true, true]),
+  new Good('Lorem sit', 'somemail@gmail.com', 1, 1, [true, true, true],[true, true, true],[true, true, true])
 ]
 
 function Good(name='', email='', count=0, price=0, russia=[], belorus=[], usa=[]) {
@@ -254,6 +256,9 @@ let appendDelivery = function(whereTo, good) {
           city_1: cityNames[0],
           city_2: cityNames[1],
           city_3: cityNames[2],
+          class_1: cityNames[0].toLowerCase(),
+          class_2: cityNames[1].toLowerCase(),
+          class_3: cityNames[2].toLowerCase(),
           attr_1: delivery[0] ? 'checked' : null,
           attr_2: delivery[1] ? 'checked' : null,
           attr_3: delivery[2] ? 'checked' : null,
@@ -264,48 +269,6 @@ let appendDelivery = function(whereTo, good) {
       renderCities('russia', ['Moscow', 'Saratov', 'SPb'], good ? good.russiaAllCities() : false);
       renderCities('belorus', ['Minsk', 'Hotlany', 'Bobruysk'], good ? good.belorusAllCities() : false);
       renderCities('usa', ['NY', 'Washington', 'Boston'], good ? good.usaAllCities() : false);
-
-      // FIXME: These three can be presented by one function
-      // DONE
-      // $(citiesTemp({
-      //   country: 'russia',
-      //   city_1: 'Moscow',
-      //   city_2: 'Saratov',
-      //   city_3: 'SPb',
-      //   attr_1: good ? good.delivery.russia.moscow ? 'checked' : null : null,
-      //   attr_2: good ? good.delivery.russia.saratov ? 'checked' : null : null,
-      //   attr_3: good ? good.delivery.russia.spb ? 'checked' : null : null,
-      //   attr_4: good ? good.russiaAllCities() ? 'checked' : null : null,
-      // })).appendTo($(whereTo + ' .cities'));  
-
-      // $(citiesTemp({
-      //   country: 'belorus',
-      //   city_1: 'Minsk',
-      //   city_2: 'Hotlany',
-      //   city_3: 'Bobruysk',
-      //   attr_1: good ? good.delivery.belorus.minsk ? 'checked' : null : null,
-      //   attr_2: good ? good.delivery.belorus.hotlany ? 'checked' : null : null,
-      //   attr_3: good ? good.delivery.belorus.bobruysk ? 'checked' : null : null,
-      //   attr_4: good ? good.belorusAllCities() ? 'checked' : null : null,
-      // })).appendTo($(whereTo + ' .cities'));  
-
-      // $(citiesTemp({
-      //   country: 'usa',
-      //   city_1: 'NY',
-      //   city_2: 'Washington',
-      //   city_3: 'Boston',
-      //   attr_1: good ? good.delivery.usa.ny ? 'checked' : null : null,
-      //   attr_2: good ? good.delivery.usa.washington ? 'checked' : null : null,
-      //   attr_3: good ? good.delivery.usa.boston ? 'checked' : null : null,
-      //   attr_4: good ? good.usaAllCities() ? 'checked' : null : null,
-      // })).appendTo($(whereTo + ' .cities'));  
-
-
-      // FIXME: Do something with this hell
-      // DONE
-      // const russia = $(whereTo + ' .russia');
-      // const belorus = $(whereTo + ' .belorus');
-      // const usa = $(whereTo + ' .usa');
 
       let countries = $(whereTo + ' .countries').children();
 
@@ -349,39 +312,11 @@ let appendDelivery = function(whereTo, good) {
         migrate(country);
       });
 
-      // FIXME: These three can be preseneted by one function 
-      // DONE
-      // $(russia).click(() => {
-
-      //   $(belorusCities).addClass('hidden');
-      //   $(usaCities).addClass('hidden');
-      //   $(russiaCities).removeClass('hidden');
-
-      // });
-
-      // $(belorus).click(() => {
-
-      //   $(russiaCities).addClass('hidden');
-      //   $(usaCities).addClass('hidden');
-      //   $(belorusCities).removeClass('hidden');
-
-      // });
-
-      // $(usa).click(() => {
-
-      //   $(russiaCities).addClass('hidden');
-      //   $(belorusCities).addClass('hidden');
-      //   $(usaCities).removeClass('hidden');
-
-      // });
-
-      // FIXME: These three can be preseneted by one function
-      // DONE
+      
 
       const selectAll = (countrySelectAll) => {
         $(countrySelectAll).click(() => {
           $(countrySelectAll).parent().siblings().children('.city').prop('checked', $(countrySelectAll).prop('checked'));
-          // $(whereTo + ' .russia_cities .city').prop('checked', $(russiaAll).prop('checked'));
         });
       }
 
@@ -459,6 +394,9 @@ const LIST = {
       })).appendTo('#table_body');
 
 
+
+    
+
       if(good.hidden){
         $('#table_row_'+number).addClass('hidden');
         $('#table_row_'+number+' *').addClass('hidden');
@@ -531,18 +469,38 @@ const LIST = {
               good.count = $(form+'.count').val();
               good.price = priceConverter($(form+'.price').val());
           
+              const editCities = () => {
+                const countries = [];
+                
+                for(let country in good.delivery) {
+                  countries.push(country);
+                }
+      
+                countries.forEach( (country)=>{
+
+                    for(let city in good.delivery[country]){
+                      good.delivery[country][city] = $(form+'.'+city).prop('checked') ? true : false;
+                    }
+                }
+                )
+              }
+
+              editCities();
+              
+
               // FIXME: These three can be presented by one function
-              good.delivery.russia.moscow = $(form+'.russia_cities .city_1').prop('checked') ? true : false; 
-              good.delivery.russia.saratov = $(form+'.russia_cities .city_2').prop('checked') ? true : false; 
-              good.delivery.russia.spb = $(form+'.russia_cities .city_3').prop('checked') ? true : false;
+              // DONE
+              // good.delivery.russia.moscow = $(form+'.russia_cities .city_1').prop('checked') ? true : false; 
+              // good.delivery.russia.saratov = $(form+'.russia_cities .city_2').prop('checked') ? true : false; 
+              // good.delivery.russia.spb = $(form+'.russia_cities .city_3').prop('checked') ? true : false;
 
-              good.delivery.belorus.minsk = $(form+'.belorus_cities .city_1').prop('checked') ? true : false;
-              good.delivery.belorus.hotlany = $(form+'.belorus_cities .city_2').prop('checked') ? true : false;
-              good.delivery.belorus.bobruysk = $(form+'.belorus_cities .city_3').prop('checked') ? true : false;
+              // good.delivery.belorus.minsk = $(form+'.belorus_cities .city_1').prop('checked') ? true : false;
+              // good.delivery.belorus.hotlany = $(form+'.belorus_cities .city_2').prop('checked') ? true : false;
+              // good.delivery.belorus.bobruysk = $(form+'.belorus_cities .city_3').prop('checked') ? true : false;
 
-              good.delivery.usa.ny = $(form+'.usa_cities .city_1').prop('checked') ? true : false; 
-              good.delivery.usa.washington = $(form+'.usa_cities .city_2').prop('checked') ? true : false; 
-              good.delivery.usa.boston = $(form+'.usa_cities .city_3').prop('checked') ? true : false;
+              // good.delivery.usa.ny = $(form+'.usa_cities .city_1').prop('checked') ? true : false; 
+              // good.delivery.usa.washington = $(form+'.usa_cities .city_2').prop('checked') ? true : false; 
+              // good.delivery.usa.boston = $(form+'.usa_cities .city_3').prop('checked') ? true : false;
               resolve('Edit successful');
             }, serverResponseTime);
           
