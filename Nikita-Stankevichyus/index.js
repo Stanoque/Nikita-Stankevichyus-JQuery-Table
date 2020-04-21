@@ -2,6 +2,12 @@
 
 const loremIpsum = 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum. ';
 const serverResponseTime = 2000;
+const initialDatabase = [
+  new Good('Lorem ipsum', 'someemail@gmail.com', 3, 100, [true, true, true],[true, true, true],[true, true, true]),
+new Good('Dolor sit amet', 'someeail@gmail.com', 4, 1000, [true, true, true],[false, false, true],[true, true, true]),
+new Good('Ipsum amet', 'smeemail@gmail.com',11, 10, [true, true, true],[false, true, true],[true, true, true]),
+new Good('Lorem sit', 'somemail@gmail.com', 1, 1, [true, true, true],[true, true, true],[true, true, true])
+]
 
 function Good(name='', email='', count=0, price=0, russia=[], belorus=[], usa=[]) {
 
@@ -10,7 +16,7 @@ function Good(name='', email='', count=0, price=0, russia=[], belorus=[], usa=[]
   this.count = count;
   this.price = price;
   this.hidden = false;
-
+    
   this.description = loremIpsum;
 
   // NOTE: Maybe there is a better way of dealing with delivery data storage
@@ -388,19 +394,36 @@ const LIST = {
   collection: [],
   ascedningName: true,
   ascedningPrice: true,
+
+
   push: (good) => {
     LIST.collection.push(good);
   },
-  
+
   delete: (good) => {
-    LIST.collection.splice(LIST.collection.indexOf(good), 1);
-    LIST.render();
-  },
+    return new Promise((resolve, reject) => {
+      setTimeout(()=>{
+        LIST.collection.splice(LIST.collection.indexOf(good), 1);
+        resolve('Good deleted')
+      }
+    , serverResponseTime);
+
+    }
+    
+  )},
 
   add: (good) => {
-    LIST.push(good);
-    LIST.render();
-  },
+
+    return new Promise((resolve, reject) => {
+      setTimeout(()=>{
+        LIST.push(good);
+        resolve('Good deleted')
+      }
+    , serverResponseTime);
+
+    }
+
+  )},
 
   forEach: (callback) => {
     LIST.collection.forEach(callback);
@@ -499,31 +522,47 @@ const LIST = {
         let validation = [isNameValid(forms[0].val()), isEmailValid(forms[1].val()), isCountValid(forms[2].val()), isPriceValid(cleanPriceString(forms[3].val()))];
 
         if(validation.every((element)=>{return element;})){
-          good.name = $(form+'.name').val();
-          good.email = $(form+'.supplier_email').val();
-          good.count = $(form+'.count').val();
-          good.price = priceConverter($(form+'.price').val());
+
+          const editPromise = new Promise((resolve, reject) => {
+
+            setTimeout(()=>{
+              good.name = $(form+'.name').val();
+              good.email = $(form+'.supplier_email').val();
+              good.count = $(form+'.count').val();
+              good.price = priceConverter($(form+'.price').val());
           
-          // FIXME: These three can be presented by one function
-          good.delivery.russia.moscow = $(form+'.russia_cities .city_1').prop('checked') ? true : false; 
-          good.delivery.russia.saratov = $(form+'.russia_cities .city_2').prop('checked') ? true : false; 
-          good.delivery.russia.spb = $(form+'.russia_cities .city_3').prop('checked') ? true : false;
+              // FIXME: These three can be presented by one function
+              good.delivery.russia.moscow = $(form+'.russia_cities .city_1').prop('checked') ? true : false; 
+              good.delivery.russia.saratov = $(form+'.russia_cities .city_2').prop('checked') ? true : false; 
+              good.delivery.russia.spb = $(form+'.russia_cities .city_3').prop('checked') ? true : false;
 
-          good.delivery.belorus.minsk = $(form+'.belorus_cities .city_1').prop('checked') ? true : false;
-          good.delivery.belorus.hotlany = $(form+'.belorus_cities .city_2').prop('checked') ? true : false;
-          good.delivery.belorus.bobruysk = $(form+'.belorus_cities .city_3').prop('checked') ? true : false;
+              good.delivery.belorus.minsk = $(form+'.belorus_cities .city_1').prop('checked') ? true : false;
+              good.delivery.belorus.hotlany = $(form+'.belorus_cities .city_2').prop('checked') ? true : false;
+              good.delivery.belorus.bobruysk = $(form+'.belorus_cities .city_3').prop('checked') ? true : false;
 
-          good.delivery.usa.ny = $(form+'.usa_cities .city_1').prop('checked') ? true : false; 
-          good.delivery.usa.washington = $(form+'.usa_cities .city_2').prop('checked') ? true : false; 
-          good.delivery.usa.boston = $(form+'.usa_cities .city_3').prop('checked') ? true : false; 
+              good.delivery.usa.ny = $(form+'.usa_cities .city_1').prop('checked') ? true : false; 
+              good.delivery.usa.washington = $(form+'.usa_cities .city_2').prop('checked') ? true : false; 
+              good.delivery.usa.boston = $(form+'.usa_cities .city_3').prop('checked') ? true : false;
+              resolve('Edit successful');
+            }, serverResponseTime);
+          
+          });
 
-          $(".modal_fade").removeClass("modal_fade_trick");
+          $('.loading').css('display', 'block');
+          editPromise.then((resolved) => {
+            $(".modal_fade").removeClass("modal_fade_trick");
+            $('.loading').css('display', 'none');
+            clearInvalid(form);
+            clearEdit(form, good);
+            LIST.render();
+          })
+          // $(".modal_fade").removeClass("modal_fade_trick");
           $("#modal_edit_"+number).css("display", "none");
         
-          clearInvalid(form);
-          clearEdit(form, good);
+          // clearInvalid(form);
+          // clearEdit(form, good);
 
-          LIST.render();
+          // LIST.render();
         } else {
             clearInvalid(form);
             validation.forEach((element, index)=>{
@@ -570,8 +609,14 @@ const LIST = {
       });
   
       $('#yes_'+number).click(() => {
-        LIST.delete(good);
-        $('.modal_fade').removeClass('modal_fade_trick');
+        const deletePromise = LIST.delete(good);
+        deletePromise.then((resolved)=>{
+          LIST.render();
+          $('.modal_fade').removeClass('modal_fade_trick');
+          $('.loading').css('display', 'none');
+        });
+        $('.loading').css('display', 'block');
+        // $('.modal_fade').removeClass('modal_fade_trick');
         $('#modal_delete_'+number).css('display', 'none');
       }); 
 
@@ -646,10 +691,29 @@ const LIST = {
 };
 
 // NOTE: Need to think about generating those
-LIST.push(new Good('Lorem ipsum', 'someemail@gmail.com', 3, 100, [true, true, true],[true, true, true],[true, true, true]));
-LIST.push(new Good('Dolor sit amet', 'someeail@gmail.com', 4, 1000, [true, true, true],[false, false, true],[true, true, true]));
-LIST.push(new Good('Ipsum amet', 'smeemail@gmail.com',11, 10, [true, true, true],[false, true, true],[true, true, true]));
-LIST.push(new Good('Lorem sit', 'somemail@gmail.com', 1, 1, [true, true, true],[true, true, true],[true, true, true]));
+// LIST.add(new Good('Lorem ipsum', 'someemail@gmail.com', 3, 100, [true, true, true],[true, true, true],[true, true, true])).then((resolved)=>{LIST.render()});
+// LIST.add(new Good('Dolor sit amet', 'someeail@gmail.com', 4, 1000, [true, true, true],[false, false, true],[true, true, true])).then((resolved)=>{LIST.render()});
+// LIST.add(new Good('Ipsum amet', 'smeemail@gmail.com',11, 10, [true, true, true],[false, true, true],[true, true, true])).then((resolved)=>{LIST.render()});
+// LIST.add(new Good('Lorem sit', 'somemail@gmail.com', 1, 1, [true, true, true],[true, true, true],[true, true, true])).then((resolved)=>{LIST.render()});
+
+$('.modal_fade').addClass('modal_fade_trick');
+$('.loading').css('display', 'block');
+const initialGet = new Promise((resolve, reject) => {
+  
+    setTimeout( () => {
+      initialDatabase.forEach((good)=>{
+        LIST.push(good);
+        resolve('Initialization successfull');
+      })} , serverResponseTime);
+    }
+);
+
+initialGet.then( (resolved) => {
+    LIST.render();
+    $('.loading').css('display', 'none');
+    $(".modal_fade").removeClass("modal_fade_trick");
+  }
+);
 
 let buttonDelete = $(".button_delete");
 let buttonClose = $(".modal_close");
@@ -724,33 +788,31 @@ $('#modal_add form').submit((event) => {
     //   delivery.slice(5, 9), 
     // ));
 
-    let addPromise = new Promise((resolve, reject) => {
-      setTimeout(()=>{
-        LIST.add(new Good(
-          $(form+'.name').val(),
-          $(form+'.supplier_email').val(),
-          $(form+'.count').val(),
-          priceConverter($(form+'.price').val()), 
-          delivery.slice(0, 3), 
-          delivery.slice(3, 5), 
-          delivery.slice(5, 9), 
-      ))
-          resolve('Good added')
-        }
-      , serverResponseTime);
-      }
-    );
     
+    const addPromise = LIST.add(new Good(
+        $(form+'.name').val(),
+        $(form+'.supplier_email').val(),
+        $(form+'.count').val(),
+        priceConverter($(form+'.price').val()), 
+        delivery.slice(0, 3), 
+        delivery.slice(3, 5), 
+        delivery.slice(5, 9), 
+    ))
+          
+    $('.loading').css('display', 'block');
+
     addPromise.then((resolved) => {
+      LIST.render();
+      $('.modal_fade').removeClass('modal_fade_trick');
+      $('.loading').css('display', 'none');
       clearAdd(form);
       clearInvalid(form);
-      LIST.render();
     }  
     );
 
     // clearAdd(form);
 
-    $(".modal_fade").removeClass("modal_fade_trick");  
+    // $(".modal_fade").removeClass("modal_fade_trick");
     $('#modal_add').css('display', 'none');
 
     

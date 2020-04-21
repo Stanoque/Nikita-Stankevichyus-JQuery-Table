@@ -51,7 +51,7 @@ label {
 	background: #fff;
 	border: 3px solid #333;
 	border-radius: 4px; 
-	z-index: 2;
+	z-index: 3;
 	opacity: 1;	
 }
 
@@ -68,7 +68,7 @@ label {
 	padding: 25px;
 	/* padding-right: 60px; */
 	/* padding-left: 40px; */
-	z-index: 2;
+	z-index: 3;
 	opacity: 1;
 	transform: translate(-50%, -23.5%);
 }
@@ -218,7 +218,7 @@ h2 {
 	background: #fff;
 	border: 3px solid #333;
 	border-radius: 4px; 
-	z-index: 2;
+	z-index: 3;
 	opacity: 1;	
 }
 
@@ -228,6 +228,19 @@ h2 {
 
 .search {
 	max-width: 66%;
+}
+
+.loading {
+	font-size: 26px;
+	color: white;
+	display: none;
+	position: fixed;
+	top: 40vh;
+	left: 50vw;
+	transform: translateX(-50%);
+	/* min-width: max-content; */
+	z-index: 1;
+	opacity: 1;	
 }
 
 .modal_save {
