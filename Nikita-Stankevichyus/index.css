@@ -1,7 +1,6 @@
-main {
+/* main {
 	position: relative;
-}
-
+} */
 
 label {
 	width: 100%;
@@ -9,6 +8,10 @@ label {
 
 .that{
   border: 1px solid red;
+}
+
+.placeholder {
+	color: lightgray !important;
 }
 
 .pd-h-10{
@@ -42,12 +45,13 @@ label {
 .my_modal_delete {
   display: none;
 	position: fixed;
-	top: 25vh;
+	top: 40vh;
 	left: 50vw;
 	min-width: max-content;
-	transform: translate(-50%, -23.5%);
+	transform: translate(-50%, -40%);
 	width: 45vw;
-	height: 200px;
+	min-height: 250px;
+	/* height: 200px; */
 	background: #fff;
 	border: 3px solid #333;
 	border-radius: 4px; 
@@ -58,7 +62,7 @@ label {
 .my_modal_edit {
 	display: none;
 	position: absolute;
-	top: 25vh;
+	top: 40vh;
 	left: 50%;
 	background: #fff;
 	border: 3px solid #333;
@@ -70,7 +74,7 @@ label {
 	/* padding-left: 40px; */
 	z-index: 3;
 	opacity: 1;
-	transform: translate(-50%, -23.5%);
+	transform: translate(-50%, -40%);
 }
 
 .mg-t-15 {
@@ -205,9 +209,9 @@ h2 {
   display: none;
 	position: fixed;
 	padding-bottom: 25px;
-	top: 25vh;
+	top: 40vh;
 	left: 50vw;
-	transform: translateX(-50%) translateY(-25%);
+	transform: translateX(-50%) translateY(-40%);
 	min-width: 200px;
 	max-width: 400px;
 	/* width: 350px; */
@@ -235,9 +239,9 @@ h2 {
 	color: white;
 	display: none;
 	position: fixed;
-	top: 40vh;
+	top: 45vh;
 	left: 50vw;
-	transform: translateX(-50%);
+	transform: translateX(-50%) translateY(-40%);
 	/* min-width: max-content; */
 	z-index: 1;
 	opacity: 1;	
@@ -292,7 +296,7 @@ h2 {
 	}
 
 	.my_modal_delete {
-		height: 220px;
+		height: 270px;
 	}
 }
 
