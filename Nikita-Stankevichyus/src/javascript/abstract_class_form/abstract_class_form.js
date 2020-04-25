@@ -1,10 +1,15 @@
 module.exports = class Form {
-  constructor(jQueryElement, modalFade=null, modalAwait=null){
+  constructor(jQueryModalFade=null, jQueryModalAwait=null, jQueryElement=null){
+
     this.jQueryElement = jQueryElement;
-    this.jQuerySubmit = jQueryElement.find('[type="submit"]');
+
+    if(jQueryElement){
+      this.jQuerySubmit = jQueryElement.find('[type="submit"]');
+    }
+
     this.modal = {
-      modalFade = modalFade,
-      modalAwait = modalAwait,
+      jQueryModalFade: jQueryModalFade,
+      jQueryModalAwait: jQueryModalAwait,
     }
   }
 }
