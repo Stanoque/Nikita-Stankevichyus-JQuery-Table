@@ -1,26 +1,26 @@
 (function(){function r(e,n,t){function o(i,f){if(!n[i]){if(!e[i]){var c="function"==typeof require&&require;if(!f&&c)return c(i,!0);if(u)return u(i,!0);var a=new Error("Cannot find module '"+i+"'");throw a.code="MODULE_NOT_FOUND",a}var p=n[i]={exports:{}};e[i][0].call(p.exports,function(r){var n=e[i][1][r];return o(n||r)},p,p.exports,r,e,n,t)}return n[i].exports}for(var u="function"==typeof require&&require,i=0;i<t.length;i++)o(t[i]);return o}return r})()({1:[function(require,module,exports){
 "use strict";
 
-const putSemi = require('./src/javascript/price_vidget/vidget_price.js').putSemi;
-const priceConverter = require('./src/javascript/price_vidget/vidget_price.js').priceConverter;
+// const putSemi = require('./src/javascript/price_vidget/vidget_price.js').putSemi;
+// const priceConverter = require('./src/javascript/price_vidget/vidget_price.js').priceConverter;
 
-const isNameValid = require('./src/javascript/form_validation.js').isNameValid;
-const isEmailValid = require('./src/javascript/form_validation.js').isEmailValid;
-const isCountValid = require('./src/javascript/form_validation.js').isCountValid;
-const isPriceValid = require('./src/javascript/form_validation.js').isPriceValid;
+// const isNameValid = require('./src/javascript/form_validation.js').isNameValid;
+// const isEmailValid = require('./src/javascript/form_validation.js').isEmailValid;
+// const isCountValid = require('./src/javascript/form_validation.js').isCountValid;
+// const isPriceValid = require('./src/javascript/form_validation.js').isPriceValid;
 
-const clearAdd = require('./src/javascript/form_cleaners.js').clearAdd;
-const clearEdit = require('./src/javascript/form_cleaners.js').clearEdit;
-const clearInvalid = require('./src/javascript/form_cleaners.js').clearInvalid;
+// const clearAdd = require('./src/javascript/form_cleaners.js').clearAdd;
+// const clearEdit = require('./src/javascript/form_cleaners.js').clearEdit;
+// const clearInvalid = require('./src/javascript/form_cleaners.js').clearInvalid;
 
-const appendDelivery = require('./src/javascript/form_appendDelivery.js');
+// const appendDelivery = require('./src/javascript/form_appendDelivery.js');
 
-const showNotes = require('./src/javascript/form_notes.js').showNotes;
-const hidNotes = require('./src/javascript/form_notes.js').hidNotes;
+// const showNotes = require('./src/javascript/form_notes.js').showNotes;
+// const hidNotes = require('./src/javascript/form_notes.js').hidNotes;
 
 const Good = require('./src/javascript/good_local_object.js');
 
-const GoodsList = require('./src/javascript/list_local_object.js');
+// const GoodsList = require('./src/javascript/list_local_object.js');
 
 const FormAdd = require('./src/javascript/list_local_object.js').FormAdd;
 const FormSearch = require('./src/javascript/class_formSearch.js');
@@ -56,20 +56,20 @@ Object.defineProperty(Object.prototype, 'addPlaceholder',{
   enumerable : false
 });
 
-Object.defineProperty(String.prototype, 'cleanPriceString', {
-  value: function(){
-    return this.replace(/\,/g, '').replace('$', '');
-  },
-  enumerable: false,
-});
+// Object.defineProperty(String.prototype, 'cleanPriceString', {
+//   value: function(){
+//     return this.replace(/\,/g, '').replace('$', '');
+//   },
+//   enumerable: false,
+// });
 
-const initPlaceholders = (form) => {
-  $(form+' input').toArray().forEach((element)=>{
-    if($(element).attr('type') !== 'checkbox' && $(element).attr('type') !== 'button' && $(element).attr('type') !== 'submit'){
-      $(element).addPlaceholder('Enter '+$(element).attr('name')+'...');
-    }
-  });
-} 
+// const initPlaceholders = (form) => {
+//   $(form+' input').toArray().forEach((element)=>{
+//     if($(element).attr('type') !== 'checkbox' && $(element).attr('type') !== 'button' && $(element).attr('type') !== 'submit'){
+//       $(element).addPlaceholder('Enter '+$(element).attr('name')+'...');
+//     }
+//   });
+// } 
 
 
 
@@ -148,7 +148,7 @@ $('.sort_price').click(()=>{
 LIST.render();
 
 
-},{"./src/javascript/class_formSearch.js":3,"./src/javascript/const_serverResponseTime.js":4,"./src/javascript/form_appendDelivery.js":5,"./src/javascript/form_cleaners.js":6,"./src/javascript/form_notes.js":7,"./src/javascript/form_validation.js":8,"./src/javascript/good_local_object.js":9,"./src/javascript/list_local_object.js":10,"./src/javascript/price_vidget/vidget_price.js":13}],2:[function(require,module,exports){
+},{"./src/javascript/class_formSearch.js":3,"./src/javascript/const_serverResponseTime.js":4,"./src/javascript/good_local_object.js":5,"./src/javascript/list_local_object.js":6}],2:[function(require,module,exports){
 module.exports = class Form {
   constructor(jQueryModalFade=null, jQueryModalAwait=null, jQueryElement=null){
 
@@ -196,6 +196,13 @@ module.exports = class formSearch extends Form {
       event.preventDefault();
       this.submit();
     })
+
+    this.jQueryElement.find('input').click(()=>{
+      if(this.jQueryElement.find('input').val() === this.jQueryElement.find('input').attr('my_placeholder')){
+        this.jQueryElement.find('input').val('');
+        this.jQueryElement.find('input').removeClass('placeholder');
+      }
+    })
   }
 
   submit(){
@@ -216,210 +223,9 @@ module.exports = class formSearch extends Form {
   }
   
 }
-},{"./abstract_class_form/abstract_class_form.js":2,"./list_local_object.js":10}],4:[function(require,module,exports){
+},{"./abstract_class_form/abstract_class_form.js":2,"./list_local_object.js":6}],4:[function(require,module,exports){
 module.exports = 2000;
 },{}],5:[function(require,module,exports){
-module.exports = function(whereTo, good) {
-
-  let citiesTemp = _.template($('#edit_cities_template').html());
-  
-      const renderCities = (country, cityNames=[], allChecked) => {
-        
-        let delivery = [];
-
-        if(good){
-          for(let city in good.delivery[country]){
-            delivery.push(good.delivery[country][city]);
-          }
-        }
-
-        $(citiesTemp({
-          country: country,
-          city_1: cityNames[0],
-          city_2: cityNames[1],
-          city_3: cityNames[2],
-          class_1: cityNames[0].toLowerCase(),
-          class_2: cityNames[1].toLowerCase(),
-          class_3: cityNames[2].toLowerCase(),
-          attr_1: delivery[0] ? 'checked' : null,
-          attr_2: delivery[1] ? 'checked' : null,
-          attr_3: delivery[2] ? 'checked' : null,
-          attr_4: allChecked ? 'checked' : null,
-        })).appendTo($(whereTo + ' .cities'));
-      };
-
-      renderCities('russia', ['Moscow', 'Saratov', 'SPb'], good ? good.allCities('russia') : false);
-      renderCities('belorus', ['Minsk', 'Hotlany', 'Bobruysk'], good ? good.allCities('belorus') : false);
-      renderCities('usa', ['NY', 'Washington', 'Boston'], good ? good.allCities('usa') : false);
-
-      let countries = $(whereTo + ' .countries').children();
-
-      countries = countries.toArray();
-
-      const cities = countries.map((country)=>{
-
-        let citiesClass = ' .'+$(country).attr('class')+'_cities';
-        return $(whereTo + citiesClass);
-
-      });
-
-      $(cities[0]).removeClass('hidden');
-
-
-      const migrate = (toCountry) => {
-
-        $(toCountry).click(() => {
-
-          cities.forEach((country)=>{
-            $(country).addClass('hidden');
-          });
-
-          const citiesClass = ' .'+$(toCountry).attr('class')+'_cities';
-          $(whereTo + citiesClass).removeClass('hidden');
-  
-        });
-      }
-
-      countries.forEach((country)=>{
-        migrate(country);
-      });
-
-      
-
-      const selectAll = (countrySelectAll) => {
-        $(countrySelectAll).click(() => {
-          $(countrySelectAll).parent().siblings().children('.city').prop('checked', $(countrySelectAll).prop('checked'));
-        });
-      }
-
-      cities.forEach((country)=>{
-       selectAll($(country).find('.select_all')); 
-      })
-}
-},{}],6:[function(require,module,exports){
-const priceConverter = require('./price_vidget/vidget_price.js').priceConverter;
-
-module.exports.clearAdd = (form) => {
-  $(form+'.name').val('');
-  $(form+'.supplier_email').val('');
-  $(form+'.count').val('');
-  $(form+'.price').val('$');
-  $(form+'.select_all').prop('checked', false);
-  $(form+'.city').prop('checked', false);
-  $(form+'.note').addClass('hidden');
-
-  // initPlaceholders(form);
-
-};
-
-module.exports.clearEdit = (form, good) => {
-  $(form+'.name').val(good.name);
-  $(form+'.supplier_email').val(good.email);
-  $(form+'.count').val(good.count);
-  $(form+'.price').val(priceConverter(good.price));
-  $(form+'russia .select_all').prop('checked', good.allCities('russia'));
-  $(form+'belorus .select_all').prop('checked', good.allCities('belorus'));
-  $(form+'usa .select_all').prop('checked', good.allCities('usa'));
-  $(form+'.note').addClass('hidden');
-
-  let cities = $(form+'.cities').toArray();
-  let delivery = good.deliveryToArray();
-  
-  cities.forEach((element, index)=>{
-    $(element).prop('checked', delivery[index]);
-  });
-
-};
-
-module.exports.clearInvalid = (form) => {
-
-  let forms = [$(form+'.name'), $(form+'.supplier_email'), $(form+'.count'), $(form+'.price')];
-  forms.forEach((element)=>{
-    element.removeClass('invalid');
-  });
-
-};
-},{"./price_vidget/vidget_price.js":13}],7:[function(require,module,exports){
-module.exports.hidNotes = (form) => {
-  $(form).parent().siblings('.note').addClass('hidden');
-}
-
-module.exports.showNotes = (form) => {
-  if($(form).hasClass('name')){
-    $(form).parent().siblings('.note').addClass('hidden');
-    if($(form).val().length < 5){
-      $(form).parent().siblings('.invalid_name_short').removeClass('hidden');
-    } else {
-      $(form).parent().siblings('.invalid_name_long').removeClass('hidden');
-    }
-  } else {
-    $(form).parent().siblings('.note').removeClass('hidden');
-  }
-}
-},{}],8:[function(require,module,exports){
-
-
-module.exports.isNameValid = (name) => {
-  let workString = name;
-  let regExpOnlySpaces = /\S/;
-  
-  if(!workString.match(regExpOnlySpaces)){
-    return false;
-  }
-  if(workString.length > 15 || workString.length < 5){
-    return false;
-  }
-
-  return true;
-
-};
-
-module.exports.isEmailValid = (email) => {
-  // let regExpEmail = /\w+@\w+.[com|ru|org]/g;
-  // let regExpEmail = /(?:(?:\r\n)?[ \t])*(?:(?:(?:[^()<>@,;:\\".\[\] \000-\031]+(?:(?:(?:\r\n)?[ \t])+|\Z|(?=[\["()<>@,;:\\".\[\]]))|"(?:[^\"\r\\]|\\.|(?:(?:\r\n)?[ \t]))*"(?:(?:\r\n)?[ \t])*)(?:\.(?:(?:\r\n)?[ \t])*(?:[^()<>@,;:\\".\[\] \000-\031]+(?:(?:(?:\r\n)?[ \t])+|\Z|(?=[\["()<>@,;:\\".\[\]]))|"(?:[^\"\r\\]|\\.|(?:(?:\r\n)?[ \t]))*"(?:(?:\r\n)?[ \t])*))*@(?:(?:\r\n)?[ \t])*(?:[^()<>@,;:\\".\[\] \000-\031]+(?:(?:(?:\r\n)?[ \t])+|\Z|(?=[\["()<>@,;:\\".\[\]]))|\[([^\[\]\r\\]|\\.)*\](?:(?:\r\n)?[ \t])*)(?:\.(?:(?:\r\n)?[ \t])*(?:[^()<>@,;:\\".\[\] \000-\031]+(?:(?:(?:\r\n)?[ \t])+|\Z|(?=[\["()<>@,;:\\".\[\]]))|\[([^\[\]\r\\]|\\.)*\](?:(?:\r\n)?[ \t])*))*|(?:[^()<>@,;:\\".\[\] \000-\031]+(?:(?:(?:\r\n)?[ \t])+|\Z|(?=[\["()<>@,;:\\".\[\]]))|"(?:[^\"\r\\]|\\.|(?:(?:\r\n)?[ \t]))*"(?:(?:\r\n)?[ \t])*)*\<(?:(?:\r\n)?[ \t])*(?:@(?:[^()<>@,;:\\".\[\] \000-\031]+(?:(?:(?:\r\n)?[ \t])+|\Z|(?=[\["()<>@,;:\\".\[\]]))|\[([^\[\]\r\\]|\\.)*\](?:(?:\r\n)?[ \t])*)(?:\.(?:(?:\r\n)?[ \t])*(?:[^()<>@,;:\\".\[\] \000-\031]+(?:(?:(?:\r\n)?[ \t])+|\Z|(?=[\["()<>@,;:\\".\[\]]))|\[([^\[\]\r\\]|\\.)*\](?:(?:\r\n)?[ \t])*))*(?:,@(?:(?:\r\n)?[ \t])*(?:[^()<>@,;:\\".\[\] \000-\031]+(?:(?:(?:\r\n)?[ \t])+|\Z|(?=[\["()<>@,;:\\".\[\]]))|\[([^\[\]\r\\]|\\.)*\](?:(?:\r\n)?[ \t])*)(?:\.(?:(?:\r\n)?[ \t])*(?:[^()<>@,;:\\".\[\] \000-\031]+(?:(?:(?:\r\n)?[ \t])+|\Z|(?=[\["()<>@,;:\\".\[\]]))|\[([^\[\]\r\\]|\\.)*\](?:(?:\r\n)?[ \t])*))*)*:(?:(?:\r\n)?[ \t])*)?(?:[^()<>@,;:\\".\[\] \000-\031]+(?:(?:(?:\r\n)?[ \t])+|\Z|(?=[\["()<>@,;:\\".\[\]]))|"(?:[^\"\r\\]|\\.|(?:(?:\r\n)?[ \t]))*"(?:(?:\r\n)?[ \t])*)(?:\.(?:(?:\r\n)?[ \t])*(?:[^()<>@,;:\\".\[\] \000-\031]+(?:(?:(?:\r\n)?[ \t])+|\Z|(?=[\["()<>@,;:\\".\[\]]))|"(?:[^\"\r\\]|\\.|(?:(?:\r\n)?[ \t]))*"(?:(?:\r\n)?[ \t])*))*@(?:(?:\r\n)?[ \t])*(?:[^()<>@,;:\\".\[\] \000-\031]+(?:(?:(?:\r\n)?[ \t])+|\Z|(?=[\["()<>@,;:\\".\[\]]))|\[([^\[\]\r\\]|\\.)*\](?:(?:\r\n)?[ \t])*)(?:\.(?:(?:\r\n)?[ \t])*(?:[^()<>@,;:\\".\[\] \000-\031]+(?:(?:(?:\r\n)?[ \t])+|\Z|(?=[\["()<>@,;:\\".\[\]]))|\[([^\[\]\r\\]|\\.)*\](?:(?:\r\n)?[ \t])*))*\>(?:(?:\r\n)?[ \t])*)|(?:[^()<>@,;:\\".\[\] \000-\031]+(?:(?:(?:\r\n)?[ \t])+|\Z|(?=[\["()<>@,;:\\".\[\]]))|"(?:[^\"\r\\]|\\.|(?:(?:\r\n)?[ \t]))*"(?:(?:\r\n)?[ \t])*)*:(?:(?:\r\n)?[ \t])*(?:(?:(?:[^()<>@,;:\\".\[\] \000-\031]+(?:(?:(?:\r\n)?[ \t])+|\Z|(?=[\["()<>@,;:\\".\[\]]))|"(?:[^\"\r\\]|\\.|(?:(?:\r\n)?[ \t]))*"(?:(?:\r\n)?[ \t])*)(?:\.(?:(?:\r\n)?[ \t])*(?:[^()<>@,;:\\".\[\] \000-\031]+(?:(?:(?:\r\n)?[ \t])+|\Z|(?=[\["()<>@,;:\\".\[\]]))|"(?:[^\"\r\\]|\\.|(?:(?:\r\n)?[ \t]))*"(?:(?:\r\n)?[ \t])*))*@(?:(?:\r\n)?[ \t])*(?:[^()<>@,;:\\".\[\] \000-\031]+(?:(?:(?:\r\n)?[ \t])+|\Z|(?=[\["()<>@,;:\\".\[\]]))|\[([^\[\]\r\\]|\\.)*\](?:(?:\r\n)?[ \t])*)(?:\.(?:(?:\r\n)?[ \t])*(?:[^()<>@,;:\\".\[\] \000-\031]+(?:(?:(?:\r\n)?[ \t])+|\Z|(?=[\["()<>@,;:\\".\[\]]))|\[([^\[\]\r\\]|\\.)*\](?:(?:\r\n)?[ \t])*))*|(?:[^()<>@,;:\\".\[\] \000-\031]+(?:(?:(?:\r\n)?[ \t])+|\Z|(?=[\["()<>@,;:\\".\[\]]))|"(?:[^\"\r\\]|\\.|(?:(?:\r\n)?[ \t]))*"(?:(?:\r\n)?[ \t])*)*\<(?:(?:\r\n)?[ \t])*(?:@(?:[^()<>@,;:\\".\[\] \000-\031]+(?:(?:(?:\r\n)?[ \t])+|\Z|(?=[\["()<>@,;:\\".\[\]]))|\[([^\[\]\r\\]|\\.)*\](?:(?:\r\n)?[ \t])*)(?:\.(?:(?:\r\n)?[ \t])*(?:[^()<>@,;:\\".\[\] \000-\031]+(?:(?:(?:\r\n)?[ \t])+|\Z|(?=[\["()<>@,;:\\".\[\]]))|\[([^\[\]\r\\]|\\.)*\](?:(?:\r\n)?[ \t])*))*(?:,@(?:(?:\r\n)?[ \t])*(?:[^()<>@,;:\\".\[\] \000-\031]+(?:(?:(?:\r\n)?[ \t])+|\Z|(?=[\["()<>@,;:\\".\[\]]))|\[([^\[\]\r\\]|\\.)*\](?:(?:\r\n)?[ \t])*)(?:\.(?:(?:\r\n)?[ \t])*(?:[^()<>@,;:\\".\[\] \000-\031]+(?:(?:(?:\r\n)?[ \t])+|\Z|(?=[\["()<>@,;:\\".\[\]]))|\[([^\[\]\r\\]|\\.)*\](?:(?:\r\n)?[ \t])*))*)*:(?:(?:\r\n)?[ \t])*)?(?:[^()<>@,;:\\".\[\] \000-\031]+(?:(?:(?:\r\n)?[ \t])+|\Z|(?=[\["()<>@,;:\\".\[\]]))|"(?:[^\"\r\\]|\\.|(?:(?:\r\n)?[ \t]))*"(?:(?:\r\n)?[ \t])*)(?:\.(?:(?:\r\n)?[ \t])*(?:[^()<>@,;:\\".\[\] \000-\031]+(?:(?:(?:\r\n)?[ \t])+|\Z|(?=[\["()<>@,;:\\".\[\]]))|"(?:[^\"\r\\]|\\.|(?:(?:\r\n)?[ \t]))*"(?:(?:\r\n)?[ \t])*))*@(?:(?:\r\n)?[ \t])*(?:[^()<>@,;:\\".\[\] \000-\031]+(?:(?:(?:\r\n)?[ \t])+|\Z|(?=[\["()<>@,;:\\".\[\]]))|\[([^\[\]\r\\]|\\.)*\](?:(?:\r\n)?[ \t])*)(?:\.(?:(?:\r\n)?[ \t])*(?:[^()<>@,;:\\".\[\] \000-\031]+(?:(?:(?:\r\n)?[ \t])+|\Z|(?=[\["()<>@,;:\\".\[\]]))|\[([^\[\]\r\\]|\\.)*\](?:(?:\r\n)?[ \t])*))*\>(?:(?:\r\n)?[ \t])*)(?:,\s*(?:(?:[^()<>@,;:\\".\[\] \000-\031]+(?:(?:(?:\r\n)?[ \t])+|\Z|(?=[\["()<>@,;:\\".\[\]]))|"(?:[^\"\r\\]|\\.|(?:(?:\r\n)?[ \t]))*"(?:(?:\r\n)?[ \t])*)(?:\.(?:(?:\r\n)?[ \t])*(?:[^()<>@,;:\\".\[\] \000-\031]+(?:(?:(?:\r\n)?[ \t])+|\Z|(?=[\["()<>@,;:\\".\[\]]))|"(?:[^\"\r\\]|\\.|(?:(?:\r\n)?[ \t]))*"(?:(?:\r\n)?[ \t])*))*@(?:(?:\r\n)?[ \t])*(?:[^()<>@,;:\\".\[\] \000-\031]+(?:(?:(?:\r\n)?[ \t])+|\Z|(?=[\["()<>@,;:\\".\[\]]))|\[([^\[\]\r\\]|\\.)*\](?:(?:\r\n)?[ \t])*)(?:\.(?:(?:\r\n)?[ \t])*(?:[^()<>@,;:\\".\[\] \000-\031]+(?:(?:(?:\r\n)?[ \t])+|\Z|(?=[\["()<>@,;:\\".\[\]]))|\[([^\[\]\r\\]|\\.)*\](?:(?:\r\n)?[ \t])*))*|(?:[^()<>@,;:\\".\[\] \000-\031]+(?:(?:(?:\r\n)?[ \t])+|\Z|(?=[\["()<>@,;:\\".\[\]]))|"(?:[^\"\r\\]|\\.|(?:(?:\r\n)?[ \t]))*"(?:(?:\r\n)?[ \t])*)*\<(?:(?:\r\n)?[ \t])*(?:@(?:[^()<>@,;:\\".\[\] \000-\031]+(?:(?:(?:\r\n)?[ \t])+|\Z|(?=[\["()<>@,;:\\".\[\]]))|\[([^\[\]\r\\]|\\.)*\](?:(?:\r\n)?[ \t])*)(?:\.(?:(?:\r\n)?[ \t])*(?:[^()<>@,;:\\".\[\] \000-\031]+(?:(?:(?:\r\n)?[ \t])+|\Z|(?=[\["()<>@,;:\\".\[\]]))|\[([^\[\]\r\\]|\\.)*\](?:(?:\r\n)?[ \t])*))*(?:,@(?:(?:\r\n)?[ \t])*(?:[^()<>@,;:\\".\[\] \000-\031]+(?:(?:(?:\r\n)?[ \t])+|\Z|(?=[\["()<>@,;:\\".\[\]]))|\[([^\[\]\r\\]|\\.)*\](?:(?:\r\n)?[ \t])*)(?:\.(?:(?:\r\n)?[ \t])*(?:[^()<>@,;:\\".\[\] \000-\031]+(?:(?:(?:\r\n)?[ \t])+|\Z|(?=[\["()<>@,;:\\".\[\]]))|\[([^\[\]\r\\]|\\.)*\](?:(?:\r\n)?[ \t])*))*)*:(?:(?:\r\n)?[ \t])*)?(?:[^()<>@,;:\\".\[\] \000-\031]+(?:(?:(?:\r\n)?[ \t])+|\Z|(?=[\["()<>@,;:\\".\[\]]))|"(?:[^\"\r\\]|\\.|(?:(?:\r\n)?[ \t]))*"(?:(?:\r\n)?[ \t])*)(?:\.(?:(?:\r\n)?[ \t])*(?:[^()<>@,;:\\".\[\] \000-\031]+(?:(?:(?:\r\n)?[ \t])+|\Z|(?=[\["()<>@,;:\\".\[\]]))|"(?:[^\"\r\\]|\\.|(?:(?:\r\n)?[ \t]))*"(?:(?:\r\n)?[ \t])*))*@(?:(?:\r\n)?[ \t])*(?:[^()<>@,;:\\".\[\] \000-\031]+(?:(?:(?:\r\n)?[ \t])+|\Z|(?=[\["()<>@,;:\\".\[\]]))|\[([^\[\]\r\\]|\\.)*\](?:(?:\r\n)?[ \t])*)(?:\.(?:(?:\r\n)?[ \t])*(?:[^()<>@,;:\\".\[\] \000-\031]+(?:(?:(?:\r\n)?[ \t])+|\Z|(?=[\["()<>@,;:\\".\[\]]))|\[([^\[\]\r\\]|\\.)*\](?:(?:\r\n)?[ \t])*))*\>(?:(?:\r\n)?[ \t])*))*)?;\s*)/;
-  let regExpEmail = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-
-  if(email.match(regExpEmail)){
-    return true;
-  } else {
-    return false;
-  };
-
-};
-
-module.exports.isCountValid = (count) => {
-
-  if(isNaN(parseInt(count))){
-    return false;
-  }
-
-  if(count.length > 0){
-    return true;
-  } else {
-    return false;
-  }
-
-};
-
-module.exports.isPriceValid = (price) => {
-
-  
-  // let regExpDollar = /\$/;
-  // workPrice = workPrice.replace(regExpDollar, '');
-
-  if(isNaN(parseFloat(price))){
-    return false;
-  }
-
-  if(price.length > 0){
-    return true;
-  } else {
-    return false;
-  }
-
-};
-
-},{}],9:[function(require,module,exports){
 const loremIpsum = 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum. ';
 
 module.exports = function Good(name='', email='', count=0, price=0, russia=[], belorus=[], usa=[]) {
@@ -472,7 +278,7 @@ module.exports = function Good(name='', email='', count=0, price=0, russia=[], b
     return toReturn;
   };
 }
-},{}],10:[function(require,module,exports){
+},{}],6:[function(require,module,exports){
 const serverResponseTime = require('./const_serverResponseTime.js');
 // const appendDelivery = require('./form_appendDelivery.js');
 
@@ -1548,11 +1354,11 @@ function GoodsList() {
 const LIST = new GoodsList();
 
 module.exports.LIST = LIST;
-},{"./abstract_class_form/abstract_class_form.js":2,"./const_serverResponseTime.js":4,"./good_local_object.js":9,"./price_vidget/vidget_price.js":13,"./row_local_object.js":14}],11:[function(require,module,exports){
+},{"./abstract_class_form/abstract_class_form.js":2,"./const_serverResponseTime.js":4,"./good_local_object.js":5,"./price_vidget/vidget_price.js":9,"./row_local_object.js":10}],7:[function(require,module,exports){
 module.exports = function(price){
   return price.replace(/\,/g, '').replace('$', '');
 };
-},{}],12:[function(require,module,exports){
+},{}],8:[function(require,module,exports){
 // const cleanPriceString = require('./putSemi.js');
 
 module.exports = function(price){
@@ -1588,7 +1394,7 @@ module.exports = function(price){
   
   return workString;
 }
-},{}],13:[function(require,module,exports){
+},{}],9:[function(require,module,exports){
 const putSemi = require('./putSemi.js');
 const cleanPriceString = require('./cleanPriceString.js');
 
@@ -1607,7 +1413,7 @@ module.exports.priceConverter = (price) => {
   }
 };
 
-},{"./cleanPriceString.js":11,"./putSemi.js":12}],14:[function(require,module,exports){
+},{"./cleanPriceString.js":7,"./putSemi.js":8}],10:[function(require,module,exports){
 const priceConverter = require('./price_vidget/vidget_price.js').priceConverter;
 
 module.exports = function Row(template, whereTo, number, good){
@@ -1699,4 +1505,4 @@ module.exports = function Row(template, whereTo, number, good){
 }
  
 
-},{"./price_vidget/vidget_price.js":13}]},{},[1]);
+},{"./price_vidget/vidget_price.js":9}]},{},[1]);

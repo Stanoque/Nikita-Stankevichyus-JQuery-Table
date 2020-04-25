@@ -9,6 +9,13 @@ module.exports = class formSearch extends Form {
       event.preventDefault();
       this.submit();
     })
+
+    this.jQueryElement.find('input').click(()=>{
+      if(this.jQueryElement.find('input').val() === this.jQueryElement.find('input').attr('my_placeholder')){
+        this.jQueryElement.find('input').val('');
+        this.jQueryElement.find('input').removeClass('placeholder');
+      }
+    })
   }
 
   submit(){

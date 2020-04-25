@@ -1,25 +1,25 @@
 "use strict";
 
-const putSemi = require('./src/javascript/price_vidget/vidget_price.js').putSemi;
-const priceConverter = require('./src/javascript/price_vidget/vidget_price.js').priceConverter;
+// const putSemi = require('./src/javascript/price_vidget/vidget_price.js').putSemi;
+// const priceConverter = require('./src/javascript/price_vidget/vidget_price.js').priceConverter;
 
-const isNameValid = require('./src/javascript/form_validation.js').isNameValid;
-const isEmailValid = require('./src/javascript/form_validation.js').isEmailValid;
-const isCountValid = require('./src/javascript/form_validation.js').isCountValid;
-const isPriceValid = require('./src/javascript/form_validation.js').isPriceValid;
+// const isNameValid = require('./src/javascript/form_validation.js').isNameValid;
+// const isEmailValid = require('./src/javascript/form_validation.js').isEmailValid;
+// const isCountValid = require('./src/javascript/form_validation.js').isCountValid;
+// const isPriceValid = require('./src/javascript/form_validation.js').isPriceValid;
 
-const clearAdd = require('./src/javascript/form_cleaners.js').clearAdd;
-const clearEdit = require('./src/javascript/form_cleaners.js').clearEdit;
-const clearInvalid = require('./src/javascript/form_cleaners.js').clearInvalid;
+// const clearAdd = require('./src/javascript/form_cleaners.js').clearAdd;
+// const clearEdit = require('./src/javascript/form_cleaners.js').clearEdit;
+// const clearInvalid = require('./src/javascript/form_cleaners.js').clearInvalid;
 
-const appendDelivery = require('./src/javascript/form_appendDelivery.js');
+// const appendDelivery = require('./src/javascript/form_appendDelivery.js');
 
-const showNotes = require('./src/javascript/form_notes.js').showNotes;
-const hidNotes = require('./src/javascript/form_notes.js').hidNotes;
+// const showNotes = require('./src/javascript/form_notes.js').showNotes;
+// const hidNotes = require('./src/javascript/form_notes.js').hidNotes;
 
 const Good = require('./src/javascript/good_local_object.js');
 
-const GoodsList = require('./src/javascript/list_local_object.js');
+// const GoodsList = require('./src/javascript/list_local_object.js');
 
 const FormAdd = require('./src/javascript/list_local_object.js').FormAdd;
 const FormSearch = require('./src/javascript/class_formSearch.js');
@@ -55,20 +55,20 @@ Object.defineProperty(Object.prototype, 'addPlaceholder',{
   enumerable : false
 });
 
-Object.defineProperty(String.prototype, 'cleanPriceString', {
-  value: function(){
-    return this.replace(/\,/g, '').replace('$', '');
-  },
-  enumerable: false,
-});
+// Object.defineProperty(String.prototype, 'cleanPriceString', {
+//   value: function(){
+//     return this.replace(/\,/g, '').replace('$', '');
+//   },
+//   enumerable: false,
+// });
 
-const initPlaceholders = (form) => {
-  $(form+' input').toArray().forEach((element)=>{
-    if($(element).attr('type') !== 'checkbox' && $(element).attr('type') !== 'button' && $(element).attr('type') !== 'submit'){
-      $(element).addPlaceholder('Enter '+$(element).attr('name')+'...');
-    }
-  });
-} 
+// const initPlaceholders = (form) => {
+//   $(form+' input').toArray().forEach((element)=>{
+//     if($(element).attr('type') !== 'checkbox' && $(element).attr('type') !== 'button' && $(element).attr('type') !== 'submit'){
+//       $(element).addPlaceholder('Enter '+$(element).attr('name')+'...');
+//     }
+//   });
+// } 
 
 
 
