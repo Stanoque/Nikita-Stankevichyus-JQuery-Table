@@ -431,6 +431,7 @@ module.exports = function Good(name='', email='', count=0, price=0, russia=[], b
   this.hidden = false;
     
   this.description = loremIpsum;
+  
 
   // NOTE: Maybe there is a better way of dealing with delivery data storage
   this.delivery = {
@@ -1334,21 +1335,28 @@ function GoodsList() {
 
       // appendDelivery('#modal_edit_'+number, good);
 
+      good.row.defineModalDescription(_.template($('#modal_description_template').html()), 'modal_description_'+number, 'modal_description_close_'+number);
 
-      let descriptionTemp = _.template($('#modal_description_template').html());
+      // DESCRIPTION
+      // let descriptionTemp = _.template($('#modal_description_template').html());
 
-      $(descriptionTemp({
-        descriptionId: 'modal_description_'+number,
-        name: good.name,
-        description: good.description,
-        closeId: 'modal_description_close_'+number,
+      // $(descriptionTemp({
+      //   descriptionId: 'modal_description_'+number,
+      //   name: good.name,
+      //   description: good.description,
+      //   closeId: 'modal_description_close_'+number,
         
-      })).appendTo('#table_body');
+      // })).appendTo('#table_body');
 
-      $('#description_'+number).click(() => {
-        $(".modal_fade").addClass("modal_fade_trick");
-        $("#modal_description_"+number).css("display", "block");
-      });
+      // $('#description_'+number).click(() => {
+      //   $(".modal_fade").addClass("modal_fade_trick");
+      //   $("#modal_description_"+number).css("display", "block");
+      // });
+
+      // $("#modal_description_close_"+number).click(() => {
+      //   $(".modal_fade").removeClass("modal_fade_trick");
+      //   $("#modal_description_"+number).css("display", "none");
+      // });
 
       // $('#modal_edit_'+number+' form').submit((event) => {
       //   event.preventDefault();
@@ -1428,45 +1436,47 @@ function GoodsList() {
       //   clearInvalid('#modal_edit_'+number+' form ');
       // });
 
-      $("#modal_description_close_"+number).click(() => {
-        $(".modal_fade").removeClass("modal_fade_trick");
-        $("#modal_description_"+number).css("display", "none");
-      });
+      // $("#modal_description_close_"+number).click(() => {
+      //   $(".modal_fade").removeClass("modal_fade_trick");
+      //   $("#modal_description_"+number).css("display", "none");
+      // });
 
       const thisCities = $('#modal_edit_'+number+' .cities');
 
       // appendDelivery('#modal_edit_'+number, good);
 
-      let deleteTemp = _.template($('#modal_delete_template').html());
+      // DELETE
+      // let deleteTemp = _.template($('#modal_delete_template').html());
 
-      $(deleteTemp({
-        deleteId: 'modal_delete_'+number,
-        name: good.name,
-        idYes: 'yes_'+number,
-        idNo: 'no_'+number,
-      })).appendTo('#table_body');
+      // $(deleteTemp({
+      //   deleteId: 'modal_delete_'+number,
+      //   name: good.name,
+      //   idYes: 'yes_'+number,
+      //   idNo: 'no_'+number,
+      // })).appendTo('#table_body');
 
-      $('#delete_'+number).click(() => {
-        $('.modal_fade').addClass('modal_fade_trick');
-        $('#modal_delete_'+number).css('display', 'block');
-      });
+      // $('#delete_'+number).click(() => {
+      //   $('.modal_fade').addClass('modal_fade_trick');
+      //   $('#modal_delete_'+number).css('display', 'block');
+      // });
+      good.row.defineModalDelete(_.template($('#modal_delete_template').html()), 'modal_delete_'+number, 'yes_'+number, 'no_'+number);
   
-      $('#yes_'+number).click(() => {
+      good.row.modalDelete.jQueryYes.click(() => {
         const deletePromise = this.delete(good);
         deletePromise.then((resolved)=>{
           this.render();
-          $('.modal_fade').removeClass('modal_fade_trick');
-          $('.loading').css('display', 'none');
+          $('#modal_fade').removeClass('modal_fade_trick');
+          $('#loading').css('display', 'none');
         });
-        $('.loading').css('display', 'block');
+        $('#loading').css('display', 'block');
         // $('.modal_fade').removeClass('modal_fade_trick');
-        $('#modal_delete_'+number).css('display', 'none');
+        good.row.modalDelete.jQueryElement.css('display', 'none');
       }); 
 
-      $('#no_'+number).click(() => {
-        $('.modal_fade').removeClass('modal_fade_trick');
-        $('#modal_delete_'+number).css('display', 'none');
-      }); 
+      // $('#no_'+number).click(() => {
+      //   $('.modal_fade').removeClass('modal_fade_trick');
+      //   $('#modal_delete_'+number).css('display', 'none');
+      // }); 
   
     });
 
@@ -1603,6 +1613,7 @@ const priceConverter = require('./price_vidget/vidget_price.js').priceConverter;
 module.exports = function Row(template, whereTo, number, good){
 
   this.good = good;
+  this.number = number;
 
   $(template({
     idRow: 'table_row_'+number,
@@ -1615,6 +1626,66 @@ module.exports = function Row(template, whereTo, number, good){
   })).appendTo(whereTo);
 
   this.jQueryElement = $('#table_row_'+number);
+
+  this.modalDescription = {};
+  this.modalDelete = {};
+  
+
+  this.defineModalDescription = (template, element, close) => {
+
+    $(template({
+        descriptionId: element,
+        name: good.name,
+        description: good.description,
+        closeId: close,
+        
+    })).appendTo('#table_body');
+
+    this.modalDescription.jQueryElement = $('#'+element);
+    this.modalDescription.jQueryClose = $('#'+close);
+
+
+    this.jQueryElement.find('#description_'+number).click(() => {
+      $("#modal_fade").addClass("modal_fade_trick");
+      this.modalDescription.jQueryElement.css("display", "block");
+    });
+    
+    this.modalDescription.jQueryClose.click(()=>{
+      $("#modal_fade").removeClass("modal_fade_trick");
+      this.modalDescription.jQueryElement.css("display", "none");
+    });
+
+  }
+
+  this.defineModalDelete = (template, element, yes, no) => {
+
+    $(template({
+      deleteId: element,
+      name: good.name,
+      idYes: yes,
+      idNo: no,
+    })).appendTo('#table_body');
+
+    this.modalDelete.jQueryElement = $('#'+element);
+    this.modalDelete.jQueryYes = $('#'+yes);
+    this.modalDelete.jQueryNo = $('#'+no);
+
+    $('#delete_'+this.number).click(() => {
+      $('#modal_fade').addClass('modal_fade_trick');
+      this.modalDelete.jQueryElement.css('display', 'block');
+    });
+
+    this.modalDelete.jQueryNo.click(() => {
+      $('#modal_fade').removeClass('modal_fade_trick');
+      this.modalDelete.jQueryElement.css('display', 'none');
+    }); 
+
+  }
+  
+
+  
+
+  
 
   this.hide = () => {
     this.jQueryElement.addClass('hidden');

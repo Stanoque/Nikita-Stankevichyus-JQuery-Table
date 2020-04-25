@@ -9,6 +9,7 @@ module.exports = function Good(name='', email='', count=0, price=0, russia=[], b
   this.hidden = false;
     
   this.description = loremIpsum;
+  
 
   // NOTE: Maybe there is a better way of dealing with delivery data storage
   this.delivery = {
