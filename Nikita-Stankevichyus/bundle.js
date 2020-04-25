@@ -645,7 +645,9 @@ class FormGood extends Form {
     this.clear();
     this.clearInvalid();
     this.hideNotes();
-    this.initPlaceholders();
+    if(!this.good){
+      this.initPlaceholders();
+    }
   }
 
   loading() {
@@ -1016,7 +1018,6 @@ class FormEdit extends FormGood {
 
     this.inputsFormat();
     this._defineNotes();
-    this.initPlaceholders();
     
     this.jQueryElement.submit((event)=>{
       event.preventDefault();
