@@ -1,7 +1,5 @@
 const Form = require('./abstract_class_form/abstract_class_form.js');
 
-const LIST = require('./LIST.js');
-
 const Good = require('./good_local_object.js');
 
 const priceConverter = require('./price_vidget/vidget_price.js').priceConverter;
@@ -9,7 +7,7 @@ const putSemi = require('./price_vidget/vidget_price.js').putSemi;
 const cleanPriceString = require('./price_vidget/vidget_price.js').cleanPriceString;
 
 class FormGood extends Form {
-  constructor(good=null, jQueryModalFade=null, jQueryModalAwait=null, modalWindow=null, jQueryTrigger, jQueryTemplate, citiesTemp, renderObject){
+  constructor(good=null, jQueryModalFade=null, jQueryModalAwait=null, modalWindow=null, jQueryTrigger, jQueryTemplate, citiesTemp){
     super(jQueryModalFade, jQueryModalAwait);
 
     this.renderObject = renderObject;
@@ -198,7 +196,7 @@ class FormGood extends Form {
       });
       
 
-      const addPromise = LIST.add(new Good(
+      const addPromise = this.LIST.add(new Good(
                 this.jQueryName.val(),
                 this.jQueryEmail.val(),
                 this.jQueryCount.val(),
@@ -211,7 +209,7 @@ class FormGood extends Form {
       this.loading();
   
       addPromise.then((resolved) => {
-        LIST.render();
+        this.LIST.render();
         this.endLoading();
         this.clear();
         this.clearInvalid();
@@ -317,7 +315,7 @@ class FormGood extends Form {
 
 module.exports.FormAdd = class FormAdd extends FormGood {
 
-  constructor(good=null, jQueryModalFade=null, jQueryModalAwait=null, modalWindow, jQueryTrigger, jQueryTemplate, citiesTemp, LIST){
+  constructor(good=null, jQueryModalFade=null, jQueryModalAwait=null, modalWindow, jQueryTrigger, jQueryTemplate, citiesTemp, this.LIST){
     super(good, jQueryModalFade, jQueryModalAwait, modalWindow, jQueryTrigger, jQueryTemplate, citiesTemp);
 
     
@@ -353,7 +351,21 @@ module.exports.FormEdit = class FormEdit extends FormGood {
     this.email = email;
     this.count = count;
     this.price = price;
+    this.modal.jQueryModalWindow = $('#'+'modal_edit_'+modalWindow);
     this.citiesChecboxes = good.deliveryToArray()
+  }
+
+  _render(number) {
+    $(_.template(this.jQueryTemplate.html())({
+      modalId: 'modal_edit_'+number,
+      email: this.good.email,
+      name: this.good.name,
+      count: this.good.count,
+      price: priceConverter(this.good.price),
+      saveId: 'modal_save_'+number,
+      cancelId: 'modal_cancel_'+number,
+    })).appendTo('#table_body');
+
   }
 
   submit() {
@@ -364,36 +376,44 @@ module.exports.FormEdit = class FormEdit extends FormGood {
   
     
     if(validation.every((element)=>{return element;})){
-      let cities = this.jQueryElement.find('.city').toArray();
-      let delivery = [];
-  
-      cities.forEach((city)=>{
-        delivery.push($(city).prop('checked') ? true : false);
-      });
-      
 
-      const addPromise = LIST.add(new Good(
-                this.jQueryName.val(),
-                this.jQueryEmail.val(),
-                this.jQueryCount.val(),
-                priceConverter(this.jQueryPrice.val()), 
-                delivery.slice(0, 3), 
-                delivery.slice(3, 5), 
-                delivery.slice(5, 9), 
-      ))
+      const editPromise = new Promise((resolve, reject) => {
+
+        setTimeout(()=>{
+          good.name = this.jQueryName.val();
+          good.email = this.jQueryEmail.val();
+          good.count = this.jQueryCount.val();
+          good.price = priceConverter(this.jQueryPrice.val());
+      
+          const editCities = () => {
+            const countries = [];
             
+            for(let country in good.delivery) {
+              countries.push(country);
+            }
+  
+            countries.forEach( (country)=>{
+
+                for(let city in good.delivery[country]){
+                  good.delivery[country][city] = this.jQueryCities.prop('checked') ? true : false;
+                }
+            }
+            )
+          }
+
+          editCities();
+          
+          resolve('Edit successful');
+        }, serverResponseTime);
+      
+      });
+
       this.loading();
-  
-      addPromise.then((resolved) => {
-        LIST.render();
-        this.endLoading();
+      editPromise.then((resolved) => {
+        this.endLoading()
         this.clear();
-        this.clearInvalid();
-      }  
-      );
-  
-     
-  
+        LIST.render();
+      })
   
     } else {
       this.clearInvalid();

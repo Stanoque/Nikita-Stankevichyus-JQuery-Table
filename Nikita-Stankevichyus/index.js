@@ -21,10 +21,11 @@ const Good = require('./src/javascript/good_local_object.js');
 
 const GoodsList = require('./src/javascript/list_local_object.js');
 
-const FormAdd = require('./src/javascript/classes_formGood.js').FormAdd;
+const FormAdd = require('./src/javascript/list_local_object.js').FormAdd;
+const FormSearch = require('./src/javascript/class_formSearch.js');
 
 const serverResponseTime = require('./src/javascript/const_serverResponseTime.js');
-const LIST = require('./src/javascript/LIST.js');
+const LIST = require('./src/javascript/list_local_object.js').LIST;
 
 const initialDatabase = [
   new Good('Lorem ipsum', 'someemail@gmail.com', 3, 100, [true, true, true],[true, true, true],[true, true, true]),
@@ -41,13 +42,15 @@ Object.defineProperty(Object.prototype, 'addPlaceholder',{
 
     currentElement.val(text);
     currentElement.addClass('placeholder');
+    currentElement.attr('my_placeholder', text);
 
     currentElement.focus(()=>{
+      currentElement.removeClass('placeholder');
       if(currentElement.val() === text){
         currentElement.val('');
-        currentElement.removeClass('placeholder');
       }
     }); 
+
   },
   enumerable : false
 });
@@ -72,8 +75,8 @@ const initPlaceholders = (form) => {
 // const LIST = new GoodsList();
 
 
-$('.modal_fade').addClass('modal_fade_trick');
-$('.loading').css('display', 'block');
+$('#modal_fade').addClass('modal_fade_trick');
+$('#loading').css('display', 'block');
 const initialGet = new Promise((resolve, reject) => {
   
     setTimeout( () => {
@@ -91,7 +94,7 @@ initialGet.then( (resolved) => {
   }
 );
 
-let addForm = new FormAdd(null, $('#modal_fade'), $('#loading'), 'modal_add', $('#good_add'), $('#modal_edit_template'), $('#edit_cities_template'), LIST.collection);
+let addForm = new FormAdd(null, $('#modal_fade'), $('#loading'), 'modal_add', $('#good_add'), $('#modal_edit_template'), $('#edit_cities_template'), LIST);
 
 
 $("#triangle_name").click(() => {
@@ -109,26 +112,25 @@ $("#triangle_price").click(() => {
 
 
 
+let searchForm = new FormSearch($('#modal_fade'), $('#loading'),  $('#search_form'));
+// $('#search_form').submit((event)=>{
+//   event.preventDefault();
+//   const form = '#search_form ';
+//   const input = $(form+'input');
 
+//   const toSearch = input.val();
+//   const regExpToFilter = new RegExp(toSearch, 'i');
 
-$('#search_form').submit((event)=>{
-  event.preventDefault();
-  const form = '#search_form ';
-  const input = $(form+'input');
+//   LIST.forEach((good)=>{
+//     if(!good.name.match(regExpToFilter)){
+//       good.hidden = true; 
+//     } else {
+//       good.hidden = false;
+//     }
+//   });
 
-  const toSearch = input.val();
-  const regExpToFilter = new RegExp(toSearch, 'i');
-
-  LIST.forEach((good)=>{
-    if(!good.name.match(regExpToFilter)){
-      good.hidden = true; 
-    } else {
-      good.hidden = false;
-    }
-  });
-
-  LIST.render();
-})
+//   LIST.render();
+// })
 
 $('.sort_name').click(()=>{
   LIST.sortByName();
@@ -138,9 +140,9 @@ $('.sort_price').click(()=>{
   LIST.sortByPrice();
 });
 
-$('#search_form'+' input').addPlaceholder('Enter name...');
+// $('#search_form'+' input').addPlaceholder('Enter name...');
 
-initPlaceholders('#modal_add');
+// initPlaceholders('#modal_add');
 
 LIST.render();
 
