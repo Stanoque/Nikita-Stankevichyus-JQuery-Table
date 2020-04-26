@@ -1,15 +1,28 @@
 (function(){function r(e,n,t){function o(i,f){if(!n[i]){if(!e[i]){var c="function"==typeof require&&require;if(!f&&c)return c(i,!0);if(u)return u(i,!0);var a=new Error("Cannot find module '"+i+"'");throw a.code="MODULE_NOT_FOUND",a}var p=n[i]={exports:{}};e[i][0].call(p.exports,function(r){var n=e[i][1][r];return o(n||r)},p,p.exports,r,e,n,t)}return n[i].exports}for(var u="function"==typeof require&&require,i=0;i<t.length;i++)o(t[i]);return o}return r})()({1:[function(require,module,exports){
 "use strict";
 
+/*
+ * NOTE: This project uses 'browserify' modules through require syntaxis
+ * See more on this topic in documentation
+*/
+
+// Local object that represents data of a real product gotten from the server
 const Good = require('./src/javascript/good_local_object.js');
 
+// Form for adding a new good to the page
 const FormAdd = require('./src/javascript/list_local_object.js').FormAdd;
+
+// Form to navigate (search) through goods list
 const FormSearch = require('./src/javascript/class_formSearch.js');
 
+// Global const that represents time it takes for server to respond
 const serverResponseTime = require('./src/javascript/const_serverResponseTime.js');
 
+// Global object that contains all local good objects
 const LIST = require('./src/javascript/list_local_object.js').LIST;
 
+// Initial base of products.
+// NOTE: It is possible to generate those.
 const initialDatabase = [
   new Good('Lorem ipsum', 'someemail@gmail.com', 3, 100, [true, true, true],[true, true, true],[true, true, true]),
   new Good('Dolor sit amet', 'someeail@gmail.com', 4, 1000, [true, true, true],[false, false, true],[true, true, true]),
@@ -17,16 +30,23 @@ const initialDatabase = [
   new Good('Lorem sit', 'somemail@gmail.com', 1, 1, [true, true, true],[true, true, true],[true, true, true])
 ]
 
-
+// I implemented the placeholder functionality via Object.prototype method more or less for educational purposes
+// Maybe it's better to integrate this into Form abstract class
 Object.defineProperty(Object.prototype, 'addPlaceholder',{
   value : function(text) {
 
+    // Remembering context for ES6 functions
     const currentElement = this;
 
     currentElement.val(text);
+
+    // For color
     currentElement.addClass('placeholder');
+
+    // Imitating HTML5 inputs' placeholders
     currentElement.attr('my_placeholder', text);
 
+    // When focused placeholder is hid
     currentElement.focus(()=>{
       currentElement.removeClass('placeholder');
       if(currentElement.val() === text){
@@ -34,6 +54,7 @@ Object.defineProperty(Object.prototype, 'addPlaceholder',{
       }
     });
 
+    // When blured placeholder is shown
     currentElement.blur(()=>{
       if(currentElement.val() === ''){
         currentElement.val(text);
@@ -41,6 +62,7 @@ Object.defineProperty(Object.prototype, 'addPlaceholder',{
       }
     })
 
+    // When input starts, placeholder is hid 
     currentElement.on('input',()=>{
       if(currentElement.val().match(currentElement.attr('my_placeholder'))){
         currentElement.val(currentElement.val().replace(currentElement.attr('my_placeholder'), ''));
@@ -52,11 +74,20 @@ Object.defineProperty(Object.prototype, 'addPlaceholder',{
   enumerable : false
 });
 
+/*
+ * NOTE: This is global scope (body of index.js file) of the project
+ * Only 'static' elements are being rendered here
+ * More on 'static' and 'dynamic' elements in documentation
+*/
 
 
+// Rendering form for adding goods
 let addForm = new FormAdd(null, $('#modal_fade'), $('#loading'), 'modal_add', $('#good_add'), $('#modal_edit_template'), $('#edit_cities_template'), LIST);
+
+// Rendering form for searching goods
 let searchForm = new FormSearch($('#modal_fade'), $('#loading'),  $('#search_form'));
 
+// Triangles regulate sorting direction
 $("#triangle_name").click(() => {
   $("#triangle_name").toggleClass('flip');
   LIST.ascedningName = !LIST.ascedningName;
@@ -68,7 +99,7 @@ $("#triangle_price").click(() => {
   LIST.ascedningPrice = !LIST.ascedningPrice;
 });
 
-
+// If certain table heads are clicked, the LIST will perfom sorting
 $('.sort_name').click(()=>{
   LIST.sortByName();
 });
@@ -78,10 +109,12 @@ $('.sort_price').click(()=>{
 });
 
 
+// Showing static modals before inital response
 $('#modal_fade').addClass('modal_fade_trick');
 $('#loading').css('display', 'block');
 
 
+// Async initial response from the server
 const initialGet = new Promise((resolve, reject) => {
   
     setTimeout( () => {
@@ -92,6 +125,7 @@ const initialGet = new Promise((resolve, reject) => {
     }
 );
 
+// Hiding static modals after initial response
 initialGet.then( (resolved) => {
     LIST.render();
     $('.loading').css('display', 'none');
@@ -99,9 +133,8 @@ initialGet.then( (resolved) => {
   }
 );
 
+// Rendering dynamic elements
 LIST.render();
-
-
 },{"./src/javascript/class_formSearch.js":3,"./src/javascript/const_serverResponseTime.js":4,"./src/javascript/good_local_object.js":5,"./src/javascript/list_local_object.js":6}],2:[function(require,module,exports){
 module.exports = class Form {
   constructor(jQueryModalFade=null, jQueryModalAwait=null, jQueryElement=null){
@@ -236,25 +269,54 @@ module.exports = function Good(name='', email='', count=0, price=0, russia=[], b
   };
 }
 },{}],6:[function(require,module,exports){
+/*
+ * NOTE: This file mostly handles rendering dynamic elements
+ * More on dynamic elements in documentation
+*/
+
+// Global const that represents time it takes for server to respond
 const serverResponseTime = require('./const_serverResponseTime.js');
 
+// Form for adding a new good to the page
 const Good = require('./good_local_object.js');
 
+// These three are vidget for converting price number into pointed dollar string format and vice versa
+
+// The body of the vidget
 const priceConverter = require('./price_vidget/vidget_price.js').priceConverter;
+
+// Function that puts semis after each digit
 const putSemi = require('./price_vidget/vidget_price.js').putSemi;
+
+// Function that cleans string preparing it to be parsed into float
 const cleanPriceString = require('./price_vidget/vidget_price.js').cleanPriceString;
 
+// Row local object that represent table row
+// Contains delete and description modals
 const Row = require('./row_local_object.js');
 
+// Abstract class from which FormGood class inherits
 const Form = require('./abstract_class_form/abstract_class_form.js');
 
+// Class for good' data modal, from which subclasses FormAdd and FormEdit inherit
 class FormGood extends Form {
+  /*
+   * good -- associated with the form good local object
+   * jQueryModalFade -- jQuery object of modal fade html element, which prevents interacting with the page during async processes
+   * jQueryModalAwait -- jQuery object of modal note html element, which shows during async processes
+   * modalWindow -- id of the future html container element
+   * jQueryTrigger -- jQuery object of html element, that envokes event interacting with the form
+   * jQueryTemplate -- jQuery object of lodash template
+   * citiesTemplate -- id of the cities lodah template
+  */
   constructor(good=null, jQueryModalFade=null, jQueryModalAwait=null, modalWindow=null, jQueryTrigger, jQueryTemplate, citiesTemp){
     super(jQueryModalFade, jQueryModalAwait);
 
     this.good = good;
     this.jQueryTemplate = jQueryTemplate;
 
+    // If constructor got good object extract values from it
+    // If not, set them to empty strings
     this.name = good ? this.good.name : '';
     this.email = good ? this.good.email : '';
     this.count = good ? this.good.count : '';
@@ -268,6 +330,7 @@ class FormGood extends Form {
 
   _render(id, citiesTemp) {
     
+    // By default the form is rendered empty
     $(_.template(this.jQueryTemplate.html())({
       modalId: id,
       email: '',
@@ -279,6 +342,7 @@ class FormGood extends Form {
     })).appendTo('.main');
   }
 
+  // This method defines notes fields with jQuery object of notes, which indicate invalid input
   _defineNotes() {
     this.jQueryNotes = {};
     this.jQueryNotes.nameShort = this.jQueryElement.find('.invalid_name_short'); 
@@ -288,23 +352,32 @@ class FormGood extends Form {
     this.jQueryNotes.price = this.jQueryElement.find('.invalid_price');
   }
 
+  // This method dictates format to count and price inputs
   inputsFormat() {
-    this.jQueryCount.on('input', (function(){
+
+    // On input
+    this.jQueryCount.on('input', ( function(){
+
+      // RegExp to find non-numerical chars
       const nonDigitRegExp = /\D/;
      
-
+      // Non-numerical chars are prohibited to input
       $(this).val($(this).val().replace(nonDigitRegExp,''));
       
 
     }));
 
+    // On input
     this.jQueryPrice.on('input', (function(){
-      const nonDigitRegExp = /[^0-9.]/;
-      const strayDotRegExp = /\.(?!\d)/g;
-
       
+      // RegExp to find non-numerical and non-dot chars
+      const nonDigitRegExp = /[^0-9.]/;
+
+      // Prohibites chars are replaced with empty string
       $(this).val($(this).val().replace(nonDigitRegExp,''));
 
+      // Basically this code allows only one dot in the field
+      // The dot can be 'moved' forward, but not backwards -- that's kinda an issue tbh
       // NOTE: Think how to rewrite this to deal with 'past' and 'present' dot
       if($(this).val().match(/\./g)){
           
@@ -318,24 +391,33 @@ class FormGood extends Form {
     
     }));
     
+    // During focus
     this.jQueryPrice.focus(function(){
+
+      // Dollar sign is hid
       let regExpDollar = /\$/;
 
       $(this).val($(this).val().replace(/\,/g, ''));
       $(this).val($(this).val().replace(regExpDollar, ''));
     });
 
+    // Out of focus
     this.jQueryPrice.blur(function(){
+
+      
       let regExpDollar = /\$/;
 
+      // Semis are put to divide digits
       if(!isNaN(parseFloat($(this).val()))){
         $(this).val(putSemi($(this).val()));
 
+        // And dollar sign is added to the beggining of the string
         if(!$(this).val().match(regExpDollar)){
           $(this).val('$'.concat($(this).val()));
         }
       }
 
+      // This code deletes all dots except one
       const strayDotRegExp = /\.(?!\d)/g;
 
       $(this).val($(this).val().replace(strayDotRegExp,''));
@@ -347,12 +429,14 @@ class FormGood extends Form {
     
   }
 
+  // Modal window is being shown
   open() {
     this.modal.jQueryModalFade.addClass('modal_fade_trick');
     this.modal.jQueryModalWindow.css('display', 'block');
     this.jQueryName.focus();
   }
 
+  // Modal window is being hid
   cancel() {
     this.modal.jQueryModalFade.removeClass('modal_fade_trick');
     this.modal.jQueryModalWindow.css('display', 'none');
@@ -364,17 +448,20 @@ class FormGood extends Form {
     }
   }
 
+  // During async processes certain modals are shown
   loading() {
     this.modal.jQueryModalFade.addClass('modal_fade_trick');
     this.modal.jQueryModalAwait.css('display', 'block');
     this.modal.jQueryModalWindow.css('display', 'none');
   }
 
+  // After async those modals are hid again
   endLoading() {
     this.modal.jQueryModalFade.removeClass('modal_fade_trick');
     this.modal.jQueryModalAwait.css('display', 'none');
   }
 
+  // This method clears form after redacting. Successful or canceled alike.
   clear() {
     this.jQueryName.val('');
     this.jQueryEmail.val('');
@@ -388,6 +475,7 @@ class FormGood extends Form {
     this.hideNotes();
   }
 
+  // This method clears 'invalid' class from inputs
   clearInvalid() {
 
     this.jQueryInputs.forEach((element)=>{
@@ -396,6 +484,9 @@ class FormGood extends Form {
   
   }
 
+  // This method shows notes indicating invalid input
+  // It operates by recognizing class of the input (and in the case of the name -- length of the value)
+  // Thus showing only related notes
   showNotes(input) {
     
     if(input.hasClass('name')){
@@ -422,6 +513,9 @@ class FormGood extends Form {
 
   }
 
+  // This method does backward process to showNotes
+  // But due to some features (two notes specifically for 'name' input)
+  // It's more concise than its' counterpart
   hideNote(input) {
     let name = input.attr('name');
 
@@ -434,12 +528,14 @@ class FormGood extends Form {
 
   }
 
+  // This method hides all notes of invalid input
   hideNotes() {
     for(let note in this.jQueryNotes){
       this.jQueryNotes[note].addClass('hidden');
     }
   }
 
+  // Checks if name's value is correct
   isNameValid(name) {
     let workString = name;
     let regExpOnlySpaces = /\S/;
@@ -455,8 +551,11 @@ class FormGood extends Form {
   
   }
 
+  // Checks if email's value is correct
   isEmailValid(email){
-   
+    
+    // Long and scary RegExp. Didn't come up with it, found in the net
+    // Seems to work!
     let regExpEmail = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
   
     if(email.match(regExpEmail)){
@@ -467,6 +566,14 @@ class FormGood extends Form {
   
   }
 
+
+  /* 
+   * NOTE: I am aware that these two can be presented by one method
+   * But I'll take responsibilty to say that in terms of further development
+   * It's more far-sighted to leave them separated
+  */ 
+
+  // Checks if count's value is correct
   isCountValid(count) {
 
     if(isNaN(parseInt(count))){
@@ -481,6 +588,7 @@ class FormGood extends Form {
 
   }
 
+  // Checks if price's value is correct
   isPriceValid(price){
 
     if(isNaN(parseFloat(price))){
@@ -495,22 +603,34 @@ class FormGood extends Form {
   };
   
 
+  // This method is envoked during 'submit' event
   submit() {
+
+    // Referring to parent abstract class method, which checks if input values are (not) their placeholders' values
+    // If they are, the values are set to empty strings
     this.checkPlaceholders();
+
+    // This array exist to support older pattern
     let forms = [this.jQueryName, this.jQueryEmail, this.jQueryCount, this.jQueryPrice];
     
+    // Same here
     let validation = [this.isNameValid(forms[0].val()), this.isEmailValid(forms[1].val()), this.isCountValid(forms[2].val()), this.isPriceValid(cleanPriceString(forms[3].val()))];
   
-    
+    // If all values are valid
     if(validation.every((element)=>{return element;})){
+
+      // Array with city checkboxes jQuery elements
       let cities = this.jQueryElement.find('.city').toArray();
+
+      // Array in which we push flags depending on checkboxes values
       let delivery = [];
   
+      // Pushing flags
       cities.forEach((city)=>{
         delivery.push($(city).prop('checked') ? true : false);
       });
       
-
+      // Async process of adding the new good
       const addPromise = LIST.add(new Good(
                 this.jQueryName.val(),
                 this.jQueryEmail.val(),
@@ -521,13 +641,23 @@ class FormGood extends Form {
                 delivery.slice(5, 9), 
       ))
             
+      // Async process starts
       this.loading();
   
+      // When it resolved proceed
       addPromise.then((resolved) => {
+
+        // New good in the list, re-render table
         LIST.render();
+
+        // Hidding modals
         this.endLoading();
+
+        // Clearing form
         this.clear();
         this.clearInvalid();
+
+        // Setting placeholders back
         this.initPlaceholders();
       }  
       );
@@ -536,7 +666,12 @@ class FormGood extends Form {
   
   
     } else {
+
+      // Clear invalid classes before setting anew
       this.clearInvalid();
+
+      // If an input didn't come through validation
+      // Through *note(s) methods indicating notes are shown
       validation.forEach((element, index)=>{
         if(!element){
           forms[index].addClass('invalid');
@@ -546,6 +681,7 @@ class FormGood extends Form {
         }
       });
   
+      // Focusing in the first invalid input field
       forms[validation.indexOf(false)].focus();
     }
   }

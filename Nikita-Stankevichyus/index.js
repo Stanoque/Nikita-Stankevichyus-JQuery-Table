@@ -1,5 +1,10 @@
 "use strict";
 
+/*
+ * NOTE: This project uses 'browserify' modules through require syntaxis
+ * See more on this topic in documentation
+*/
+
 // Local object that represents data of a real product gotten from the server
 const Good = require('./src/javascript/good_local_object.js');
 
@@ -129,4 +134,3 @@ initialGet.then( (resolved) => {
 
 // Rendering dynamic elements
 LIST.render();
-
