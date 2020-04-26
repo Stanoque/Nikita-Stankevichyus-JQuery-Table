@@ -43,10 +43,11 @@ module.exports = function Good(name='', email='', count=0, price=0, russia=[], b
   this.allCities = (country) => {
     let toReturn = true;
     for(let city in this.delivery[country]){
-      if(!this.delivery.russia[city]){
+      if(!this.delivery[country][city]){
         toReturn = false;
       }
     }
+   
     return toReturn;
   };
 }

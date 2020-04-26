@@ -261,10 +261,11 @@ module.exports = function Good(name='', email='', count=0, price=0, russia=[], b
   this.allCities = (country) => {
     let toReturn = true;
     for(let city in this.delivery[country]){
-      if(!this.delivery.russia[city]){
+      if(!this.delivery[country][city]){
         toReturn = false;
       }
     }
+   
     return toReturn;
   };
 }
@@ -1125,7 +1126,13 @@ module.exports = function Row(template, whereTo, number, good){
     idDelete: 'delete_'+number,
   })).appendTo(whereTo);
 
+
   this.jQueryElement = $('#table_row_'+number);
+
+  if(this.good.count.length > 2) {
+    this.jQueryElement.find('.badge').parent().removeClass('col-1');
+    this.jQueryElement.find('.badge').parent().addClass('col-12');
+  }
 
   this.modalDescription = {};
   this.modalDelete = {};
@@ -1181,10 +1188,6 @@ module.exports = function Row(template, whereTo, number, good){
     }); 
 
   }
-  
-
-  
-
   
 
   this.hide = () => {
