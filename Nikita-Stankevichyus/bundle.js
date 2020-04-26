@@ -692,6 +692,7 @@ class FormGood extends Form {
     
     // Subfunction, appends one pair country-cities checkboxes to the form
     const renderCities = (country, cityNames=[], allChecked) => {
+
     /*
      * country -- name of the country
      * cityNames -- 3 city names
@@ -747,7 +748,6 @@ class FormGood extends Form {
   
     // Subfunction which realizes mechanism of corresponding rendering of pair: 
     // option[class=country] --> checkbox[class=country_cities]
-
     const migrate = (toCountry) => {
   
       $(toCountry).click(() => {
@@ -783,8 +783,10 @@ class FormGood extends Form {
 
 }
 
+// Subclass for adding new element
 module.exports.FormAdd = class FormAdd extends FormGood {
 
+  // All comments considering parent class are also true for this class
   constructor(good=null, jQueryModalFade=null, jQueryModalAwait=null, modalWindow, jQueryTrigger, jQueryTemplate, citiesTemp, LIST){
     super(good, jQueryModalFade, jQueryModalAwait, modalWindow, jQueryTrigger, jQueryTemplate, citiesTemp);
 
@@ -795,32 +797,43 @@ module.exports.FormAdd = class FormAdd extends FormGood {
   
     this.appendDelivery(citiesTemp);
 
+    // jQuery objects corresponding to html inputs
     this.jQueryName = this.jQueryElement.find('input.name');
     this.jQueryEmail = this.jQueryElement.find('input.supplier_email');
     this.jQueryCount = this.jQueryElement.find('input.count');
     this.jQueryPrice = this.jQueryElement.find('input.price');
 
+    // Array to support older patterns
     this.jQueryInputs = [this.jQueryName, this.jQueryEmail, this.jQueryCount, this.jQueryPrice];
+
+    // Notes indicating invalid input
     this.jQueryNotes = this.jQueryElement.find('.note');
 
+    // Delivery checkbox form
     this.jQueryCities = {};
-
     this.jQueryCities.selectAll = this.jQueryElement.find('input.select_all');
     this.jQueryCities.cities = this.jQueryElement.find('input.city');
 
+    // Formatting inputs
     this.inputsFormat();
+
+    // Defining each note separately
     this._defineNotes();
+
+    // Setting placeholders
     this.initPlaceholders();
 
+    // jQueryTrigger starts interacting with the form
     this.jQueryTrigger = jQueryTrigger;
     this.jQueryTrigger.click(()=>{this.open()});
 
-    
+    // On submit
     this.jQueryElement.submit((event)=>{
       event.preventDefault();
       this.submit()
     });
 
+    // Canceling without any changes
     this.jQueryCancel = this.jQueryElement.find('.cancel');
     this.jQueryCancel.click(()=>{this.cancel()});
     
@@ -828,8 +841,10 @@ module.exports.FormAdd = class FormAdd extends FormGood {
 
 }
 
+// Subclass for editing form
 class FormEdit extends FormGood {
   
+  // All comments from parent and sibling classes are true here except if it's said otherwise
   constructor(good=null, jQueryModalFade=null, jQueryModalAwait=null, modalWindow=null, jQueryTrigger, jQueryTemplate, citiesTemp, renderObject){
     super(good, jQueryModalFade, jQueryModalAwait, modalWindow, jQueryTrigger, jQueryTemplate, citiesTemp);
 
@@ -837,8 +852,15 @@ class FormEdit extends FormGood {
     this.email = this.good.email;
     this.count = this.good.count;
     this.price = this.good.price;
+
+    // this.that is peculiar field. I can't say if it's still used or meant to be used, but I leave it anyway
+    // Basically it is just a jQueryModalWindow id text
     this.that = '#'+'modal_edit_'+modalWindow;
+
+    // What differs here from the parent and sibling classes is the way modalWindow is expected
+    // In this subclass it used like a number (index)
     this.modal.jQueryModalWindow = $('#'+'modal_edit_'+modalWindow);
+
     this.citiesChecboxes = good.deliveryToArray()
 
     
@@ -875,6 +897,9 @@ class FormEdit extends FormGood {
   }
 
   _render(number) {
+    
+    // This is overrided method from the parent classes
+    // Instead of empty strings the form is initialized with data from good corresponding to form
     $(_.template(this.jQueryTemplate.html())({
       modalId: 'modal_edit_'+number,
       email: this.good.email,
@@ -888,6 +913,8 @@ class FormEdit extends FormGood {
   }
 
   clear() {
+
+    // Method clear differs in similiar way as with _render() method -- in leaves fields envalued with good's data
     this.jQueryName.val(this.good.name);
     this.jQueryEmail.val(this.good.email);
     this.jQueryCount.val(this.good.count);
@@ -906,6 +933,8 @@ class FormEdit extends FormGood {
   }
 
   submit() {
+
+    // All comments for this method are true for the parent class, except for one specific place (if validation successful)
     this.checkPlaceholders();
     let forms = [this.jQueryName, this.jQueryEmail, this.jQueryCount, this.jQueryPrice];
     
@@ -914,8 +943,11 @@ class FormEdit extends FormGood {
     
     if(validation.every((element)=>{return element;})){
 
+      // Due to inability to set promise directly to setter method of the good (too complicated)
+      // Promise is formed right here
       const editPromise = new Promise((resolve, reject) => {
 
+        // Function changes corresponding good's data to gotten from inputs values
         setTimeout(()=>{
           this.good.name = this.jQueryName.val();
           this.good.email = this.jQueryEmail.val();
@@ -972,17 +1004,26 @@ class FormEdit extends FormGood {
 
 }
 
-
+// Local object that deals with storaging and manipulating dynamic elements
+// Mainly good local objects
 function GoodsList() {
+
+  // Collection of the good local objects
   this.collection = [];
+
+  // Directions of the sortings. If true -- ascending
+  // Yeah, there is grammar issue, but it is left to support older patterns
   this.ascedningName = true;
   this.ascedningPrice = true;
 
 
+  // Item pushing override (definiton)
   this.push = (good) => {
     this.collection.push(good);
   };
 
+  // Good deleting definition
+  // It is an async process
   this.delete = (good) => {
     return new Promise((resolve, reject) => {
       setTimeout(()=>{
@@ -995,12 +1036,15 @@ function GoodsList() {
     
   )};
 
+
+  // Good adding definition
+  // It is an async process
   this.add = (good) => {
 
     return new Promise((resolve, reject) => {
       setTimeout(()=>{
         this.push(good);
-        resolve('Good deleted')
+        resolve('Good added')
       }
     , serverResponseTime);
 
@@ -1008,30 +1052,47 @@ function GoodsList() {
 
   )};
 
+  // forEach override (definition)
   this.forEach = (callback) => {
     this.collection.forEach(callback);
   };
 
+  // Name field sorting.
+  // NOTE: String are 'compared' via localeCompare method
   this.sortByName = () => {
     const callback = this.ascedningName ? ((x, y) => {return ('' + x.name).localeCompare(y.name);}) 
                                : ((x, y) => {return ('' + y.name).localeCompare(x.name);}); 
-    this.collection.sort(callback)
+    this.collection.sort(callback);
+
+    // NOTE: It re-renders automatically after sorting
     this.render();
   };
 
+
+  // Price field sorting
   this.sortByPrice = () => {
     const callback = this.ascedningPrice ? ((x, y) => {return y.price-x.price;}) : ((x, y) => {return x.price-y.price;}); 
     this.collection.sort(callback);
+
+    // NOTE: It re-renders automatically after sorting
     this.render();
   };
 
+  // Main method of the object, that renders dynamic elements into the page (table)
   this.render = () => {
+
+    // Firstly we empty the table
     $('#table_body').empty();
 
+    // Then, for each good item in the collection we perfom render
+    // NOTE: This part can be taken out to a separate renderSelf method, which potentially could help optimize rendering
+    // For example: we could re-render only edited part, not all dynamic elements, or just append added element to content.
     this.forEach((good, number) => {
 
+      // Forming new row
       good.row = new Row(_.template($("#row_template").html()), '#table_body', number, good);
 
+      // If good hasn't mached sorting, it is hidden
       if(good.hidden){
         good.row.hide();
       } else {
@@ -1039,11 +1100,21 @@ function GoodsList() {
       }
      
 
-      
+      // Forming edit form for the good
       good.formEdit = new FormEdit(good, $('#modal_fade'), $('#loading'), number, $('#edit_'+number), $("#modal_edit_template"), '#edit_cities_template');
+
+      // Forming description modal
       good.row.defineModalDescription(_.template($('#modal_description_template').html()), 'modal_description_'+number, 'modal_description_close_'+number);
+
+      // Forming delete modal
       good.row.defineModalDelete(_.template($('#modal_delete_template').html()), 'modal_delete_'+number, 'yes_'+number, 'no_'+number);
   
+      /* 
+       * This sets trigger to a 'delete' button to open delete modal
+       * Reason for not incapsulating this into row object like modal itself 
+       * Is because it manipulates directly with GoodsList data (good local objects)
+      */
+      
       good.row.modalDelete.jQueryYes.click(() => {
         const deletePromise = this.delete(good);
         deletePromise.then((resolved)=>{
@@ -1060,6 +1131,7 @@ function GoodsList() {
   };
 };
 
+// Forming instance of the GoodsList to export
 const LIST = new GoodsList();
 
 module.exports.LIST = LIST;
