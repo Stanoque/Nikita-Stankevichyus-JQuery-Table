@@ -18,17 +18,20 @@
 
     <main class=main>
 
-
+      <!-- Modal fade -->
       <div class="modal_fade" id="modal_fade">
       </div>
 
+      <!-- Writing "Synchronizing" during async processes -->
       <div class="loading" id="loading">
         Synchronizing...
       </div>
       
+
         <div class='container-fluid'>
           <div class='row justify-content-between mg-t-15 mg-b-15'>
               
+            <!-- Search form -->
               <div class="col-sm-4 col-12">
                 <form action="" id='search_form'>
                   <div class="row justify-content-center">
@@ -37,7 +40,8 @@
                   </div>
                 </form>
               </div>
-             
+
+             <!-- "Add new" button -->
               <div class="col-sm-2 col-12 row">
                 <button type="button" class="btn btn-primary btn-block mg-r-7" id="good_add">Add New</button>
               </div>
@@ -49,12 +53,14 @@
 
         <thead>
 
+          <!-- Head of the table -->
           <tr class='row' id="show">
             <th scope="col"  class='col-xl-5 col-lg-5 col-md-4 col-sm-4 col-3'>
               <div class='row justify-content-between pd-h-10'>
                 <div class='col-sm-4 col-12 text-primary good_name sort_name'>
                   Name
                 </div>
+                <!-- Triangle for search by name -->
                 <div class='col-sm-1 col-12 triangle' id="triangle_name">
                   <svg class="bi bi-caret-down-fill" width="1em" height="1em" viewBox="0 0 16 16" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
                     <path d="M7.247 11.14L2.451 5.658C1.885 5.013 2.345 4 3.204 4h9.592a1 1 0 01.753 1.659l-4.796 5.48a1 1 0 01-1.506 0z"/>
@@ -67,6 +73,7 @@
                 <div class='col-sm-4 col-12 mg-l--10 good_name text-primary sort_price'>
                   Price
                 </div>
+                 <!-- Triangle for search by price -->
                 <div class='col-sm-1 col-12 triangle' id="triangle_price">
                   <svg class="bi bi-caret-down-fill" width="1em" height="1em" viewBox="0 0 16 16" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
                     <path d="M7.247 11.14L2.451 5.658C1.885 5.013 2.345 4 3.204 4h9.592a1 1 0 01.753 1.659l-4.796 5.48a1 1 0 01-1.506 0z"/>
@@ -80,7 +87,7 @@
         </thead>
 
         <tbody id="table_body">
-
+          <!-- Rows and edit, delete and description modals are rendered here  -->
         </tbody>
       </table>
 
@@ -89,6 +96,7 @@
     <footer>
     </footer>
 
+    <!-- Lodash row template -->
     <script type="text/template" id="row_template">
       <tr class="row" id="<%-idRow%>">
         <td class="col-xl-5 col-lg-5 col-md-4 col-sm-4 col-3">
@@ -110,7 +118,9 @@
         </td>
       </tr>
     </script>
-      
+
+
+      <!-- Lodash edit modal template -->
     <script type="text/template" id="modal_edit_template">
 
       <div class="my_modal_edit" id="<%-modalId%>">
@@ -168,6 +178,7 @@
                   </div>
 
                   <div class="col-12 col-sm-6 light_border cities">
+                    <!-- Delivery checkboxes form is rendered here -->
                   </div>
                     
                 </div>
@@ -183,7 +194,8 @@
         </div>
       </div>
     </script>
-  
+
+    <!-- Lodash delivery checkbox form template -->
     <script type="text/template" id="edit_cities_template">
       <div class="cities_form hidden <%-country%>_cities">
         <label class="border-bottom font-weight-bold">
@@ -205,6 +217,7 @@
       </div>
     </script>
     
+    <!-- Lodash delete template -->
     <script type="text/template" id="modal_delete_template">
 
       <div class="my_modal_delete" id="<%-deleteId%>">
@@ -225,6 +238,7 @@
 
     </script>
 
+    <!-- Lodash description template -->
     <script type="text/template" id="modal_description_template">
       <div class="my_modal_description" id="<%-descriptionId%>">
         <div class="container">

@@ -262,38 +262,6 @@ class FormGood extends Form {
 
     this._render(modalWindow);
     
-    // this.that = '#' + modalWindow;
-    
-    // this.modal.jQueryModalWindow = $('#'+ modalWindow);
-    // this.jQueryElement = this.modal.jQueryModalWindow.find('form');
-    // // this._render(modalWindow, citiesTemp);
-    // this.appendDelivery(citiesTemp);
-
-    // this.jQueryName = this.jQueryElement.find('input.name');
-    // this.jQueryEmail = this.jQueryElement.find('input.supplier_email');
-    // this.jQueryCount = this.jQueryElement.find('input.count');
-    // this.jQueryPrice = this.jQueryElement.find('input.price');
-
-    // this.jQueryInputs = [this.jQueryName, this.jQueryEmail, this.jQueryCount, this.jQueryPrice];
-    // this.jQueryNotes = this.jQueryElement.find('.note');
-
-    // this.jQueryCities = {};
-
-    // this.jQueryCities.selectAll = this.jQueryElement.find('input.select_all');
-    // this.jQueryCities.cities = this.jQueryElement.find('input.city');
-
-    // this.jQueryTrigger = jQueryTrigger;
-    // this.jQueryTrigger.click(()=>{this.open()});
-
-    
-
-    // this.jQueryElement.submit((event)=>{
-    //   event.preventDefault();
-    //   this.submit()
-    // });
-
-    // this.jQueryCancel = this.jQueryElement.find('.cancel');
-    // this.jQueryCancel.click(()=>{this.cancel()});
 
   }
 
@@ -309,7 +277,6 @@ class FormGood extends Form {
       saveId: 'save_add',
       cancelId: 'cancel_add',
     })).appendTo('.main');
-    // this.appendDelivery(citiesTemp);
   }
 
   _defineNotes() {
@@ -337,11 +304,6 @@ class FormGood extends Form {
 
       
       $(this).val($(this).val().replace(nonDigitRegExp,''));
-      // $(this).val($(this).val().replace(strayDotRegExp,''));
-      
-      // if($(this).val().charAt(0) === '.'){
-      //   $(this).val($(this).val().slice(1));
-      // }
 
       // NOTE: Think how to rewrite this to deal with 'past' and 'present' dot
       if($(this).val().match(/\./g)){
@@ -435,9 +397,9 @@ class FormGood extends Form {
   }
 
   showNotes(input) {
-    // debugger;
+    
     if(input.hasClass('name')){
-      // debugger;
+  
       this.jQueryNotes.nameShort.addClass('hidden');
       this.jQueryNotes.nameLong.addClass('hidden');
       if(input.val().length < 5){
@@ -616,7 +578,6 @@ class FormGood extends Form {
     })).appendTo(this.jQueryElement.find('.cities'));
     };
     
-    // this.modal.jQueryModalWindow.find('.cities')
     
     renderCities('russia', ['Moscow', 'Saratov', 'SPb'], this.good ? this.good.allCities('russia') : false);
     renderCities('belorus', ['Minsk', 'Hotlany', 'Bobruysk'], this.good ? this.good.allCities('belorus') : false);
@@ -680,7 +641,7 @@ module.exports.FormAdd = class FormAdd extends FormGood {
     
     this.modal.jQueryModalWindow = $('#'+ modalWindow);
     this.jQueryElement = this.modal.jQueryModalWindow.find('form');
-    // this._render(modalWindow, citiesTemp);
+  
     this.appendDelivery(citiesTemp);
 
     this.jQueryName = this.jQueryElement.find('input.name');
@@ -711,27 +672,9 @@ module.exports.FormAdd = class FormAdd extends FormGood {
 
     this.jQueryCancel = this.jQueryElement.find('.cancel');
     this.jQueryCancel.click(()=>{this.cancel()});
-    // this.jQueryTemplate = jQueryTemplate;
-    // this._render(modalWindow);
-
-    // this.modal.jQueryModalWindow = $('#'+ modalWindow);
-    // this.jQueryElement = this.modal.jQueryModalWindow.find('form');
-
-    // this.appendDelivery();
+    
   }
 
-//   _render(id) {
-//     $(_.template(jQueryTemplate.html())({
-//       modalId: id,
-//       email: '',
-//       name: '',
-//       count: '',
-//       price: '$',
-//       saveId: 'save_add',
-//       cancelId: 'cancel_add',
-//     })).appendTo('.main');
-
-//   }
 }
 
 class FormEdit extends FormGood {
@@ -918,25 +861,6 @@ function GoodsList() {
     this.collection.forEach(callback);
   };
 
-  // this.clearEdit = (form, good) => {
-  //   $(form+'.name').val(good.name);
-  //   $(form+'.supplier_email').val(good.email);
-  //   $(form+'.count').val(good.count);
-  //   $(form+'.price').val(priceConverter(good.price));
-  //   $(form+'russia .select_all').prop('checked', good.allCities('russia'));
-  //   $(form+'belorus .select_all').prop('checked', good.allCities('belorus'));
-  //   $(form+'usa .select_all').prop('checked', good.allCities('usa'));
-  //   $(form+'.note').addClass('hidden');
-  
-  //   let cities = $(form+'.cities').toArray();
-  //   let delivery = good.deliveryToArray();
-    
-  //   cities.forEach((element, index)=>{
-  //     $(element).prop('checked', delivery[index]);
-  //   });
-  
-  // }
-
   this.sortByName = () => {
     const callback = this.ascedningName ? ((x, y) => {return ('' + x.name).localeCompare(y.name);}) 
                                : ((x, y) => {return ('' + y.name).localeCompare(x.name);}); 
@@ -953,8 +877,6 @@ function GoodsList() {
   this.render = () => {
     $('#table_body').empty();
 
-    // let rowTemp = _.template($("#row_template").html());
-
     this.forEach((good, number) => {
 
       good.row = new Row(_.template($("#row_template").html()), '#table_body', number, good);
@@ -964,252 +886,11 @@ function GoodsList() {
       } else {
         good.row.show();
       }
-      // $(rowTemp({
-      //   idRow: 'table_row_'+number,
-      //   name: good.name,
-      //   price: priceConverter(good.price),
-      //   count: good.count,
-      //   idName: 'description_'+number,
-      //   idEdit: 'edit_'+number,
-      //   idDelete: 'delete_'+number,
-      // })).appendTo('#table_body');
-
-
-
-    
-
-      // if(good.hidden){
-      //   $('#table_row_'+number).addClass('hidden');
-      //   $('#table_row_'+number+' *').addClass('hidden');
-      // } else {
-      //   $('#table_row_'+number).removeClass('hidden');
-      //   $('#table_row_'+number+' *').removeClass('hidden');
-      // }
+     
 
       
       good.formEdit = new FormEdit(good, $('#modal_fade'), $('#loading'), number, $('#edit_'+number), $("#modal_edit_template"), '#edit_cities_template');
-
-      // let modalTemp = _.template($("#modal_edit_template").html());
-
-      // $(modalTemp({
-      //   modalId: 'modal_edit_'+number,
-      //   name: good.name,
-      //   price: priceConverter(good.price),
-      //   count: good.count,
-      //   email: good.email,
-      //   saveId: 'modal_save_'+number,
-      //   cancelId: 'modal_cancel_'+number,
-      // })).appendTo('#table_body');
-
-      // $('#edit_'+number).click(() => {
-      //   $(".modal_fade").addClass("modal_fade_trick");
-      //   $("#modal_edit_"+number).css("display", "block");
-      // });
-
-      // $('#modal_edit_'+number+' form').submit((event) => {
-      //   event.preventDefault();
-
-      //   const form = '#modal_edit_'+number+' form ';
-      //   let forms = [$(form+'.name'), $(form+'.supplier_email'), $(form+'.count'), $(form+'.price')];
-      //   let validation = [isNameValid(forms[0].val()), isEmailValid(forms[1].val()), isCountValid(forms[2].val()), isPriceValid(cleanPriceString(forms[3].val()))];
-
-      //   if(validation.every((element)=>{return element;})){
-
-      //     const editPromise = new Promise((resolve, reject) => {
-
-      //       setTimeout(()=>{
-      //         good.name = $(form+'.name').val();
-      //         good.email = $(form+'.supplier_email').val();
-      //         good.count = $(form+'.count').val();
-      //         good.price = priceConverter($(form+'.price').val());
-          
-      //         const editCities = () => {
-      //           const countries = [];
-                
-      //           for(let country in good.delivery) {
-      //             countries.push(country);
-      //           }
-      
-      //           countries.forEach( (country)=>{
-
-      //               for(let city in good.delivery[country]){
-      //                 good.delivery[country][city] = $(form+'.'+city).prop('checked') ? true : false;
-      //               }
-      //           }
-      //           )
-      //         }
-
-      //         editCities();
-              
-      //         resolve('Edit successful');
-      //       }, serverResponseTime);
-          
-      //     });
-
-      //     $('.loading').css('display', 'block');
-      //     editPromise.then((resolved) => {
-      //       $(".modal_fade").removeClass("modal_fade_trick");
-      //       $('.loading').css('display', 'none');
-      //       clearInvalid(form);
-      //       clearEdit(form, good);
-      //       this.render();
-      //     })
-      //     // $(".modal_fade").removeClass("modal_fade_trick");
-      //     $("#modal_edit_"+number).css("display", "none");
-        
-      //     // clearInvalid(form);
-      //     // clearEdit(form, good);
-
-      //     // LIST.render();
-      //   } else {
-      //       clearInvalid(form);
-      //       validation.forEach((element, index)=>{
-      //       if(!element){
-      //         forms[index].addClass('invalid');
-      //         showNotes(forms[index]);
-      //       } else {
-      //         hidNotes(forms[index]);
-      //       }
-      //     });
-      
-      //     forms[validation.indexOf(false)].focus();
-          
-      //   }
-      // });
-
-      // $('#modal_cancel_'+number).click(() => {
-      //   $('.modal_fade').removeClass('modal_fade_trick');
-      //   $('#modal_edit_'+number).css('display', 'none');
-      //   clearEdit('#modal_edit_'+number+' form ', good);
-      //   clearInvalid('#modal_edit_'+number+' form ');
-      // });
-
-      // appendDelivery('#modal_edit_'+number, good);
-
       good.row.defineModalDescription(_.template($('#modal_description_template').html()), 'modal_description_'+number, 'modal_description_close_'+number);
-
-      // DESCRIPTION
-      // let descriptionTemp = _.template($('#modal_description_template').html());
-
-      // $(descriptionTemp({
-      //   descriptionId: 'modal_description_'+number,
-      //   name: good.name,
-      //   description: good.description,
-      //   closeId: 'modal_description_close_'+number,
-        
-      // })).appendTo('#table_body');
-
-      // $('#description_'+number).click(() => {
-      //   $(".modal_fade").addClass("modal_fade_trick");
-      //   $("#modal_description_"+number).css("display", "block");
-      // });
-
-      // $("#modal_description_close_"+number).click(() => {
-      //   $(".modal_fade").removeClass("modal_fade_trick");
-      //   $("#modal_description_"+number).css("display", "none");
-      // });
-
-      // $('#modal_edit_'+number+' form').submit((event) => {
-      //   event.preventDefault();
-
-      //   const form = '#modal_edit_'+number+' form ';
-      //   let forms = [$(form+'.name'), $(form+'.supplier_email'), $(form+'.count'), $(form+'.price')];
-      //   let validation = [isNameValid(forms[0].val()), isEmailValid(forms[1].val()), isCountValid(forms[2].val()), isPriceValid(cleanPriceString(forms[3].val()))];
-
-      //   if(validation.every((element)=>{return element;})){
-
-      //     const editPromise = new Promise((resolve, reject) => {
-
-      //       setTimeout(()=>{
-      //         good.name = $(form+'.name').val();
-      //         good.email = $(form+'.supplier_email').val();
-      //         good.count = $(form+'.count').val();
-      //         good.price = priceConverter($(form+'.price').val());
-          
-      //         const editCities = () => {
-      //           const countries = [];
-                
-      //           for(let country in good.delivery) {
-      //             countries.push(country);
-      //           }
-      
-      //           countries.forEach( (country)=>{
-
-      //               for(let city in good.delivery[country]){
-      //                 good.delivery[country][city] = $(form+'.'+city).prop('checked') ? true : false;
-      //               }
-      //           }
-      //           )
-      //         }
-
-      //         editCities();
-              
-      //         resolve('Edit successful');
-      //       }, serverResponseTime);
-          
-      //     });
-
-      //     $('.loading').css('display', 'block');
-      //     editPromise.then((resolved) => {
-      //       $(".modal_fade").removeClass("modal_fade_trick");
-      //       $('.loading').css('display', 'none');
-      //       clearInvalid(form);
-      //       clearEdit(form, good);
-      //       this.render();
-      //     })
-      //     // $(".modal_fade").removeClass("modal_fade_trick");
-      //     $("#modal_edit_"+number).css("display", "none");
-        
-      //     // clearInvalid(form);
-      //     // clearEdit(form, good);
-
-      //     // LIST.render();
-      //   } else {
-      //       clearInvalid(form);
-      //       validation.forEach((element, index)=>{
-      //       if(!element){
-      //         forms[index].addClass('invalid');
-      //         showNotes(forms[index]);
-      //       } else {
-      //         hidNotes(forms[index]);
-      //       }
-      //     });
-      
-      //     forms[validation.indexOf(false)].focus();
-          
-      //   }
-      // });
-
-      // $('#modal_cancel_'+number).click(() => {
-      //   $('.modal_fade').removeClass('modal_fade_trick');
-      //   $('#modal_edit_'+number).css('display', 'none');
-      //   clearEdit('#modal_edit_'+number+' form ', good);
-      //   clearInvalid('#modal_edit_'+number+' form ');
-      // });
-
-      // $("#modal_description_close_"+number).click(() => {
-      //   $(".modal_fade").removeClass("modal_fade_trick");
-      //   $("#modal_description_"+number).css("display", "none");
-      // });
-
-      const thisCities = $('#modal_edit_'+number+' .cities');
-
-      // appendDelivery('#modal_edit_'+number, good);
-
-      // DELETE
-      // let deleteTemp = _.template($('#modal_delete_template').html());
-
-      // $(deleteTemp({
-      //   deleteId: 'modal_delete_'+number,
-      //   name: good.name,
-      //   idYes: 'yes_'+number,
-      //   idNo: 'no_'+number,
-      // })).appendTo('#table_body');
-
-      // $('#delete_'+number).click(() => {
-      //   $('.modal_fade').addClass('modal_fade_trick');
-      //   $('#modal_delete_'+number).css('display', 'block');
-      // });
       good.row.defineModalDelete(_.template($('#modal_delete_template').html()), 'modal_delete_'+number, 'yes_'+number, 'no_'+number);
   
       good.row.modalDelete.jQueryYes.click(() => {
@@ -1220,79 +901,11 @@ function GoodsList() {
           $('#loading').css('display', 'none');
         });
         $('#loading').css('display', 'block');
-        // $('.modal_fade').removeClass('modal_fade_trick');
         good.row.modalDelete.jQueryElement.css('display', 'none');
       }); 
 
-      // $('#no_'+number).click(() => {
-      //   $('.modal_fade').removeClass('modal_fade_trick');
-      //   $('#modal_delete_'+number).css('display', 'none');
-      // }); 
-  
     });
-
-    // $('.count').on('input', (function(){
-    //   const nonDigitRegExp = /\D/;
-     
-
-    //   $(this).val($(this).val().replace(nonDigitRegExp,''));
-      
-
-    // }));
-
-    // $('.price').on('input', (function(){
-    //   const nonDigitRegExp = /[^0-9.]/;
-    //   const strayDotRegExp = /\.(?!\d)/g;
-
-      
-    //   $(this).val($(this).val().replace(nonDigitRegExp,''));
-    //   // $(this).val($(this).val().replace(strayDotRegExp,''));
-      
-    //   // if($(this).val().charAt(0) === '.'){
-    //   //   $(this).val($(this).val().slice(1));
-    //   // }
-
-    //   // NOTE: Think how to rewrite this to deal with 'past' and 'present' dot
-    //   if($(this).val().match(/\./g)){
-          
-    //       if($(this).val().match(/\./g).length > 1){
-          
-    //         const valArray = $(this).val().split('');
-    //         valArray[valArray.indexOf('.')] = '';
-    //         $(this).val(valArray.join(''));
-    //       }
-    //   }
     
-    // }));
-    
-    // $('.price').focus(function(){
-    //   let regExpDollar = /\$/;
-
-    //   $(this).val($(this).val().replace(/\,/g, ''));
-    //   $(this).val($(this).val().replace(regExpDollar, ''));
-    // });
-
-    // $('.price').blur(function(){
-    //   let regExpDollar = /\$/;
-
-    //   if(!isNaN(parseFloat($(this).val()))){
-    //     $(this).val(putSemi($(this).val()));
-
-    //     if(!$(this).val().match(regExpDollar)){
-    //       $(this).val('$'.concat($(this).val()));
-    //     }
-    //   }
-
-    //   const strayDotRegExp = /\.(?!\d)/g;
-
-    //   $(this).val($(this).val().replace(strayDotRegExp,''));
-      
-    //   if($(this).val().charAt(0) === '.'){
-    //     $(this).val($(this).val().slice(1));
-    //   }
-    // });
-    
-
   };
 };
 

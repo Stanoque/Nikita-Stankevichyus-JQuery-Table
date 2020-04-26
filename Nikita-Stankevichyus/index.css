@@ -1,6 +1,8 @@
-/* main {
-	position: relative;
-} */
+/*
+ * No point in refactoring this untill a preprocessor is installed.
+ * This file is litterally margins, paddings and modals. Not much else.
+ * But yeah, tbh it's just a spaghetti code.
+ */
 
 label {
 	width: 100%;
@@ -299,17 +301,3 @@ h2 {
 		height: 270px;
 	}
 }
-
-/* .col-12 {
-	width: 100% !important;
-	margin: 0 auto !important;
-}
-
-.col-12 button{
-	width: 100% !important;
-}
-
-.col-12 input{
-	width: 100% !important;
-} */
-
