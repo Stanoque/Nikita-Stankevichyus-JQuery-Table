@@ -1,31 +1,13 @@
 (function(){function r(e,n,t){function o(i,f){if(!n[i]){if(!e[i]){var c="function"==typeof require&&require;if(!f&&c)return c(i,!0);if(u)return u(i,!0);var a=new Error("Cannot find module '"+i+"'");throw a.code="MODULE_NOT_FOUND",a}var p=n[i]={exports:{}};e[i][0].call(p.exports,function(r){var n=e[i][1][r];return o(n||r)},p,p.exports,r,e,n,t)}return n[i].exports}for(var u="function"==typeof require&&require,i=0;i<t.length;i++)o(t[i]);return o}return r})()({1:[function(require,module,exports){
 "use strict";
 
-// const putSemi = require('./src/javascript/price_vidget/vidget_price.js').putSemi;
-// const priceConverter = require('./src/javascript/price_vidget/vidget_price.js').priceConverter;
-
-// const isNameValid = require('./src/javascript/form_validation.js').isNameValid;
-// const isEmailValid = require('./src/javascript/form_validation.js').isEmailValid;
-// const isCountValid = require('./src/javascript/form_validation.js').isCountValid;
-// const isPriceValid = require('./src/javascript/form_validation.js').isPriceValid;
-
-// const clearAdd = require('./src/javascript/form_cleaners.js').clearAdd;
-// const clearEdit = require('./src/javascript/form_cleaners.js').clearEdit;
-// const clearInvalid = require('./src/javascript/form_cleaners.js').clearInvalid;
-
-// const appendDelivery = require('./src/javascript/form_appendDelivery.js');
-
-// const showNotes = require('./src/javascript/form_notes.js').showNotes;
-// const hidNotes = require('./src/javascript/form_notes.js').hidNotes;
-
 const Good = require('./src/javascript/good_local_object.js');
-
-// const GoodsList = require('./src/javascript/list_local_object.js');
 
 const FormAdd = require('./src/javascript/list_local_object.js').FormAdd;
 const FormSearch = require('./src/javascript/class_formSearch.js');
 
 const serverResponseTime = require('./src/javascript/const_serverResponseTime.js');
+
 const LIST = require('./src/javascript/list_local_object.js').LIST;
 
 const initialDatabase = [
@@ -70,28 +52,36 @@ Object.defineProperty(Object.prototype, 'addPlaceholder',{
   enumerable : false
 });
 
-// Object.defineProperty(String.prototype, 'cleanPriceString', {
-//   value: function(){
-//     return this.replace(/\,/g, '').replace('$', '');
-//   },
-//   enumerable: false,
-// });
-
-// const initPlaceholders = (form) => {
-//   $(form+' input').toArray().forEach((element)=>{
-//     if($(element).attr('type') !== 'checkbox' && $(element).attr('type') !== 'button' && $(element).attr('type') !== 'submit'){
-//       $(element).addPlaceholder('Enter '+$(element).attr('name')+'...');
-//     }
-//   });
-// } 
 
 
+let addForm = new FormAdd(null, $('#modal_fade'), $('#loading'), 'modal_add', $('#good_add'), $('#modal_edit_template'), $('#edit_cities_template'), LIST);
+let searchForm = new FormSearch($('#modal_fade'), $('#loading'),  $('#search_form'));
 
-// const LIST = new GoodsList();
+$("#triangle_name").click(() => {
+  $("#triangle_name").toggleClass('flip');
+  LIST.ascedningName = !LIST.ascedningName;
+
+});
+
+$("#triangle_price").click(() => {
+  $("#triangle_price").toggleClass('flip');
+  LIST.ascedningPrice = !LIST.ascedningPrice;
+});
+
+
+$('.sort_name').click(()=>{
+  LIST.sortByName();
+});
+
+$('.sort_price').click(()=>{
+  LIST.sortByPrice();
+});
 
 
 $('#modal_fade').addClass('modal_fade_trick');
 $('#loading').css('display', 'block');
+
+
 const initialGet = new Promise((resolve, reject) => {
   
     setTimeout( () => {
@@ -108,56 +98,6 @@ initialGet.then( (resolved) => {
     $(".modal_fade").removeClass("modal_fade_trick");
   }
 );
-
-let addForm = new FormAdd(null, $('#modal_fade'), $('#loading'), 'modal_add', $('#good_add'), $('#modal_edit_template'), $('#edit_cities_template'), LIST);
-
-
-$("#triangle_name").click(() => {
-  $("#triangle_name").toggleClass('flip');
-  LIST.ascedningName = !LIST.ascedningName;
-
-});
-
-
-
-$("#triangle_price").click(() => {
-  $("#triangle_price").toggleClass('flip');
-  LIST.ascedningPrice = !LIST.ascedningPrice;
-});
-
-
-
-let searchForm = new FormSearch($('#modal_fade'), $('#loading'),  $('#search_form'));
-// $('#search_form').submit((event)=>{
-//   event.preventDefault();
-//   const form = '#search_form ';
-//   const input = $(form+'input');
-
-//   const toSearch = input.val();
-//   const regExpToFilter = new RegExp(toSearch, 'i');
-
-//   LIST.forEach((good)=>{
-//     if(!good.name.match(regExpToFilter)){
-//       good.hidden = true; 
-//     } else {
-//       good.hidden = false;
-//     }
-//   });
-
-//   LIST.render();
-// })
-
-$('.sort_name').click(()=>{
-  LIST.sortByName();
-});
-
-$('.sort_price').click(()=>{
-  LIST.sortByPrice();
-});
-
-// $('#search_form'+' input').addPlaceholder('Enter name...');
-
-// initPlaceholders('#modal_add');
 
 LIST.render();
 
@@ -297,12 +237,6 @@ module.exports = function Good(name='', email='', count=0, price=0, russia=[], b
 }
 },{}],6:[function(require,module,exports){
 const serverResponseTime = require('./const_serverResponseTime.js');
-// const appendDelivery = require('./form_appendDelivery.js');
-
-// const isNameValid = require('./form_validation.js').isNameValid;
-// const isEmailValid = require('./form_validation.js').isEmailValid;
-// const isCountValid = require('./form_validation.js').isCountValid;
-// const isPriceValid = require('./form_validation.js').isPriceValid;
 
 const Good = require('./good_local_object.js');
 
@@ -311,12 +245,6 @@ const putSemi = require('./price_vidget/vidget_price.js').putSemi;
 const cleanPriceString = require('./price_vidget/vidget_price.js').cleanPriceString;
 
 const Row = require('./row_local_object.js');
-
-// const showNotes = require('./form_notes.js').showNotes;
-// const hidNotes = require('./form_notes.js').hidNotes;
-
-// const clearEdit = require('./form_cleaners.js').clearEdit;
-// const clearInvalid = require('./form_cleaners.js').clearInvalid;
 
 const Form = require('./abstract_class_form/abstract_class_form.js');
 

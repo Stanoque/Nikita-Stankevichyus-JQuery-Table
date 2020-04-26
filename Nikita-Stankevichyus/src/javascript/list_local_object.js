@@ -1,10 +1,4 @@
 const serverResponseTime = require('./const_serverResponseTime.js');
-// const appendDelivery = require('./form_appendDelivery.js');
-
-// const isNameValid = require('./form_validation.js').isNameValid;
-// const isEmailValid = require('./form_validation.js').isEmailValid;
-// const isCountValid = require('./form_validation.js').isCountValid;
-// const isPriceValid = require('./form_validation.js').isPriceValid;
 
 const Good = require('./good_local_object.js');
 
@@ -13,12 +7,6 @@ const putSemi = require('./price_vidget/vidget_price.js').putSemi;
 const cleanPriceString = require('./price_vidget/vidget_price.js').cleanPriceString;
 
 const Row = require('./row_local_object.js');
-
-// const showNotes = require('./form_notes.js').showNotes;
-// const hidNotes = require('./form_notes.js').hidNotes;
-
-// const clearEdit = require('./form_cleaners.js').clearEdit;
-// const clearInvalid = require('./form_cleaners.js').clearInvalid;
 
 const Form = require('./abstract_class_form/abstract_class_form.js');
 
