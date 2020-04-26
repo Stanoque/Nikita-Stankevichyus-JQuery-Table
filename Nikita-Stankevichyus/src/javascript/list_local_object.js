@@ -415,10 +415,18 @@ class FormGood extends Form {
     }
   }
  
-
+  // Method append delivery checbox inputs to modal form
   appendDelivery(citiesTemp) {
+    
+    // Subfunction, appends one pair country-cities checkboxes to the form
     const renderCities = (country, cityNames=[], allChecked) => {
-          
+    /*
+     * country -- name of the country
+     * cityNames -- 3 city names
+     * allChecked -- true if delivery is made to each city of the list
+    */      
+    
+    // flags indicating that delivery is possible for this city
     let delivery = [];
   
     if(this.good){
@@ -427,7 +435,7 @@ class FormGood extends Form {
       }
     }
    
-
+    // Appending form
     $(_.template($(citiesTemp).html())({
       country: country,
       city_1: cityNames[0],
@@ -443,17 +451,18 @@ class FormGood extends Form {
     })).appendTo(this.jQueryElement.find('.cities'));
     };
     
-    
+    // Appending forms for each country
     renderCities('russia', ['Moscow', 'Saratov', 'SPb'], this.good ? this.good.allCities('russia') : false);
     renderCities('belorus', ['Minsk', 'Hotlany', 'Bobruysk'], this.good ? this.good.allCities('belorus') : false);
     renderCities('usa', ['NY', 'Washington', 'Boston'], this.good ? this.good.allCities('usa') : false);
 
   
-  
+    // Options array of country select form
     let countries = this.jQueryElement.find('.countries').children();
   
     countries = countries.toArray();
   
+    // Forming new array, containing cities for each country in respecitve order
     const cities = countries.map((country)=>{
   
       let citiesClass = ' .'+$(country).attr('class')+'_cities';
@@ -461,9 +470,12 @@ class FormGood extends Form {
   
     });
   
+    // The first option is shown by default
     $(cities[0]).removeClass('hidden');
   
-  
+    // Subfunction which realizes mechanism of corresponding rendering of pair: 
+    // option[class=country] --> checkbox[class=country_cities]
+
     const migrate = (toCountry) => {
   
       $(toCountry).click(() => {
@@ -478,18 +490,20 @@ class FormGood extends Form {
       });
     }
   
+    // Setting handlers for all options
     countries.forEach((country)=>{
       migrate(country);
     });
   
         
-  
+    // If select_all checkbox is clicked, all checboxes in the option get 'checked' attribute
     const selectAll = (countrySelectAll) => {
       $(countrySelectAll).click(() => {
         $(countrySelectAll).parent().siblings().children('.city').prop('checked', $(countrySelectAll).prop('checked'));
       });
     }
   
+    // Applying selectAll to each select_all element
     cities.forEach((country)=>{
       selectAll($(country).find('.select_all')); 
     })
