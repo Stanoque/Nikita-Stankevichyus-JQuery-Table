@@ -64,8 +64,12 @@ Object.defineProperty(Object.prototype, 'addPlaceholder',{
 
     // When input starts, placeholder is hid 
     currentElement.on('input',()=>{
-      if(currentElement.val().match(currentElement.attr('my_placeholder'))){
+
+      // Yup, it looks awful, but really easy to understand: 
+      // If input starts (either by entering or deleting) placeholder (or what remains of it) deletes      
+      if(currentElement.val().match(currentElement.attr('my_placeholder')) || currentElement.val().match(currentElement.attr('my_placeholder').slice(0, currentElement.attr('my_placeholder').length - 1))){
         currentElement.val(currentElement.val().replace(currentElement.attr('my_placeholder'), ''));
+        currentElement.val(currentElement.val().replace(currentElement.attr('my_placeholder').slice(0, currentElement.attr('my_placeholder').length - 1), ''));
         currentElement.removeClass('placeholder');
       }
     });
@@ -172,14 +176,29 @@ module.exports = class Form {
   
 }
 },{}],3:[function(require,module,exports){
+
+// Importing Form abstract class
 const Form = require('./abstract_class_form/abstract_class_form.js');
+
+// Importing LIST object
 const LIST = require('./list_local_object.js').LIST;
 
-module.exports = class formSearch extends Form {
-  constructor(jQueryModalFade=null, jQueryModalAwait=null, jQueryElement=null){
 
+// This class inherits from Form abstract class and corresponds to search form static element 
+// (consisting from 1 input and 1 submit button)
+
+module.exports = class formSearch extends Form {
+
+   /*
+    * jQueryModalFade -- jQuery object of modal fade html element, which prevents interacting with the page during async processes
+    * jQueryModalAwait -- jQuery object of modal note html element, which shows during async processes
+    * jQueryElement -- jQuery object of the form 
+   */
+
+  constructor(jQueryModalFade=null, jQueryModalAwait=null, jQueryElement=null){
     super(jQueryModalFade, jQueryModalAwait, jQueryElement);
 
+    // Setting placeholders
     this.initPlaceholders();
     
     this.jQueryElement.submit((event)=>{
@@ -187,6 +206,7 @@ module.exports = class formSearch extends Form {
       this.submit();
     })
 
+    // Dealing with features of the search form placeholder -- making the submit event neglecting value equal to placeholder text
     this.jQueryElement.find('input').click(()=>{
       if(this.jQueryElement.find('input').val() === this.jQueryElement.find('input').attr('my_placeholder')){
         this.jQueryElement.find('input').val('');
@@ -196,9 +216,13 @@ module.exports = class formSearch extends Form {
   }
 
   submit(){
+
     this.checkPlaceholders();
+
+    // RegExp to match to name fields 
     const regExpToFilter = new RegExp(this.jQueryElement.find('input').val(), 'i');
 
+    // If name does not match -- good will be hidden during re-render
     LIST.forEach((good)=>{
       if(!good.name.match(regExpToFilter)){
         good.hidden = true; 
@@ -207,8 +231,10 @@ module.exports = class formSearch extends Form {
       }
     });
 
+    // Re-rendering
     LIST.render();
     
+    // Setting placeholders back
     this.initPlaceholders();
   }
   
@@ -321,6 +347,7 @@ const Form = require('./abstract_class_form/abstract_class_form.js');
 
 // Class for good' data modal, from which subclasses FormAdd and FormEdit inherit
 class FormGood extends Form {
+  
   /*
    * good -- associated with the form good local object
    * jQueryModalFade -- jQuery object of modal fade html element, which prevents interacting with the page during async processes
@@ -1156,27 +1183,36 @@ const LIST = new GoodsList();
 
 module.exports.LIST = LIST;
 },{"./abstract_class_form/abstract_class_form.js":2,"./const_serverResponseTime.js":4,"./good_local_object.js":5,"./price_vidget/vidget_price.js":9,"./row_local_object.js":10}],7:[function(require,module,exports){
+// This simple function just cleans price string from semis and dollars
+
 module.exports = function(price){
   return price.replace(/\,/g, '').replace('$', '');
 };
 },{}],8:[function(require,module,exports){
-// const cleanPriceString = require('./putSemi.js');
 
+// This function puts semis after each digit in the price string
 module.exports = function(price){
 
+  // Stringifying price and making the function immutable
   let workString = price.toString();
+
+  // Defining tail, which be evaluated with numbers after period (if there are some)
   let tail = '';
 
+  // Cleaning the string from semis
   workString = workString.replace(/\,/g, '');
 
+  // Slicing tail numbers after period sign
   if(workString.indexOf('.') !== -1){
     tail = workString.slice(workString.indexOf('.'));
     workString = workString.slice(0, workString.indexOf('.'));
   }
 
+  // Splittin string into array and reversing it
   workString = workString.split('');
   workString.reverse();
   
+  // And just putting semis after each three numbers
   let counter = 0;
   for(let i = 0; i < workString.length; i++){
     if(counter < 3) {
@@ -1189,27 +1225,41 @@ module.exports = function(price){
     
   }
   
+  // Reversing back to normal
   workString.reverse();
   
+  // Joining array into resulting string
   workString = workString.join('').concat(tail);
   
   return workString;
 }
 },{}],9:[function(require,module,exports){
+// This file is hub for price vidget (formatting from number to dollar string format and vice versa)
+
+// Function putting semis after each digit
 const putSemi = require('./putSemi.js');
+
+// Function cleaning price string from dollar and semi signs
 const cleanPriceString = require('./cleanPriceString.js');
 
+// Re-exporting cleanPriceString
 module.exports.cleanPriceString = cleanPriceString;
 
+// Re-exporting putSemi
 module.exports.putSemi = putSemi;
 
+
 module.exports.priceConverter = (price) => {
+
+  // Function is immutable
   let workPrice = price;
   
+  // If price is number converting it into dollar format
   if(typeof price === 'number') {
     return '$'+putSemi(workPrice);
   } else {
-    
+  
+  // Otherwise cleaning the string and parsing float
     return parseFloat(cleanPriceString(workPrice));
   }
 };

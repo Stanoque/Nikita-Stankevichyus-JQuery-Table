@@ -63,8 +63,12 @@ Object.defineProperty(Object.prototype, 'addPlaceholder',{
 
     // When input starts, placeholder is hid 
     currentElement.on('input',()=>{
-      if(currentElement.val().match(currentElement.attr('my_placeholder'))){
+
+      // Yup, it looks awful, but really easy to understand: 
+      // If input starts (either by entering or deleting) placeholder (or what remains of it) deletes      
+      if(currentElement.val().match(currentElement.attr('my_placeholder')) || currentElement.val().match(currentElement.attr('my_placeholder').slice(0, currentElement.attr('my_placeholder').length - 1))){
         currentElement.val(currentElement.val().replace(currentElement.attr('my_placeholder'), ''));
+        currentElement.val(currentElement.val().replace(currentElement.attr('my_placeholder').slice(0, currentElement.attr('my_placeholder').length - 1), ''));
         currentElement.removeClass('placeholder');
       }
     });

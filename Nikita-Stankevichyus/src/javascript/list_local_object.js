@@ -29,6 +29,7 @@ const Form = require('./abstract_class_form/abstract_class_form.js');
 
 // Class for good' data modal, from which subclasses FormAdd and FormEdit inherit
 class FormGood extends Form {
+  
   /*
    * good -- associated with the form good local object
    * jQueryModalFade -- jQuery object of modal fade html element, which prevents interacting with the page during async processes
