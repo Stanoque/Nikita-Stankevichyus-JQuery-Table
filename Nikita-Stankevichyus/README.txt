@@ -15,8 +15,8 @@ semi(s) -- comma(s). For whatever reason I call comma char a "semi". It is almos
 
 Documentation:
 
-1. file-dependencies.html -- diagramm of file dependencies in HTML format.
-2. class-object-relations.html -- diagramm of class and object relations in HTML format.
+1. file-dependencies.svg -- diagramm of file dependencies in SVG format.
+2. class-object-relations.svg -- diagramm of class and object relations in SVG format.
 
 
 
