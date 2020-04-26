@@ -50,7 +50,21 @@ Object.defineProperty(Object.prototype, 'addPlaceholder',{
       if(currentElement.val() === text){
         currentElement.val('');
       }
-    }); 
+    });
+
+    currentElement.blur(()=>{
+      if(currentElement.val() === ''){
+        currentElement.val(text);
+        currentElement.addClass('placeholder');
+      }
+    })
+
+    currentElement.on('input',()=>{
+      if(currentElement.val().match(currentElement.attr('my_placeholder'))){
+        currentElement.val(currentElement.val().replace(currentElement.attr('my_placeholder'), ''));
+        currentElement.removeClass('placeholder');
+      }
+    });
 
   },
   enumerable : false
@@ -190,8 +204,11 @@ const LIST = require('./list_local_object.js').LIST;
 
 module.exports = class formSearch extends Form {
   constructor(jQueryModalFade=null, jQueryModalAwait=null, jQueryElement=null){
+
     super(jQueryModalFade, jQueryModalAwait, jQueryElement);
+
     this.initPlaceholders();
+    
     this.jQueryElement.submit((event)=>{
       event.preventDefault();
       this.submit();

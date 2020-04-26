@@ -3,8 +3,11 @@ const LIST = require('./list_local_object.js').LIST;
 
 module.exports = class formSearch extends Form {
   constructor(jQueryModalFade=null, jQueryModalAwait=null, jQueryElement=null){
+
     super(jQueryModalFade, jQueryModalAwait, jQueryElement);
+
     this.initPlaceholders();
+    
     this.jQueryElement.submit((event)=>{
       event.preventDefault();
       this.submit();

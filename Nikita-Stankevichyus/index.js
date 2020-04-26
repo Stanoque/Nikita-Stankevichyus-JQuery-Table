@@ -49,7 +49,21 @@ Object.defineProperty(Object.prototype, 'addPlaceholder',{
       if(currentElement.val() === text){
         currentElement.val('');
       }
-    }); 
+    });
+
+    currentElement.blur(()=>{
+      if(currentElement.val() === ''){
+        currentElement.val(text);
+        currentElement.addClass('placeholder');
+      }
+    })
+
+    currentElement.on('input',()=>{
+      if(currentElement.val().match(currentElement.attr('my_placeholder'))){
+        currentElement.val(currentElement.val().replace(currentElement.attr('my_placeholder'), ''));
+        currentElement.removeClass('placeholder');
+      }
+    });
 
   },
   enumerable : false
