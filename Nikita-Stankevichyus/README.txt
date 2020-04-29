@@ -25,7 +25,7 @@ File structure:
 index.css -- basic (spaghetti) css code. Some styles beyond bootstrap functionality.
 index.html -- basic html template with hard-coded static elements and storaged dynamic ones (lodash templates).
 index.js -- imports all other JS files, defines a Object.prototype method and renders static elements.
-bundle.js -- file generated via 'browserify' CLI command. It is included into index.html, not index.js.
+bundle.js -- file generated via 'browserify' CLI command. That is the file (not index.js) included into index.html.
 
   src/javascript:
     class_formSearch.js -- class corresponding to search form.
